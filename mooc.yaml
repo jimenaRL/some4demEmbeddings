@@ -1,0 +1,13 @@
+sqlite_db: /tmp/mooc.db
+country: ''
+ideological_model:
+  check_input: true
+  engine: auto
+  force_bipartite: true
+  force_full_rank: false
+  in_degree_threshold: 3
+  n_latent_dimensions: 2
+  out_degree_threshold: null
+  random_state: null
+  standardize_mean: true
+  standardize_std: false
