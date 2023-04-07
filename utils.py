@@ -89,7 +89,12 @@ def graphToAdjencyMatrix(res, sparce=False):
     return ntwrk_csr.toarray(), rows_id, columns_id
 
 
-def visualize_ide(sources_coord_ide, targets_coord_ide, palette=None):
+def visualize_ide(
+    sources_coord_ide,
+    targets_coord_ide,
+    palette=None,
+    path=None
+):
 
     # plot sources embeddings
     g = sns.jointplot(
@@ -126,13 +131,17 @@ def visualize_ide(sources_coord_ide, targets_coord_ide, palette=None):
         )
     plt.legend()
 
+    if path:
+        plt.savefig(path, dpi=150)
+
 
 def visualize_att(
     sources_coord_att,
     targets_coord_att,
     groups_coord_att,
     dims,
-    palette=None
+    palette=None,
+    path=None
 ):
 
     # plot sources embeddings
@@ -200,3 +209,6 @@ def visualize_att(
             )
 
         plt.legend()
+
+    if path:
+        plt.savefig(path, dpi=150)
