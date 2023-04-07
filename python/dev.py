@@ -5,13 +5,10 @@ from linate import IdeologicalEmbedding, AttitudinalEmbedding
 from argparse import ArgumentParser
 
 # parse arguments and set paths
-# ap = ArgumentParser()
-# ap.add_argument('--country', type=str, required=True)
-# args = ap.parse_args()
-# country = args.country
-
-country = 'france'
-
+ap = ArgumentParser()
+ap.add_argument('--country', type=str, required=True)
+args = ap.parse_args()
+country = args.country
 
 config = f'{country}.yaml'
 

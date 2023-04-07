@@ -66,8 +66,6 @@ ENV PYTHONIOENCODING utf-8
 RUN apt-get update && \
     apt-get install -y git
 
-RUN pwd
-
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 
 WORKDIR /some4demEmbeddings
