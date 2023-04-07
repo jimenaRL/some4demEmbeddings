@@ -101,7 +101,8 @@ def visualize_ide(
         data=sources_coord_ide.drop_duplicates(),
         x='latent_dimension_0',
         y='latent_dimension_1',
-        kind="hex"
+        kind="hex",
+        height=6
     )
 
     # get unique groups and build color dictionary
@@ -149,7 +150,8 @@ def visualize_att(
         data=sources_coord_att,
         x=dims['x'],
         y=dims['y'],
-        kind="hex"
+        kind="hex",
+        height=6
     )
 
     # get unique groups and build color dictionary
