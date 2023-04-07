@@ -1,9 +1,5 @@
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
 country: france
-group_att_columns:
-  k: entity
-  marporLA2020_per403: issue_1
-  marporLA2020_per502: issue_2
 ideological_model:
   check_input: true
   engine: auto
@@ -15,3 +11,27 @@ ideological_model:
   random_state: null
   standardize_mean: true
   standardize_std: false
+attitudinal_model:
+  N: 2
+  random_state: 666
+attitudinal_dimensions:
+  - ches2019_immigrate_salience
+  - ches2019_protectionism
+palette:
+  LR: cyan
+  LFI: red
+  LREM: gold
+  MoDem: orange
+  EELV: green
+  PCF: pink
+  PS: magenta
+  RN: blue
+mapping:
+  'Les Républicains': LR
+  'La France insoumise - NUPES': LFI
+  'Renaissance': LREM
+  'Démocrate (MoDem et Indépendants)': MoDem
+  'Écologiste - NUPES': EELV
+  'Gauche Démocrate et Républicaine - NUPES': PCF
+  'Socialistes et Apparentés (Membre de L’Intergroupe NUPES)': PS
+  'Rassemblement National': RN
