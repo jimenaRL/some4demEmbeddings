@@ -16,7 +16,7 @@ country = 'france'
 config = f'{country}.yaml'
 
 
-with open(config, "r") as fh:
+with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
@@ -129,7 +129,7 @@ visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     PALETTE,
-    f'ide_{country}_20230407.png')
+    f'images/ide_{country}_20230407.png')
 
 # (3.b) Visualize attitudinal embedding
 visualize_att(
@@ -138,6 +138,6 @@ visualize_att(
     groups_coord_att,
     dict(zip(['x', 'y'], DIMS)),
     PALETTE,
-    f"att_{'vs'.join(DIMS)}_{country}_20230407.png")
+    f"images/att_{'vs'.join(DIMS)}_{country}_20230407.png")
 
 plt.show()
