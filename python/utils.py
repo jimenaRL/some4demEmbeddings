@@ -102,7 +102,7 @@ def visualize_ide(
         x='latent_dimension_0',
         y='latent_dimension_1',
         kind="hex",
-        height=6
+        height=8
     )
 
     # get unique groups and build color dictionary
@@ -126,11 +126,11 @@ def visualize_ide(
             sample['latent_dimension_1'],
             marker='+',
             s=30,
-            alpha=0.5,
+            alpha=0.75,
             color=palette[p],
             label=p
         )
-    plt.legend()
+    plt.legend(loc='best', title='PARTY')
 
     if path:
         plt.savefig(path, dpi=150)
@@ -151,7 +151,7 @@ def visualize_att(
         x=dims['x'],
         y=dims['y'],
         kind="hex",
-        height=6
+        height=8
     )
 
     # get unique groups and build color dictionary
@@ -210,7 +210,7 @@ def visualize_att(
                 label=p
             )
 
-        plt.legend()
+        plt.legend(loc='best', title='PARTY')
 
     if path:
         plt.savefig(path, dpi=150)

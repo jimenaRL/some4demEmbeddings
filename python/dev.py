@@ -10,7 +10,7 @@ ap.add_argument('--limit', type=int, required=True)
 ap.add_argument('--config', type=str, required=True)
 args = ap.parse_args()
 config = args.config
-limit = arg.limit
+limit = args.limit
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
