@@ -71,3 +71,5 @@ RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 WORKDIR /some4demEmbeddings
 
 RUN pip install -r python/requirements.txt
+
+RUN mkdir images
