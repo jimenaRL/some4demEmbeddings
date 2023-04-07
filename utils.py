@@ -24,14 +24,46 @@ def retrieveSqlite(db, query):
     return res
 
 
-def retrieveFollowersMpsGraph(db, country, limit=-1):
+def retrieveGraph(db, country, limit=-1):
     query = f"SELECT * FROM mps_followers_{country} LIMIT {int(limit)}"
     return retrieveSqlite(db, query)
 
 
-def retrieveMpsParties(db, country):
-    query = f"SELECT mp_pseudo_id, party FROM mps_party_{country}"
-    return retrieveSqlite(db, query)
+def retrieveAndFormatTargetGroups(db, country):
+
+    columns = ['mp_pseudo_id', 'party']
+
+    table = f"mps_party_{country}"
+    query = f"SELECT {','.join(columns)} FROM {table}"
+    res = retrieveSqlite(db, query)
+
+    dtypes = {'mp_pseudo_id': str, 'party': str}
+
+    return pd.DataFrame(res, columns=columns) \
+        .astype(dtypes) \
+        .rename(columns={"party": "group"})
+
+
+def retrieveAndFormatTargetGroupsCoord(db, country, dims_names):
+
+    columns = ['party']+list(dims_names)
+
+    table = f"parties_attitude_{country}"
+    query = f"SELECT {','.join(columns)} FROM {table}"
+    res = retrieveSqlite(db, query)
+
+    dtypes = {'party': str}
+    dtypes.update({d: np.float32 for d in dims_names})
+
+    df = pd.DataFrame(res, columns=columns) \
+        .astype(dtypes) \
+        .rename(columns={"party": "group"}) \
+
+    # /!\ /!\ /!\ /!\ /!\ /!\ /!\ HOTFIX  /!\/!\/!\/!\/!\/!\
+    # ASSURE THIS IS DB CRATION
+    df = df.dropna()
+
+    return df
 
 
 def graphToAdjencyMatrix(res, sparce=False):
@@ -57,51 +89,31 @@ def graphToAdjencyMatrix(res, sparce=False):
     return ntwrk_csr.toarray(), rows_id, columns_id
 
 
-def getTargetGroups(res):
-    return pd.DataFrame({
-        "mp_pseudo_id": [r[0] for r in res],
-        "party": [r[1] for r in res],
-        })
-
-
-def visualize(
-    sources_coords_ide,
-    targets_coords_ide,
-    targets_ids,
-    sources_ids,
-    targets_groups,
-    palette=None
-):
+def visualize_ide(sources_coord_ide, targets_coord_ide, palette=None):
 
     # plot sources embeddings
     g = sns.jointplot(
-        data=sources_coords_ide.drop_duplicates(),
+        data=sources_coord_ide.drop_duplicates(),
         x='latent_dimension_0',
         y='latent_dimension_1',
         kind="hex"
     )
 
-    targets_coords_ide = targets_coords_ide.assign(target_pid=targets_ids)
-
-    # plot targets embeddings
-    targets_coords_ide = targets_coords_ide.merge(
-            targets_groups,
-            left_on="target_pid",
-            right_on="mp_pseudo_id",
-            how="inner"
-        ) \
-        .drop(columns="mp_pseudo_id")
-
-    unique_parties = targets_coords_ide.party.unique().tolist()
-    nunique_parties = targets_coords_ide.party.nunique()
+    # get unique groups and build color dictionary
+    unique_groups = targets_coord_ide.group.unique().tolist()
+    nunique_groups = targets_coord_ide.group.nunique()
     if palette is None:
-        palette = sns.color_palette("viridis", nunique_parties)
-    unique_parties.sort()
-    palette_dict = dict(zip(unique_parties, palette))
+        unique_groups.sort()
+        palette = dict(zip(
+            unique_groups,
+            sns.color_palette("viridis", nunique_groups)
+            )
+        )
 
+    # plot colored by groups target embeddings
     ax = g.ax_joint
-    for p in unique_parties:
-        sample = targets_coords_ide[targets_coords_ide.party == p] \
+    for p in unique_groups:
+        sample = targets_coord_ide[targets_coord_ide.group == p] \
             .drop_duplicates()
         ax.scatter(
             sample['latent_dimension_0'],
@@ -109,7 +121,82 @@ def visualize(
             marker='+',
             s=30,
             alpha=0.5,
-            color=palette_dict[p]
+            color=palette[p],
+            label=p
+        )
+    plt.legend()
+
+
+def visualize_att(
+    sources_coord_att,
+    targets_coord_att,
+    groups_coord_att,
+    dims,
+    palette=None
+):
+
+    # plot sources embeddings
+    g = sns.jointplot(
+        data=sources_coord_att,
+        x=dims['x'],
+        y=dims['y'],
+        kind="hex"
+    )
+
+    # get unique groups and build color dictionary
+    unique_groups = targets_coord_att.group.unique().tolist()
+    nunique_groups = targets_coord_att.group.nunique()
+    if palette is None:
+        unique_groups.sort()
+        palette = dict(zip(
+            unique_groups,
+            sns.color_palette("viridis", nunique_groups)
+            )
         )
 
-    plt.show()
+    ax = g.ax_joint
+
+    # plot groups target
+
+    for p in unique_groups:
+
+        # plot colored by groups target embeddings
+        sample = targets_coord_att[targets_coord_att.group == p] \
+            .drop_duplicates()
+
+        ax.scatter(
+            sample[dims['x']],
+            sample[dims['y']],
+            marker='+',
+            s=30,
+            alpha=0.75,
+            color=palette[p]
+        )
+
+        # plot estimated groups mean
+        mean_group_estimated = sample[[dims['x'], dims['y']]].mean()
+        ax.plot(
+            mean_group_estimated[dims['x']],
+            mean_group_estimated[dims['y']],
+            marker='o',
+            mec='k',
+            color=palette[p],
+            ms=7
+        )
+
+        # plot groups attitudinal_positions
+        group_positions = groups_coord_att[groups_coord_att.group == p]
+        if len(group_positions) > 1:
+            raise ValueError("Bizarre")
+        if len(group_positions) == 1:
+            ax.plot(
+                group_positions.iloc[0][dims['x']],
+                group_positions.iloc[0][dims['y']],
+                marker='^',
+                mec='k',
+                color=palette[p],
+                ms=7,
+                label=p
+            )
+
+        plt.legend()
