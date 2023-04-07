@@ -6,11 +6,9 @@ from argparse import ArgumentParser
 
 # parse arguments and set paths
 ap = ArgumentParser()
-ap.add_argument('--country', type=str, required=True)
+ap.add_argument('--config', type=str, required=True)
 args = ap.parse_args()
-country = args.country
-
-config = f'{country}.yaml'
+config = args.config
 
 
 with open(config, "r", encoding='utf-8') as fh:
@@ -126,7 +124,7 @@ visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     PALETTE,
-    f'../images/ide_{country}_20230407.png')
+    f'../images/ide_{COUNTRY}_20230407.png')
 
 # (3.b) Visualize attitudinal embedding
 visualize_att(
@@ -135,6 +133,6 @@ visualize_att(
     groups_coord_att,
     dict(zip(['x', 'y'], DIMS)),
     PALETTE,
-    f"../images/att_{'vs'.join(DIMS)}_{country}_20230407.png")
+    f"../images/att_{'vs'.join(DIMS)}_{COUNTRY}_20230407.png")
 
 plt.show()
