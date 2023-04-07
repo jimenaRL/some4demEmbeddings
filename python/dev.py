@@ -129,7 +129,7 @@ visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     PALETTE,
-    f'images/ide_{country}_20230407.png')
+    f'../images/ide_{country}_20230407.png')
 
 # (3.b) Visualize attitudinal embedding
 visualize_att(
@@ -138,6 +138,6 @@ visualize_att(
     groups_coord_att,
     dict(zip(['x', 'y'], DIMS)),
     PALETTE,
-    f"images/att_{'vs'.join(DIMS)}_{country}_20230407.png")
+    f"../images/att_{'vs'.join(DIMS)}_{country}_20230407.png")
 
 plt.show()
