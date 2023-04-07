@@ -6,10 +6,11 @@ from argparse import ArgumentParser
 
 # parse arguments and set paths
 ap = ArgumentParser()
+ap.add_argument('--limit', type=int, required=True)
 ap.add_argument('--config', type=str, required=True)
 args = ap.parse_args()
 config = args.config
-
+limit = arg.limit
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
@@ -24,7 +25,7 @@ MAPPING = params['mapping']
 
 # (0) DATA RETRIEVAL
 # (0.a) Retrive source/target bipartite graph and target groups from sqlite db
-res_graph = retrieveGraph(DB, COUNTRY, limit=1e6)
+res_graph = retrieveGraph(DB, COUNTRY, limit=limit)
 targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY)
 groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, COUNTRY, DIMS)
 
@@ -124,7 +125,7 @@ visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     PALETTE,
-    f'../images/ide_{COUNTRY}_20230407.png')
+    f'../images/ide_{COUNTRY}_links_{limit}_20230407.png')
 
 # (3.b) Visualize attitudinal embedding
 visualize_att(
@@ -133,6 +134,6 @@ visualize_att(
     groups_coord_att,
     dict(zip(['x', 'y'], DIMS)),
     PALETTE,
-    f"../images/att_{'vs'.join(DIMS)}_{COUNTRY}_20230407.png")
+    f"../images/att_{'vs'.join(DIMS)}_{COUNTRY}_links_{limit}_20230407.png")
 
 plt.show()
