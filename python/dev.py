@@ -1,4 +1,6 @@
+import os
 import yaml
+from datetime import date
 from utils import *
 from linate import IdeologicalEmbedding, AttitudinalEmbedding
 
@@ -6,16 +8,17 @@ from argparse import ArgumentParser
 
 # parse arguments and set paths
 ap = ArgumentParser()
-ap.add_argument('--limit', type=int, required=True)
+ap.add_argument('--limit', type=str, required=True)
 ap.add_argument('--config', type=str, required=True)
+ap.add_argument('--output', type=str, required=False)
 args = ap.parse_args()
 config = args.config
 limit = args.limit
+output = args.output
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
-
 
 COUNTRY = params['country']
 DB = params['sqlite_db']
@@ -23,9 +26,10 @@ DIMS = params['attitudinal_dimensions']
 PALETTE = params['palette']
 MAPPING = params['mapping']
 
+
 # (0) DATA RETRIEVAL
 # (0.a) Retrive source/target bipartite graph and target groups from sqlite db
-res_graph = retrieveGraph(DB, COUNTRY, limit=limit)
+res_graph = retrieveGraph(DB, COUNTRY, limit=float(limit))
 targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY)
 groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, COUNTRY, DIMS)
 
@@ -120,12 +124,18 @@ targets_coord_att = targets_coord_att.merge(
     .drop(columns="mp_pseudo_id")
 
 # (3) VISUALIZATIONS
+
+today = date.today().strftime("%b-%d-%Y")
+
 # (3.a) Visualize ideological embedding
 visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     PALETTE,
-    f'../images/ide_{COUNTRY}_links_{limit}_20230407.png')
+    os.path.join(output, f'ide_{COUNTRY}_{limit}_links_{today}.png')
+)
+
+attitudes = '_vs_'.join(DIMS)
 
 # (3.b) Visualize attitudinal embedding
 visualize_att(
@@ -134,6 +144,7 @@ visualize_att(
     groups_coord_att,
     dict(zip(['x', 'y'], DIMS)),
     PALETTE,
-    f"../images/att_{'vs'.join(DIMS)}_{COUNTRY}_links_{limit}_20230407.png")
+    os.path.join(output, f"att_{attitudes}_{COUNTRY}_{limit}_links_{today}.png")
+)
 
 plt.show()

@@ -134,6 +134,7 @@ def visualize_ide(
 
     if path:
         plt.savefig(path, dpi=150)
+        print(f"Figure saved at {path}.")
 
 
 def visualize_att(
@@ -214,3 +215,4 @@ def visualize_att(
 
     if path:
         plt.savefig(path, dpi=150)
+        print(f"Figure saved at {path}.")
