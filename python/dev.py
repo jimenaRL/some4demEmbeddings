@@ -26,16 +26,23 @@ DB = params['sqlite_db']
 DIMS = params['attitudinal_dimensions']
 PALETTE = params['palette']
 MAPPING = params['mapping']
+NB_MIN_FOLLOWERS = params['min_followers']
+
 OUTPUT = args.output
 
 
 # (0) DATA RETRIEVAL
 # (0.a) Retrive source/target bipartite graph and target groups from sqlite db
-res_graph = retrieveGraph(DB, COUNTRY, limit=float(limit))
 targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY)
 groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, COUNTRY, DIMS)
+users_metadata = retrieveAndFormatUsersMetadata(DB, COUNTRY)
 
-# (0.b) mapping
+users_metadata = users_metadata.query(f"nb_followers >= {NB_MIN_FOLLOWERS}")
+valid_followers = users_metadata.pseudo_id.unique().tolist()
+
+res_graph = retrieveGraph(DB, COUNTRY, valid_followers, limit=float(limit))
+
+# (0.c) mapping
 
 MAPPING = pd.DataFrame.from_dict({
     'parliamentary_group': MAPPING.keys(),
@@ -54,6 +61,9 @@ g1 = len(targets_groups)
 if g0 > g1:
     print(
         f"Dropped {g0 - g1} targets with no group in mapping.")
+
+
+
 
 # (1) IDEOLOGICAL SPACES
 # (1.a) Build adjency matrix

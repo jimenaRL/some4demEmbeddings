@@ -21,10 +21,25 @@ def retrieveSqlite(db, query):
     return res
 
 
-def retrieveGraph(db, country, limit=-1):
+def retrieveGraph(db, country, valid_followers, limit=-1):
     table = f"mps_followers_{country}"
-    query = f"SELECT * FROM {table} ORDER BY RANDOM() LIMIT {int(limit)}"
+    columns = ['mp_pseudo_id', 'follower_pseudo_id']
+    valid_followers = [f"'{vf}'" for vf in valid_followers]
+    query = f"SELECT {','.join(columns)} FROM {table} "
+    query += f"WHERE follower_pseudo_id IN ({','.join(valid_followers)}) "
+    # query += f"ORDER BY RANDOM() LIMIT {int(limit)}"
     return retrieveSqlite(db, query)
+
+
+def retrieveAndFormatUsersMetadata(db, country):
+    table = f"users_metadata_{country}"
+    columns = ['pseudo_id', 'followers']
+    query = f"SELECT {','.join(columns)} FROM {table}"
+    res = retrieveSqlite(db, query)
+    dtypes = {'pseudo_id': str, 'followers': float}
+    return pd.DataFrame(res, columns=columns) \
+        .astype(dtypes) \
+        .rename(columns={"followers": "nb_followers"})
 
 
 def retrieveAndFormatTargetGroups(db, country):

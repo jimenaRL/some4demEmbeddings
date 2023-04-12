@@ -1,5 +1,6 @@
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
 country: france
+min_followers: 25
 ideological_model:
   check_input: true
   engine: auto
