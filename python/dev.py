@@ -1,7 +1,8 @@
 import os
+import os.path as op
 import yaml
-from datetime import date
 from utils import *
+from viz import *
 from linate import IdeologicalEmbedding, AttitudinalEmbedding
 
 from argparse import ArgumentParser
@@ -25,6 +26,7 @@ DB = params['sqlite_db']
 DIMS = params['attitudinal_dimensions']
 PALETTE = params['palette']
 MAPPING = params['mapping']
+OUTPUT = args.output
 
 
 # (0) DATA RETRIEVAL
@@ -68,7 +70,6 @@ targets_coord_ide = model_ide.ideological_embedding_target_latent_dimensions_
 
 # (2) ATTITUDINAL SPACES
 
-
 # (2.a) Estimate target groups positions in ideological space by averaging
 # targets' positions
 targets_coord_ide.index.rename('', inplace=True)
@@ -105,7 +106,6 @@ model_att.fit(
     groups_coord_att.rename(columns={'group': 'entity'})
 )
 
-
 sources_coord_ide = sources_coord_ide.assign(entity=sources_ids)
 targets_coord_ide = targets_coord_ide.rename(columns={'target_id': 'entity'})
 
@@ -123,28 +123,43 @@ targets_coord_att = targets_coord_att.merge(
     ) \
     .drop(columns="mp_pseudo_id")
 
-# (3) VISUALIZATIONS
+
+# (3) SAVE RESULTS
 
 today = date.today().strftime("%b-%d-%Y")
+attitudes = '_vs_'.join(DIMS)
+output_folder = os.path.join(
+        OUTPUT,
+        'embeddings',
+        f"{attitudes}_{COUNTRY}_{limit}_links_{today}")
 
-# (3.a) Visualize ideological embedding
-visualize_ide(
-    sources_coord_ide,
-    targets_coord_ide,
-    PALETTE,
-    os.path.join(output, f'ide_{COUNTRY}_{limit}_links_{today}.png')
+save_embeddings(
+    embeddings={
+        "sources_coord_ide": sources_coord_ide,
+        "targets_coord_ide": targets_coord_ide,
+        "sources_coord_att": sources_coord_att,
+        "targets_coord_att": targets_coord_att,
+        "groups_coord_att": groups_coord_att
+    },
+    output_folder=output_folder
 )
 
-attitudes = '_vs_'.join(DIMS)
+# (4) VISUALIZATIONS
 
-# (3.b) Visualize attitudinal embedding
-visualize_att(
+output_folder = os.path.join(OUTPUT, 'images')
+ide_name = f'ide_{COUNTRY}_{limit}_links_{today}.png'
+att_name = f"att_{attitudes}_{COUNTRY}_{limit}_links_{today}.png"
+
+viz2dEmb(
+    sources_coord_ide,
+    targets_coord_ide,
     sources_coord_att,
     targets_coord_att,
     groups_coord_att,
-    dict(zip(['x', 'y'], DIMS)),
+    DIMS,
     PALETTE,
-    os.path.join(output, f"att_{attitudes}_{COUNTRY}_{limit}_links_{today}.png")
+    output_folder,
+    ide_name,
+    att_name
 )
-
 plt.show()
