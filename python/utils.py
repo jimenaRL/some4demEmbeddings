@@ -22,7 +22,8 @@ def retrieveSqlite(db, query):
 
 
 def retrieveGraph(db, country, limit=-1):
-    query = f"SELECT * FROM mps_followers_{country} LIMIT {int(limit)}"
+    table = f"mps_followers_{country}"
+    query = f"SELECT * FROM {table} ORDER BY RANDOM() LIMIT {int(limit)}"
     return retrieveSqlite(db, query)
 
 
