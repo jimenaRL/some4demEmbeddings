@@ -12,7 +12,7 @@ def retrieveSqlite(db, query):
         raise FileNotFoundError(f"Unnable to find database: '{db}'.")
 
     with sqlite3.connect(db) as con:
-        print(f"Quering sqlite database at {db} with `{query}`... ",  end='')
+        print(f"Quering sqlite database at {db} with `{query[:100]}`... ",  end='')
         cur = con.cursor()
         cur.execute(query)
         res = cur.fetchall()
