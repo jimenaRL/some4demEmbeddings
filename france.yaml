@@ -16,8 +16,8 @@ attitudinal_model:
   N: 2
   random_state: 666
 attitudinal_dimensions:
-  - ches2019_multiculturalism
-  - ches2019_deregulation
+  - ches2019_antielite_salience
+  - ches2019_immigrate_salience
 palette:
   LR: cyan
   LFI: red
