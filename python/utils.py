@@ -127,22 +127,23 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     columns_id = columns_id[idx_valid_j]
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
-    mssg = f"Drop {j0 - j1} of {j0} sources with outdegree less"
-    mssg += f" than {min_outdegree}, keeped {j1}."
+    mssg = f"Drop {j0 - j1} of {j0} sources ({100*(j0 - j1)/j0:.2f}%) "
+    mssg += f"with outdegree less than {min_outdegree}, keeped {j1}."
     print(mssg)
 
     # remove repeated sources (rows)
-    _, idx_valid_j = np.unique(ntwrk_csr, axis=0, return_index=True)
+    _, idx_valid_j = np.unique(ntwrk_csr.toarray(), axis=0, return_index=True)
     ja = ntwrk_csr.shape[0]
     ntwrk_csr = ntwrk_csr[idx_valid_j, :]
     jb = ntwrk_csr.shape[0]
     columns_id = columns_id[idx_valid_j]
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
-    mssg = f"Drop {ja - jb} of {ja} repeated sources, keeped {jb}."
+    mssg = f"Drop {ja - jb} of {ja} repeated sources "
+    mssg += f"({100*(ja - jb)/ja:.2f}%), keeped {jb}."
     print(mssg)
 
-    mssg = f"Found {len(ntwrk_csr.nnz)} links, from {len(columns_id)} unique sources "
+    mssg = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} unique sources "
     mssg += f"to {len(rows_id)} unique targets."
     print(mssg)
 
