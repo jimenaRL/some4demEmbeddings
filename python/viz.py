@@ -13,19 +13,21 @@ def viz2dEmb(
     groups_coord_att,
     dimensions,
     palette,
-    output_folder,
+    ide_output_folder,
+    att_output_folder,
     ide_path,
     att_path
 ):
 
-    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(ide_output_folder, exist_ok=True)
+    os.makedirs(att_output_folder, exist_ok=True)
 
     # visualize ideological embedding
     visualize_ide(
         sources_coord_ide,
         targets_coord_ide,
         palette,
-        os.path.join(output_folder, ide_path)
+        os.path.join(ide_output_folder, ide_path)
     )
 
     # Visualize attitudinal embedding
@@ -35,7 +37,7 @@ def viz2dEmb(
         groups_coord_att,
         dict(zip(['x', 'y'], dimensions)),
         palette,
-        os.path.join(output_folder, att_path)
+        os.path.join(att_output_folder, att_path)
     )
 
 
