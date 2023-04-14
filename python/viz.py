@@ -55,6 +55,12 @@ def visualize_ide(
         height=8
     )
 
+    # # shrink fig so cbar is visible
+    # plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
+    # # make new ax object for the cbar
+    # cbar_ax = g.fig.add_axes([.85, .25, .05, .4])  # x, y, width, height
+    # plt.colorbar(cax=cbar_ax)
+
     # get unique groups and build color dictionary
     unique_groups = targets_coord_ide.group.unique().tolist()
     nunique_groups = targets_coord_ide.group.nunique()
@@ -80,6 +86,21 @@ def visualize_ide(
             color=palette[p],
             label=p
         )
+
+        # plot estimated groups mean
+        mean_group_estimated = sample[[
+            'latent_dimension_0',
+            'latent_dimension_1'
+        ]].mean()
+        ax.plot(
+            mean_group_estimated['latent_dimension_0'],
+            mean_group_estimated['latent_dimension_1'],
+            marker='o',
+            mec='k',
+            color=palette[p],
+            ms=7
+        )
+
     plt.legend(loc='best', title='PARTY')
 
     if path:
