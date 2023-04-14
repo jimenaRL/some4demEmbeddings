@@ -120,8 +120,8 @@ today = date.today().strftime("%b-%d-%Y")
 attitudes = '_vs_'.join(DIMS)
 
 emb_folder = f"{COUNTRY}"
-emb_folder += f"_sources_min_followers_{sources_min_followers}"
-emb_folder += f"_sources_min_outdegree_{sources_min_outdegree}"
+emb_folder += f"_sources_min_followers_{NB_MIN_FOLLOWERS}"
+emb_folder += f"_sources_min_outdegree_{MIN_OUTDEGREE}"
 emb_folder += f"_{limit}_links"
 emb_folder += f"_{today}"
 emb_folder = os.path.join(OUTPUT, 'embeddings', emb_folder)
@@ -143,18 +143,16 @@ save_embeddings(
 # (4) VISUALIZATIONS
 
 img_folder = f"{COUNTRY}"
-img_folder += f"_sources_min_followers_{sources_min_followers}"
-img_folder += f"_sources_min_outdegree_{sources_min_outdegree}"
+img_folder += f"_sources_min_followers_{NB_MIN_FOLLOWERS}"
+img_folder += f"_sources_min_outdegree_{MIN_OUTDEGREE}"
 img_folder += f"_{limit}_links"
 img_folder += f"_{today}"
 img_folder = os.path.join(OUTPUT, 'images', img_folder)
 ide_output_folder = os.path.join(img_folder, 'ide')
 att_output_folder = os.path.join(img_folder, 'att', attitudes)
 
-ide_name = f'ide_{COUNTRY}_{limit}_links_{today}.png'
-att_name = f"att_{name}.png"
-name += f"_{attitudes}"
-
+ide_name = f'ide_{COUNTRY}_{today}.png'
+att_name = f"att_{attitudes}_{COUNTRY}_{today}.png"
 
 viz2dEmb(
     sources_coord_ide,
@@ -165,7 +163,7 @@ viz2dEmb(
     DIMS,
     PALETTE,
     ide_output_folder,
-    att_output_folder
+    att_output_folder,
     ide_name,
     att_name
 )

@@ -155,10 +155,12 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
 
 def save_embeddings(embeddings, ide_output_folder, att_output_folder):
 
-    os.makedirs(output_folder, exist_ok=True)
+    os.makedirs(ide_output_folder, exist_ok=True)
+    os.makedirs(att_output_folder, exist_ok=True)
 
     for name, df in embeddings.items():
         folder = ide_output_folder if name[-3:] == 'ide' else att_output_folder
         df.to_csv(os.path.join(folder, f"{name}.csv"), index=False)
 
-    print(f"Embeddings saved at folder {output_folder}.")
+    print(f"Ideological embeddings saved at folder {ide_output_folder}.")
+    print(f"Attitudinal embeddings saved at folder {att_output_folder}.")
