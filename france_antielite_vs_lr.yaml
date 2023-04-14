@@ -1,0 +1,30 @@
+sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
+country: france
+sources_min_followers: 25
+sources_min_outdegree: 2
+ideological_model:
+  check_input: true
+  engine: auto
+  force_bipartite: true
+  force_full_rank: false
+  in_degree_threshold: 3
+  n_latent_dimensions: 2
+  out_degree_threshold: null
+  random_state: null
+  standardize_mean: true
+  standardize_std: false
+attitudinal_model:
+  N: 2
+  random_state: 666
+attitudinal_dimensions:
+  - ches2019_antielite_salience
+  - ches2019_lrgen
+palette:
+  LR: cyan
+  LFI: red
+  LREM: gold
+  MoDem: orange
+  EELV: green
+  PCF: pink
+  PS: magenta
+  RN: blue
