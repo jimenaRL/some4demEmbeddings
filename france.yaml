@@ -1,5 +1,7 @@
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
 country: france
+sources_min_followers: 25
+sources_min_outdegree: 2
 ideological_model:
   check_input: true
   engine: auto
@@ -15,8 +17,8 @@ attitudinal_model:
   N: 2
   random_state: 666
 attitudinal_dimensions:
-  - ches2019_multiculturalism
-  - ches2019_deregulation
+  - ches2019_antielite_salience
+  - ches2019_immigrate_salience
 palette:
   LR: cyan
   LFI: red
@@ -26,12 +28,3 @@ palette:
   PCF: pink
   PS: magenta
   RN: blue
-mapping:
-  'Les Républicains': LR
-  'La France insoumise - NUPES': LFI
-  'Renaissance': LREM
-  'Démocrate (MoDem et Indépendants)': MoDem
-  'Écologiste - NUPES': EELV
-  'Gauche Démocrate et Républicaine - NUPES': PCF
-  'Socialistes et Apparentés (Membre de L’Intergroupe NUPES)': PS
-  'Rassemblement National': RN

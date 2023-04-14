@@ -9,9 +9,9 @@ from argparse import ArgumentParser
 
 # parse arguments and set paths
 ap = ArgumentParser()
-ap.add_argument('--limit', type=str, required=True)
 ap.add_argument('--config', type=str, required=True)
-ap.add_argument('--output', type=str, required=False)
+ap.add_argument('--output', type=str, required=False, default='-1')
+ap.add_argument('--limit', type=str, required=False, default='-1')
 args = ap.parse_args()
 config = args.config
 limit = args.limit
@@ -25,39 +25,29 @@ COUNTRY = params['country']
 DB = params['sqlite_db']
 DIMS = params['attitudinal_dimensions']
 PALETTE = params['palette']
-MAPPING = params['mapping']
+NB_MIN_FOLLOWERS = params['sources_min_followers']
+MIN_OUTDEGREE = params['sources_min_outdegree']
+
 OUTPUT = args.output
 
 
 # (0) DATA RETRIEVAL
 # (0.a) Retrive source/target bipartite graph and target groups from sqlite db
-res_graph = retrieveGraph(DB, COUNTRY, limit=float(limit))
-targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY)
+
 groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, COUNTRY, DIMS)
+ches_mapping = retrieveAndFormatPartiesMapping(DB, COUNTRY)
+targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY, ches_mapping)
 
-# (0.b) mapping
-
-MAPPING = pd.DataFrame.from_dict({
-    'parliamentary_group': MAPPING.keys(),
-    'group': MAPPING.values()})
-
-groups_coord_att = groups_coord_att \
-    .merge(MAPPING, how='left', on='group') \
-    .drop('parliamentary_group', axis=1)
-
-g0 = len(targets_groups)
-targets_groups = targets_groups \
-    .rename(columns={'group': 'parliamentary_group'}) \
-    .merge(MAPPING) \
-    .drop('parliamentary_group', axis=1)
-g1 = len(targets_groups)
-if g0 > g1:
-    print(
-        f"Dropped {g0 - g1} targets with no group in mapping.")
+users_metadata = retrieveAndFormatUsersMetadata(DB, COUNTRY)
+valid_followers = users_metadata \
+    .query(f"nb_followers >= {NB_MIN_FOLLOWERS}") \
+    .pseudo_id.unique().tolist()
+res_graph = retrieveGraph(DB, COUNTRY, valid_followers, limit=float(limit))
 
 # (1) IDEOLOGICAL SPACES
 # (1.a) Build adjency matrix
-X, targets_ids, sources_ids = graphToAdjencyMatrix(res_graph, sparce=False)
+X, targets_ids, sources_ids = graphToAdjencyMatrix(
+    res_graph, MIN_OUTDEGREE, sparce=False)
 
 # (1.b) Create and fit ideological embedding
 model_ide = IdeologicalEmbedding(**params["ideological_model"])
