@@ -1,7 +1,7 @@
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
 country: france
 sources_min_followers: 25
-sources_min_outdegree: 2
+sources_min_outdegree: 3
 ideological_model:
   check_input: true
   engine: auto
@@ -16,9 +16,16 @@ ideological_model:
 attitudinal_model:
   N: 2
   random_state: 666
-attitudinal_dimensions:
-  - ches2019_antielite_salience
-  - ches2019_immigrate_salience
+attitudinal_spaces:
+  antielite_vs_inmigrat-sal:
+    - ches2019_antielite_salience
+    - ches2019_immigrate_salience
+  import-ecology_vs_eu-integration:
+    - ches2019_enviro_salience
+    - ches2019_eu_position
+  antielite_vs_lr:
+    - ches2019_antielite_salience
+    - ches2019_lrgen
 palette:
   LR: cyan
   LFI: red

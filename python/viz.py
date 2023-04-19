@@ -4,46 +4,13 @@ from datetime import date
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
-def viz2dEmb(
-    sources_coord_ide,
-    targets_coord_ide,
-    sources_coord_att,
-    targets_coord_att,
-    groups_coord_att,
-    dimensions,
-    palette,
-    ide_output_folder,
-    att_output_folder,
-    ide_path,
-    att_path
-):
-
-    os.makedirs(ide_output_folder, exist_ok=True)
-    os.makedirs(att_output_folder, exist_ok=True)
-
-    # visualize ideological embedding
-    visualize_ide(
-        sources_coord_ide,
-        targets_coord_ide,
-        palette,
-        os.path.join(ide_output_folder, ide_path)
-    )
-
-    # Visualize attitudinal embedding
-    visualize_att(
-        sources_coord_att,
-        targets_coord_att,
-        groups_coord_att,
-        dict(zip(['x', 'y'], dimensions)),
-        palette,
-        os.path.join(att_output_folder, att_path)
-    )
+from utils import retrieveAndFormatUsersMetadata, set_output_folder_dims
 
 
 def visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
+    targets_groups,
     palette=None,
     path=None
 ):
@@ -64,8 +31,8 @@ def visualize_ide(
     # plt.colorbar(cax=cbar_ax)
 
     # get unique groups and build color dictionary
-    unique_groups = targets_coord_ide.group.unique().tolist()
-    nunique_groups = targets_coord_ide.group.nunique()
+    unique_groups = targets_groups.group.unique().tolist()
+    nunique_groups = targets_groups.group.nunique()
     if palette is None:
         unique_groups.sort()
         palette = dict(zip(
@@ -73,6 +40,14 @@ def visualize_ide(
             sns.color_palette("viridis", nunique_groups)
             )
         )
+
+    targets_coord_ide = targets_coord_ide.merge(
+            targets_groups,
+            left_on="entity",
+            right_on="mp_pseudo_id",
+            how="inner"
+        ) \
+        .drop(columns="mp_pseudo_id")
 
     # plot colored by groups target embeddings
     ax = g.ax_joint
@@ -114,6 +89,7 @@ def visualize_att(
     sources_coord_att,
     targets_coord_att,
     groups_coord_att,
+    targets_groups,
     dims,
     palette=None,
     path=None

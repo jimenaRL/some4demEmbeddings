@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -11,24 +12,24 @@ def retrieveSqlite(db, query):
     if not os.path.exists(db):
         raise FileNotFoundError(f"Unnable to find database: '{db}'.")
 
+    print(f"Quering sqlite database at {db} with `{query[:100]}`... ", end='')
+
     with sqlite3.connect(db) as con:
-        print(
-            f"Quering sqlite database at {db} with `{query[:100]}`... ",  end='')
         cur = con.cursor()
         cur.execute(query)
         res = cur.fetchall()
-        print("done.")
+
+    print("done.")
 
     return res
 
 
-def retrieveGraph(db, country, valid_followers, limit=-1):
+def retrieveGraph(db, country, valid_followers):
     table = f"mps_followers_{country}"
     columns = ['mp_pseudo_id', 'follower_pseudo_id']
     valid_followers = [f"'{vf}'" for vf in valid_followers]
     query = f"SELECT {','.join(columns)} FROM {table} "
     query += f"WHERE follower_pseudo_id IN ({','.join(valid_followers)}) "
-    query += f"ORDER BY RANDOM() LIMIT {int(limit)}"
     return retrieveSqlite(db, query)
 
 
@@ -108,6 +109,9 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     """
     # Format data from sqlite graph res and build (sparse) matrix
     """
+
+    print(f"Building adjency matrix... ", end='')
+
     sources = [r[1] for r in res]
     targets = [r[0] for r in res]
 
@@ -150,17 +154,97 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     if sparce:
         return ntwrk_csr, rows_id, columns_id
 
+    print("done.")
+
     return ntwrk_csr.toarray(), rows_id, columns_id
 
 
-def save_embeddings(embeddings, ide_output_folder, att_output_folder):
+def load_ide_embeddings(folder):
 
-    os.makedirs(ide_output_folder, exist_ok=True)
-    os.makedirs(att_output_folder, exist_ok=True)
+    print(f"Ideological embeddings load from folder {folder}.")
 
-    for name, df in embeddings.items():
-        folder = ide_output_folder if name[-3:] == 'ide' else att_output_folder
-        df.to_csv(os.path.join(folder, f"{name}.csv"), index=False)
+    ide_sources = pd.read_csv(os.path.join(folder, 'ide_sources.csv'))
+    ide_targets = pd.read_csv(os.path.join(folder, 'ide_targets.csv'))
 
-    print(f"Ideological embeddings saved at folder {ide_output_folder}.")
-    print(f"Attitudinal embeddings saved at folder {att_output_folder}.")
+    return ide_sources, ide_targets
+
+
+def save_ide_embeddings(model, sources_ids, targets_ids, folder):
+
+    model.ideological_embedding_source_latent_dimensions_ \
+        .reset_index()\
+        .drop(columns=["source_id"]) \
+        .assign(entity=sources_ids) \
+        .to_csv(
+            os.path.join(folder, 'ide_sources.csv'),
+            index=False)
+
+    model.ideological_embedding_target_latent_dimensions_ \
+        .reset_index()\
+        .drop(columns=["target_id"]) \
+        .assign(entity=targets_ids) \
+        .to_csv(
+            os.path.join(folder, 'ide_targets.csv'),
+            index=False)
+
+    print(f"Ideological embeddings saved at folder {folder}.")
+
+
+def save_att_embeddings(att_source, att_targets, att_groups, targets_groups, folder, dims):
+
+    targets_groups.to_csv(
+        os.path.join(folder, 'targets_groups.csv'), index=False)
+
+    att_folder = set_output_folder_dims(folder, dims)
+
+    att_source.to_csv(
+        os.path.join(att_folder, 'att_source.csv'), index=False)
+    att_targets.to_csv(
+        os.path.join(att_folder, 'att_targets.csv'), index=False)
+    att_groups.to_csv(
+        os.path.join(att_folder, 'att_groups.csv'), index=False)
+
+    print(f"Attitudinal embeddings saved at folder {att_folder}.")
+
+
+def load_att_embeddings(folder, dims):
+
+    att_folder = set_output_folder_dims(folder, dims)
+
+    print(f"Attitudinal embeddings load from folder {att_folder}.")
+
+    att_source = pd.read_csv(os.path.join(att_folder, 'att_source.csv'))
+    att_targets = pd.read_csv(os.path.join(att_folder, 'att_targets.csv'))
+    att_groups = pd.read_csv(os.path.join(att_folder, 'att_groups.csv'))
+
+    return att_source, att_targets, att_groups
+
+
+def load_targets_groups(folder):
+
+    return pd.read_csv(os.path.join(folder, 'targets_groups.csv'))
+
+
+def set_output_folder(params, output):
+
+    today = date.today().strftime("%b-%d-%Y")
+
+    emb_folder = f"{params['country']}"
+    emb_folder += f"_ideN_{params['ideological_model']['n_latent_dimensions']}"
+    emb_folder += f"_sources_min_followers_{params['sources_min_followers']}"
+    emb_folder += f"_sources_min_outdegree_{params['sources_min_outdegree']}"
+    emb_folder += f"_{today}"
+
+    output_folder = os.path.join(output, emb_folder)
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    return output_folder
+
+
+def set_output_folder_dims(folder, dims):
+
+    folder = os.path.join(folder, '_vs_'.join(dims))
+    os.makedirs(folder, exist_ok=True)
+
+    return folder
