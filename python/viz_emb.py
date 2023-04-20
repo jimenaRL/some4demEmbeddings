@@ -16,6 +16,8 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+COUNTRY = params['country']
+DB = params['sqlite_db']
 ATTSPACES = params['attitudinal_spaces']
 PALETTE = params['palette']
 
@@ -50,4 +52,14 @@ for dims in ATTSPACES.values():
         )
 
 
-# plt.show()
+# for TB viz
+
+saveMpsMetadata(
+    DB,
+    COUNTRY,
+    pids=ide_targets.entity.tolist(),
+    path=os.path.join(
+            set_output_folder_dims(folder, dims), "mps_metadata.csv"))
+
+
+plt.show()

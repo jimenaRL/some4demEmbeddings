@@ -1,5 +1,4 @@
 import os
-from datetime import date
 
 import seaborn as sns
 import matplotlib.pyplot as plt

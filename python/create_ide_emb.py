@@ -36,6 +36,10 @@ X, targets_ids, sources_ids = graphToAdjencyMatrix(
 
 # Create and fit ideological embedding
 model = IdeologicalEmbedding(**params["ideological_model"])
+
+print(model)
+print(model.get_params())
+
 model.fit(X)
 
 # Save sources/targets coordinates in ideological space and add pseudo ids

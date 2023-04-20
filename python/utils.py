@@ -1,6 +1,5 @@
 import os
 import sqlite3
-from datetime import date
 
 import numpy as np
 import pandas as pd
@@ -22,6 +21,16 @@ def retrieveSqlite(db, query):
     print("done.")
 
     return res
+
+def saveMpsMetadata(db, country, pids, path):
+    table = f"mps_annotations_{country}"
+    mps_pids = [f"'{pid}'" for pid in pids]
+    columns = ['mp_pseudo_id', 'name']
+    query = f"SELECT {','.join(columns)} FROM {table} "
+    query += f"WHERE mp_pseudo_id IN ({','.join(mps_pids)}) "
+    res = retrieveSqlite(db, query)
+    pd.DataFrame(res, columns=columns).astype(str).to_csv(path, index=False)
+    print(f"MPs meatadata saved at {path}.")
 
 
 def retrieveGraph(db, country, valid_followers):
@@ -227,13 +236,10 @@ def load_targets_groups(folder):
 
 def set_output_folder(params, output):
 
-    today = date.today().strftime("%b-%d-%Y")
-
     emb_folder = f"{params['country']}"
     emb_folder += f"_ideN_{params['ideological_model']['n_latent_dimensions']}"
     emb_folder += f"_sources_min_followers_{params['sources_min_followers']}"
     emb_folder += f"_sources_min_outdegree_{params['sources_min_outdegree']}"
-    emb_folder += f"_{today}"
 
     output_folder = os.path.join(output, emb_folder)
 

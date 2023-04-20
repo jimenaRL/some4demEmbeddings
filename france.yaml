@@ -8,23 +8,20 @@ ideological_model:
   force_bipartite: true
   force_full_rank: false
   in_degree_threshold: 3
-  n_latent_dimensions: 2
+  n_latent_dimensions: 8
   out_degree_threshold: null
   random_state: null
   standardize_mean: true
   standardize_std: false
 attitudinal_model:
-  N: 2
+  N: 5
   random_state: 666
 attitudinal_spaces:
-  antielite_vs_inmigrat-sal:
+  all:
     - ches2019_antielite_salience
     - ches2019_immigrate_salience
-  import-ecology_vs_eu-integration:
     - ches2019_enviro_salience
     - ches2019_eu_position
-  antielite_vs_lr:
-    - ches2019_antielite_salience
     - ches2019_lrgen
 palette:
   LR: cyan
