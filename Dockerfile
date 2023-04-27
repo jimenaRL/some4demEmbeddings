@@ -64,11 +64,14 @@ ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 ENV PYTHONIOENCODING utf-8
 
 RUN apt-get update && \
-    apt-get install -y git
+    apt-get install -y git && \
+    apt-get install -y nano
 
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 
 WORKDIR /some4demEmbeddings
+
+RUN git pull
 
 RUN mkdir /some4demEmbeddings/images
 

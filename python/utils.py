@@ -22,6 +22,7 @@ def retrieveSqlite(db, query):
 
     return res
 
+
 def saveMpsMetadata(db, country, pids, path):
     table = f"mps_annotations_{country}"
     mps_pids = [f"'{pid}'" for pid in pids]
@@ -55,34 +56,37 @@ def retrieveAndFormatUsersMetadata(db, country):
 
 def retrieveAndFormatPartiesMapping(db, country):
 
-    columns = ['parliamentary_group', 'ches2019_party']
+    columns = ['party', 'ches2019_party']
 
     table = f"parties_mapping_{country}"
     query = f"SELECT {','.join(columns)} FROM {table}"
     res = retrieveSqlite(db, query)
+    dtypes = {'party': str, 'ches2019_party': str}
 
-    dtypes = {'parliamentary_group': str, 'ches2019_party': str}
+    party_map = pd.DataFrame(res, columns=columns)
+    no_mapping = party_map[party_map.ches2019_party.isna()].party.tolist()
+    party_map = party_map[~party_map.party.isin(no_mapping)]
+    print(f"Dropped {len(no_mapping)} parties with no mapping: {no_mapping}.")
 
-    return pd.DataFrame(res, columns=columns) \
-        .astype(dtypes)
+    return party_map.astype(dtypes)
 
 
-def retrieveAndFormatTargetGroups(db, country, parties_mapping):
+def retrieveAndFormatTargetGroups(db, country, party_map):
 
-    columns = ['mp_pseudo_id', 'parliamentary_group']
+    columns = ['mp_pseudo_id', 'party']
 
     table = f"mps_party_{country}"
     query = f"SELECT {','.join(columns)} FROM {table}"
     res = retrieveSqlite(db, query)
 
-    dtypes = {'mp_pseudo_id': str, 'parliamentary_group': str}
+    dtypes = {'mp_pseudo_id': str, 'party': str}
 
-    targets_groups = pd.DataFrame(res, columns=columns).astype(dtypes)
+    targets_groups = pd.DataFrame(res, columns=columns)
 
     g0 = len(targets_groups)
     targets_groups = targets_groups \
-        .merge(parties_mapping) \
-        .drop('parliamentary_group', axis=1) \
+        .merge(party_map, on='party') \
+        .drop(["party"], axis=1) \
         .rename(columns={'ches2019_party': 'group'})
     g1 = len(targets_groups)
     if g0 > g1:
@@ -234,9 +238,9 @@ def load_targets_groups(folder):
     return pd.read_csv(os.path.join(folder, 'targets_groups.csv'))
 
 
-def set_output_folder(params, output):
+def set_output_folder(params, country, output):
 
-    emb_folder = f"{params['country']}"
+    emb_folder = f"{country}"
     emb_folder += f"_ideN_{params['ideological_model']['n_latent_dimensions']}"
     emb_folder += f"_sources_min_followers_{params['sources_min_followers']}"
     emb_folder += f"_sources_min_outdegree_{params['sources_min_outdegree']}"

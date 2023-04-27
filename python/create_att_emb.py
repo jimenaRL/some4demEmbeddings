@@ -1,4 +1,5 @@
 import yaml
+from itertools import combinations
 from utils import *
 from linate import AttitudinalEmbedding
 
@@ -7,25 +8,27 @@ from argparse import ArgumentParser
 # parse arguments and set paths
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
+ap.add_argument('--country', type=str, required=True)
 ap.add_argument('--output', type=str, required=False, default='-1')
 args = ap.parse_args()
 config = args.config
 output = args.output
+country = args.country
+
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
-COUNTRY = params['country']
 DB = params['sqlite_db']
-ATTSPACES = params['attitudinal_spaces']
+ATTDIMS = params['attitudinal_dimensions']
 
 # Retrieve target groups from sqlite db
-ches_mapping = retrieveAndFormatPartiesMapping(DB, COUNTRY)
-targets_groups = retrieveAndFormatTargetGroups(DB, COUNTRY, ches_mapping)
+ches_mapping = retrieveAndFormatPartiesMapping(DB, country)
+targets_groups = retrieveAndFormatTargetGroups(DB, country, ches_mapping)
 
 # Load data from ideological embedding
-folder = set_output_folder(params, output)
+folder = set_output_folder(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(folder)
 
 # Estimate target groups positions in ideological space by averaging
@@ -45,10 +48,11 @@ if t0 > t1:
     print(
         f"Dropped {t0 - t1} targets with no group in mapping.")
 
-# Fit regression
-for dims in ATTSPACES.values():
 
-    groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, COUNTRY, dims)
+# Fit regression
+for dimpair in combinations(ATTDIMS, 2):
+
+    groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, country, dimpair)
     ide_targets_cp = ide_targets.copy()
     ide_sources_cp = ide_sources.copy()
 
@@ -86,4 +90,5 @@ for dims in ATTSPACES.values():
             groups_coord_att,
             targets_groups,
             folder,
-            dims)
+            dimpair)
+

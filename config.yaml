@@ -1,5 +1,4 @@
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
-country: germany
 sources_min_followers: 25
 sources_min_outdegree: 3
 ideological_model:
@@ -16,18 +15,14 @@ ideological_model:
 attitudinal_model:
   N: 2
   random_state: 666
-attitudinal_spaces:
-  all:
-    - ches2019_lrgen
-    - ches2019_lrecon
-    - ches2019_antielite_salience
-    - ches2019_eu_position
-    - ches2019_immigrate_policy
-    - ches2019_galtan
-    - ches2019_environment
-palette:
-  CDU: cyan
-  DIE LINKE: red
-  FDP: gold
-  SDP: magenta
-  AfD: blue
+attitudinal_dimensions:
+  - ches2019_lrgen
+  - ches2019_lrecon
+  - ches2019_antielite_salience
+  - ches2019_eu_position
+  - ches2019_immigrate_policy
+  - ches2019_galtan
+  - ches2019_environment
+palette_path: '/home/jimena/work/data/some4dem/annotations/${country}/party_palette.yaml'
+
+
