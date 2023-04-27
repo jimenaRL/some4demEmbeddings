@@ -18,11 +18,13 @@ attitudinal_model:
   random_state: 666
 attitudinal_spaces:
   all:
-    - ches2019_antielite_salience
-    - ches2019_immigrate_salience
-    - ches2019_enviro_salience
-    - ches2019_eu_position
     - ches2019_lrgen
+    - ches2019_lrecon
+    - ches2019_antielite_salience
+    - ches2019_eu_position
+    - ches2019_immigrate_policy
+    - ches2019_galtan
+    - ches2019_environment
 palette:
   CDU: cyan
   DIE LINKE: red
