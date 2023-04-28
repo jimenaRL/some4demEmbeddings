@@ -1,5 +1,7 @@
 __pycache__
 *.png
+*.npy
+*.npz
 *.tar
 outputs
 .python-version

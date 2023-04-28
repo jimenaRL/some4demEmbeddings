@@ -3,8 +3,6 @@ import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from utils import retrieveAndFormatUsersMetadata, set_output_folder_dims
-
 
 def visualize_ide(
     sources_coord_ide,
@@ -30,8 +28,9 @@ def visualize_ide(
     # plt.colorbar(cax=cbar_ax)
 
     # get unique groups and build color dictionary
-    unique_groups = targets_groups.group.unique().tolist()
-    nunique_groups = targets_groups.group.nunique()
+    unique_groups = targets_groups.ches2019_party.unique().tolist()
+    nunique_groups = len(set(unique_groups))
+
     if palette is None:
         unique_groups.sort()
         palette = dict(zip(
@@ -51,7 +50,7 @@ def visualize_ide(
     # plot colored by groups target embeddings
     ax = g.ax_joint
     for p in unique_groups:
-        sample = targets_coord_ide[targets_coord_ide.group == p] \
+        sample = targets_coord_ide[targets_coord_ide.ches2019_party == p] \
             .drop_duplicates()
         ax.scatter(
             sample['latent_dimension_0'],
@@ -104,8 +103,8 @@ def visualize_att(
     )
 
     # get unique groups and build color dictionary
-    unique_groups = targets_coord_att.group.unique().tolist()
-    nunique_groups = targets_coord_att.group.nunique()
+    unique_groups = targets_coord_att.ches2019_party.unique().tolist()
+    nunique_groups = targets_coord_att.ches2019_party.nunique()
     if palette is None:
         unique_groups.sort()
         palette = dict(zip(
@@ -121,7 +120,7 @@ def visualize_att(
     for p in unique_groups:
 
         # plot colored by groups target embeddings
-        sample = targets_coord_att[targets_coord_att.group == p] \
+        sample = targets_coord_att[targets_coord_att.ches2019_party == p] \
             .drop_duplicates()
 
         ax.scatter(
@@ -145,7 +144,7 @@ def visualize_att(
         )
 
         # plot groups attitudinal_positions
-        group_positions = groups_coord_att[groups_coord_att.group == p]
+        group_positions = groups_coord_att[groups_coord_att.party == p]
         if len(group_positions) > 1:
             raise ValueError("Bizarre")
         if len(group_positions) == 1:

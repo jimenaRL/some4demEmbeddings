@@ -1,9 +1,14 @@
 import yaml
 from itertools import combinations
-from utils import *
-from linate import AttitudinalEmbedding
-
 from argparse import ArgumentParser
+
+from linate import AttitudinalEmbedding
+from some4demdb import SQLite
+from some4demexp.inout import \
+    set_output_folder, \
+    load_targets_groups, \
+    load_ide_embeddings, \
+    save_att_embeddings
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -20,19 +25,18 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
-DB = params['sqlite_db']
+SQLITE = SQLite(params['sqlite_db'])
 ATTDIMS = params['attitudinal_dimensions']
-
-# Retrieve target groups from sqlite db
-ches_mapping = retrieveAndFormatPartiesMapping(DB, country)
-targets_groups = retrieveAndFormatTargetGroups(DB, country, ches_mapping)
 
 # Load data from ideological embedding
 folder = set_output_folder(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(folder)
 
+# Load target groups
+targets_groups = load_targets_groups(folder)
+
 # Estimate target groups positions in ideological space by averaging
-# targets' positions
+# targets' individual positions
 
 # add group information
 t0 = len(ide_targets)
@@ -52,27 +56,26 @@ if t0 > t1:
 # Fit regression
 for dimpair in combinations(ATTDIMS, 2):
 
-    groups_coord_att = retrieveAndFormatTargetGroupsCoord(DB, country, dimpair)
+    groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsCoord(country, dimpair)
     ide_targets_cp = ide_targets.copy()
     ide_sources_cp = ide_sources.copy()
 
     # make estimate
     estimated_groups_coord_ide = ide_targets_cp \
         .drop(columns=['entity']) \
-        .groupby('group') \
+        .groupby('ches2019_party') \
         .mean() \
-        .reset_index() \
-        .rename(columns={'group': 'entity'})
+        .reset_index()
 
     model_att = AttitudinalEmbedding(**params["attitudinal_model"])
 
     model_att.fit(
-        estimated_groups_coord_ide,
-        groups_coord_att.rename(columns={'group': 'entity'})
+        estimated_groups_coord_ide.rename(columns={'ches2019_party': 'entity'}),
+        groups_coord_att.rename(columns={'party': 'entity'})
     )
 
     sources_coord_att = model_att.transform(ide_sources_cp)
-    targets_coord_att = model_att.transform(ide_targets_cp.drop("group", axis=1))
+    targets_coord_att = model_att.transform(ide_targets_cp.drop("ches2019_party", axis=1))
 
     # add group information
     targets_coord_att = targets_coord_att.merge(
@@ -91,4 +94,3 @@ for dimpair in combinations(ATTDIMS, 2):
             targets_groups,
             folder,
             dimpair)
-

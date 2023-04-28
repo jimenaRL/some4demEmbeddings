@@ -1,8 +1,15 @@
 import yaml
 from string import Template
 from itertools import combinations
-from viz import *
-from utils import *
+from bivariate_marginal import visualize_att, visualize_ide
+
+from some4demexp.utils import \
+
+from some4demexp.utils import \
+    set_output_folder, \
+    set_output_folder_dims, \
+    load_ide_embeddings, \
+    load_targets_groups \
 
 from argparse import ArgumentParser
 
@@ -33,34 +40,10 @@ DB = params['sqlite_db']
 ATTDIMS = params['attitudinal_dimensions']
 
 folder = set_output_folder(params, country, output)
+folder_dims = set_output_folder_dims(folder, dimpair)
 
-ide_sources, ide_targets = load_ide_embeddings(folder)
+_, ide_targets = load_ide_embeddings(folder)
 
-targets_groups = load_targets_groups(folder)
-
-visualize_ide(
-    ide_sources,
-    ide_targets,
-    targets_groups,
-    palette=palette,
-    path=os.path.join(folder, "ideological.png")
-)
-
-
-for dimpair in combinations(ATTDIMS, 2):
-
-    att_sources, att_targets, att_groups = load_att_embeddings(folder, dimpair)
-
-    visualize_att(
-        att_sources,
-        att_targets,
-        att_groups,
-        targets_groups,
-        dims=dict(zip(['x', 'y'], dimpair)),
-        palette=palette,
-        path=os.path.join(
-            set_output_folder_dims(folder, dimpair), "attitudinal.png")
-        )
 
 # for TB viz
 
@@ -68,8 +51,7 @@ saveMpsMetadata(
     DB,
     country,
     pids=ide_targets.entity.tolist(),
-    path=os.path.join(
-            set_output_folder_dims(folder, dimpair), "mps_metadata.csv"))
+    path=os.path.join(folder_dims, "mps_metadata.csv"))
 
 if show:
     plt.show
