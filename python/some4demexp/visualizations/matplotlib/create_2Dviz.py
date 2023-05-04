@@ -6,7 +6,8 @@ from itertools import combinations
 
 from some4demexp.inout import \
     set_output_folder, \
-    set_output_folder_dims, \
+    set_output_folder_emb, \
+    set_output_folder_att, \
     load_ide_embeddings, \
     load_att_embeddings, \
     load_targets_groups \
@@ -14,7 +15,6 @@ from some4demexp.inout import \
 from some4demexp.bivariate_marginal import \
     visualize_ide, \
     visualize_att
-
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -39,27 +39,36 @@ palette_path = Template(params['palette_path']).substitute(country=country)
 with open(palette_path, "r", encoding='utf-8') as fh:
     palette = yaml.load(fh, Loader=yaml.SafeLoader)
 
-folder = set_output_folder(params, country, output)
+ide_folder = set_output_folder_emb(params, country, output)
+ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+ide_images_folder = os.path.join(ide_folder, 'pairwise_latent_dimensions_images')
+os.makedirs(ide_images_folder, exist_ok=True)
 
-ide_sources, ide_targets = load_ide_embeddings(folder)
-
-targets_groups = load_targets_groups(folder)
+# Load target groups
+data_folder = set_output_folder(params, country, output)
+targets_groups = load_targets_groups(data_folder)
 
 # visualize ideological space
-visualize_ide(
-    ide_sources,
-    ide_targets,
-    targets_groups,
-    palette=palette,
-    path=os.path.join(folder, "ideological.png")
-)
+ide_dims = range(params['ideological_model']['n_latent_dimensions'])
+for x, y in combinations(ide_dims, 2):
+    visualize_ide(
+        ide_sources,
+        ide_targets,
+        targets_groups,
+        latent_dim_x=x,
+        latent_dim_y=y,
+        palette=palette,
+        output_folder=ide_images_folder
+    )
+
+exit()
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
 
-    att_sources, att_targets, att_groups = load_att_embeddings(folder, dimpair)
+    att_folder = set_output_folder_att(ide_folder, dimpair)
+    att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
 
-    folder_dims = set_output_folder_dims(folder, dimpair)
     visualize_att(
         att_sources,
         att_targets,
@@ -67,7 +76,7 @@ for dimpair in combinations(ATTDIMS, 2):
         targets_groups,
         dims=dict(zip(['x', 'y'], dimpair)),
         palette=palette,
-        path=os.path.join(folder_dims, "attitudinal.png")
+        path=os.path.join(att_folder, "attitudinal.png")
         )
 
 if show:

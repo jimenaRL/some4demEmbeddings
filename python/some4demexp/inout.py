@@ -47,32 +47,25 @@ def save_ide_embeddings(model, sources_ids, targets_ids, folder):
     print(f"Ideological embeddings saved at folder {folder}.")
 
 
-def save_att_embeddings(att_source, att_targets, att_groups, targets_groups, folder, dims):
-
-    targets_groups.to_csv(
-        os.path.join(folder, 'targets_groups.csv'), index=False)
-
-    att_folder = set_output_folder_dims(folder, dims)
+def save_att_embeddings(att_source, att_targets, att_groups, folder):
 
     att_source.to_csv(
-        os.path.join(att_folder, 'att_source.csv'), index=False)
+        os.path.join(folder, 'att_source.csv'), index=False)
     att_targets.to_csv(
-        os.path.join(att_folder, 'att_targets.csv'), index=False)
+        os.path.join(folder, 'att_targets.csv'), index=False)
     att_groups.to_csv(
-        os.path.join(att_folder, 'att_groups.csv'), index=False)
+        os.path.join(folder, 'att_groups.csv'), index=False)
 
-    print(f"Attitudinal embeddings saved at folder {att_folder}.")
+    print(f"Attitudinal embeddings saved at folder {folder}.")
 
 
-def load_att_embeddings(folder, dims):
+def load_att_embeddings(folder):
 
-    att_folder = set_output_folder_dims(folder, dims)
+    print(f"Attitudinal embeddings load from folder {folder}.")
 
-    print(f"Attitudinal embeddings load from folder {att_folder}.")
-
-    att_source = pd.read_csv(os.path.join(att_folder, 'att_source.csv'))
-    att_targets = pd.read_csv(os.path.join(att_folder, 'att_targets.csv'))
-    att_groups = pd.read_csv(os.path.join(att_folder, 'att_groups.csv'))
+    att_source = pd.read_csv(os.path.join(folder, 'att_source.csv'))
+    att_targets = pd.read_csv(os.path.join(folder, 'att_targets.csv'))
+    att_groups = pd.read_csv(os.path.join(folder, 'att_groups.csv'))
 
     return att_source, att_targets, att_groups
 
@@ -112,26 +105,32 @@ def load_experiment_data(folder):
 
 def set_output_folder(params, country, output):
 
-    emb_folder = f"{country}"
-    emb_folder += f"_ideN_{params['ideological_model']['n_latent_dimensions']}"
-    emb_folder += f"_sources_min_followers_{params['sources_min_followers']}"
-    emb_folder += f"_sources_min_outdegree_{params['sources_min_outdegree']}"
+    emb_folder = f"min_followers_{params['sources_min_followers']}"
+    emb_folder += f"_min_outdegree_{params['sources_min_outdegree']}"
 
-    output_folder = os.path.join(output, emb_folder)
+    output_folder = os.path.join(output, country, emb_folder)
 
     os.makedirs(output_folder, exist_ok=True)
 
-    config_file = os.path.join(output_folder, 'config.yaml')
-    if not os.path.exists(config_file):
-        with open(config_file, 'w') as file:
-            yaml.dump(params, file)
+    # config_file = os.path.join(output_folder, 'config.yaml')
+    # if not os.path.exists(config_file):
+    #     with open(config_file, 'w') as file:
+    #         yaml.dump(params, file)
 
-    print(f"YAML config saved at {output_folder}.")
+    # print(f"YAML config saved at {output_folder}.")
 
     return output_folder
 
 
-def set_output_folder_dims(folder, dims):
+def set_output_folder_emb(params, country, output):
+    output_folder_emb = os.path.join(
+        set_output_folder(params, country, output),
+        f"ideN_{params['ideological_model']['n_latent_dimensions']}")
+    os.makedirs(output_folder_emb, exist_ok=True)
+    return output_folder_emb
+
+
+def set_output_folder_att(folder, dims):
 
     folder = os.path.join(folder, '_vs_'.join(dims))
     os.makedirs(folder, exist_ok=True)

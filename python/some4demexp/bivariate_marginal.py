@@ -1,34 +1,93 @@
 import os
 
 import seaborn as sns
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+import matplotlib.patheffects as PathEffects
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+mpl.rcParams['text.latex.preamble'] = r"\usepackage{amsmath}"
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans-serif', size=12)
+mpl.rcParams['mathtext.fontset'] = 'custom'
+mpl.rcParams['mathtext.rm'] = 'Bitstream Vera Sans'
+mpl.rcParams['mathtext.it'] = 'Bitstream Vera Sans:italic'
+mpl.rcParams['mathtext.bf'] = 'Bitstream Vera Sans:bold'
+mpl.rcParams.update(mpl.rcParamsDefault)
+
+fs = 12
+
+legend_mps = Line2D(
+    [0],
+    [0],
+    color='black',
+    marker='+',
+    lw=0,
+    alpha=1.0,
+    label='MPs'
+)
+legend_parties = Line2D(
+    [0],
+    [0],
+    color='gray',
+    marker='o',
+    mec='k',
+    lw=0,
+    alpha=1,
+    label='Parties'
+)
+legend_followers = Line2D(
+    [0],
+    [0],
+    color='deepskyblue',
+    marker='s',
+    alpha=0.8,
+    linestyle='None',
+    label='Followers'
+)
+custom_legend = [legend_mps, legend_parties, legend_followers]
 
 
 def visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     targets_groups,
+    latent_dim_x=0,
+    latent_dim_y=1,
     palette=None,
-    path=None
+    output_folder=None
 ):
+
+    # preprocessing
+    colrename = {
+        f'latent_dimension_{latent_dim_x}': 'x',
+        f'latent_dimension_{latent_dim_y}': 'y'
+    }
+    sources_coord_ide = sources_coord_ide \
+        .rename(columns=colrename) \
+        .drop_duplicates()
+    targets_coord_ide = targets_coord_ide \
+        .rename(columns=colrename) \
+        .drop_duplicates()
+
+    targets_groups = targets_groups \
+        .rename(columns=colrename) \
+        .drop_duplicates()
 
     # plot sources embeddings
     g = sns.jointplot(
         data=sources_coord_ide.drop_duplicates(),
-        x='latent_dimension_0',
-        y='latent_dimension_1',
+        x='x',
+        y='y',
         kind="hex",
         height=8
     )
 
-    # # shrink fig so cbar is visible
-    # plt.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.2)
-    # # make new ax object for the cbar
-    # cbar_ax = g.fig.add_axes([.85, .25, .05, .4])  # x, y, width, height
-    # plt.colorbar(cax=cbar_ax)
-
     # get unique groups and build color dictionary
-    unique_groups = targets_groups.ches2019_party.unique().tolist()
+    unique_groups = targets_groups.party_acronym.unique().tolist()
     nunique_groups = len(set(unique_groups))
 
     if palette is None:
@@ -50,11 +109,11 @@ def visualize_ide(
     # plot colored by groups target embeddings
     ax = g.ax_joint
     for p in unique_groups:
-        sample = targets_coord_ide[targets_coord_ide.ches2019_party == p] \
-            .drop_duplicates()
+        sample = targets_coord_ide[targets_coord_ide.party_acronym == p]
+
         ax.scatter(
-            sample['latent_dimension_0'],
-            sample['latent_dimension_1'],
+            sample['x'],
+            sample['y'],
             marker='+',
             s=30,
             alpha=0.75,
@@ -63,13 +122,10 @@ def visualize_ide(
         )
 
         # plot estimated groups mean
-        mean_group_estimated = sample[[
-            'latent_dimension_0',
-            'latent_dimension_1'
-        ]].mean()
+        mean_group_estimated = sample[['x', 'y']].mean()
         ax.plot(
-            mean_group_estimated['latent_dimension_0'],
-            mean_group_estimated['latent_dimension_1'],
+            mean_group_estimated['x'],
+            mean_group_estimated['y'],
             marker='o',
             mec='k',
             color=palette[p],
@@ -78,8 +134,24 @@ def visualize_ide(
 
     plt.legend(loc='best', title='PARTY')
 
-    if path:
-        plt.savefig(path, dpi=150)
+    ax.set_xlabel(
+        fr'{latent_dim_x}th latent dimension $\delta_{latent_dim_x}$',
+        fontsize=fs)
+    ax.set_ylabel(
+        fr'{latent_dim_y}th latent dimension $\delta_{latent_dim_y}$',
+        fontsize=fs)
+
+    ax.legend(handles=custom_legend, loc='lower right', fontsize=fs-2)
+    ax.tick_params(axis='x', labelsize=fs)
+    ax.tick_params(axis='x', labelsize=fs)
+
+    # ax.set_aspect('equal')
+    plt.tight_layout()
+
+    if output_folder:
+        figname = f"latent_dims_{latent_dim_x}_vs_{latent_dim_y}.png"
+        path = os.path.join(output_folder, figname)
+        plt.savefig(path, dpi=300)
         print(f"Figure saved at {path}.")
 
 
@@ -103,8 +175,8 @@ def visualize_att(
     )
 
     # get unique groups and build color dictionary
-    unique_groups = targets_coord_att.ches2019_party.unique().tolist()
-    nunique_groups = targets_coord_att.ches2019_party.nunique()
+    unique_groups = targets_coord_att.party_acronym.unique().tolist()
+    nunique_groups = targets_coord_att.party_acronym.nunique()
     if palette is None:
         unique_groups.sort()
         palette = dict(zip(
@@ -120,7 +192,7 @@ def visualize_att(
     for p in unique_groups:
 
         # plot colored by groups target embeddings
-        sample = targets_coord_att[targets_coord_att.ches2019_party == p] \
+        sample = targets_coord_att[targets_coord_att.party_acronym == p] \
             .drop_duplicates()
 
         ax.scatter(

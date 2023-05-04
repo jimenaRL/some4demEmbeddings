@@ -6,6 +6,8 @@ from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
     set_output_folder, \
+    set_output_folder_emb, \
+    set_output_folder_att, \
     load_targets_groups, \
     load_ide_embeddings, \
     save_att_embeddings
@@ -28,12 +30,14 @@ print(yaml.dump(params, default_flow_style=False))
 SQLITE = SQLite(params['sqlite_db'])
 ATTDIMS = params['attitudinal_dimensions']
 
-# Load data from ideological embedding
-folder = set_output_folder(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(folder)
-
 # Load target groups
-targets_groups = load_targets_groups(folder)
+data_folder = set_output_folder(params, country, output)
+targets_groups = load_targets_groups(data_folder)
+
+# Load data from ideological embedding
+ide_folder = set_output_folder_emb(params, country, output)
+ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+
 
 # Estimate target groups positions in ideological space by averaging
 # targets' individual positions
@@ -63,19 +67,19 @@ for dimpair in combinations(ATTDIMS, 2):
     # make estimate
     estimated_groups_coord_ide = ide_targets_cp \
         .drop(columns=['entity']) \
-        .groupby('ches2019_party') \
+        .groupby('party_acronym') \
         .mean() \
         .reset_index()
 
     model_att = AttitudinalEmbedding(**params["attitudinal_model"])
 
     model_att.fit(
-        estimated_groups_coord_ide.rename(columns={'ches2019_party': 'entity'}),
+        estimated_groups_coord_ide.rename(columns={'party_acronym': 'entity'}),
         groups_coord_att.rename(columns={'party': 'entity'})
     )
 
     sources_coord_att = model_att.transform(ide_sources_cp)
-    targets_coord_att = model_att.transform(ide_targets_cp.drop("ches2019_party", axis=1))
+    targets_coord_att = model_att.transform(ide_targets_cp.drop("party_acronym", axis=1))
 
     # add group information
     targets_coord_att = targets_coord_att.merge(
@@ -87,10 +91,9 @@ for dimpair in combinations(ATTDIMS, 2):
         .drop(columns="mp_pseudo_id")
 
     # save results
+    att_folder = set_output_folder_att(ide_folder, dimpair)
     save_att_embeddings(
             sources_coord_att,
             targets_coord_att,
             groups_coord_att,
-            targets_groups,
-            folder,
-            dimpair)
+            att_folder)
