@@ -104,45 +104,45 @@ spain:
   legend_loc: "lower right"
   limits:
     x:
-      - -2.5
+      - -3
       - 2
     y:
       - -4.5
       - 2.5
   nudges:
     PSOE:
-      - 0
+      - 0.35
       - 0
     Vox:
       - 0
-      - 0
+      - -0.7
     EHB:
-      - 0
-      - 0
+      - 0.2
+      - -0.2
     PPP:
-      - 0
+      - 0.4
       - 0
     ERC:
-      - 0
-      - 0
+      - 0.2
+      - -0.2
     Cs:
       - 0
-      - 0
+      - -0.8
     PNV:
-      - 0
-      - 0
+      - 0.25
+      - -0.4
     Podemos:
-      - 0
-      - 0
+      - -1.2
+      - 0.3
     Pais:
-      - 0
-      - 0
+      - 0.25
+      - 0.1
     CC:
       - 0
-      - 0
+      - -0.8
     BNG:
-      - 0
-      - 0
+      - 0.2
+      - -0.5
   palette:
     PSOE: red
     Vox: magenta

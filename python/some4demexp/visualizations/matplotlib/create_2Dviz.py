@@ -22,7 +22,7 @@ ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
 ap.add_argument('--output', type=str, required=True)
 ap.add_argument('--vizconfig', type=str, required=True)
-ap.add_argument('--show', type=bool, required=False, default=False)
+ap.add_argument('--show', type=bool, required=False)
 args = ap.parse_args()
 config = args.config
 vizconfig = args.vizconfig

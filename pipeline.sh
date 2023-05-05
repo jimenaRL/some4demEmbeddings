@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a StringArray=(spain)
+declare -a StringArray=(france germany spain)
 
 config=config.yaml
 outputs=outputs
@@ -15,8 +15,8 @@ for country in ${StringArray[@]}; do
         --config=$config \
         --country=$country \
         --vizconfig=$vizconfig \
-        --output=$outputs \
-        --show=$show
+        --output=$outputs
+        # --show=$show
 done
 
 
