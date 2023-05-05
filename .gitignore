@@ -3,5 +3,5 @@ __pycache__
 *.npy
 *.npz
 *.tar
-outputs
+*outputs
 .python-version

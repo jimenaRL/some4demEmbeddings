@@ -60,26 +60,26 @@ if t0 > t1:
 # Fit regression
 for dimpair in combinations(ATTDIMS, 2):
 
-    groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsCoord(country, dimpair)
+    groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(country, dimpair)
     ide_targets_cp = ide_targets.copy()
     ide_sources_cp = ide_sources.copy()
 
     # make estimate
     estimated_groups_coord_ide = ide_targets_cp \
         .drop(columns=['entity']) \
-        .groupby('party_acronym') \
+        .groupby('party') \
         .mean() \
         .reset_index()
 
     model_att = AttitudinalEmbedding(**params["attitudinal_model"])
 
     model_att.fit(
-        estimated_groups_coord_ide.rename(columns={'party_acronym': 'entity'}),
+        estimated_groups_coord_ide.rename(columns={'party': 'entity'}),
         groups_coord_att.rename(columns={'party': 'entity'})
     )
 
     sources_coord_att = model_att.transform(ide_sources_cp)
-    targets_coord_att = model_att.transform(ide_targets_cp.drop("party_acronym", axis=1))
+    targets_coord_att = model_att.transform(ide_targets_cp.drop("party", axis=1))
 
     # add group information
     targets_coord_att = targets_coord_att.merge(

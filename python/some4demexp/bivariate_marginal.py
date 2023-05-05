@@ -1,11 +1,11 @@
 import os
-
+import pandas as pd
 import seaborn as sns
-
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
+from adjustText import adjust_text
 
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
@@ -51,14 +51,30 @@ legend_followers = Line2D(
 custom_legend = [legend_mps, legend_parties, legend_followers]
 
 
+def get_ordinal(n):
+    if n < 0 or not isinstance(n, int):
+        raise ValueError(f"Input must be a strictly positive interger.")
+    if n == 1:
+        return "1st"
+    elif n == 2:
+        return "2nd"
+    else:
+        return f"{n}th"
+
+
 def visualize_ide(
     sources_coord_ide,
     targets_coord_ide,
     targets_groups,
-    latent_dim_x=0,
-    latent_dim_y=1,
-    palette=None,
-    output_folder=None
+    latent_dim_x,
+    latent_dim_y,
+    palette,
+    nudges,
+    limits,
+    cbar_rect,
+    legend_loc,
+    output_folder=None,
+    show=False
 ):
 
     # preprocessing
@@ -66,28 +82,44 @@ def visualize_ide(
         f'latent_dimension_{latent_dim_x}': 'x',
         f'latent_dimension_{latent_dim_y}': 'y'
     }
-    sources_coord_ide = sources_coord_ide \
-        .rename(columns=colrename) \
-        .drop_duplicates()
-    targets_coord_ide = targets_coord_ide \
-        .rename(columns=colrename) \
-        .drop_duplicates()
+    sources_coord_ide = sources_coord_ide.rename(columns=colrename)
+    targets_coord_ide = targets_coord_ide.rename(columns=colrename)
+    targets_groups = targets_groups.rename(columns=colrename)
 
-    targets_groups = targets_groups \
-        .rename(columns=colrename) \
-        .drop_duplicates()
+    plot_df = pd.concat([sources_coord_ide, targets_coord_ide]) \
+        .reset_index() \
+        .drop(columns="index")
 
-    # plot sources embeddings
-    g = sns.jointplot(
-        data=sources_coord_ide.drop_duplicates(),
-        x='x',
-        y='y',
-        kind="hex",
-        height=8
-    )
+    l0 = len(plot_df)
+    plot_df = plot_df.drop_duplicates()
+    l1 = len(plot_df)
+    if (l0 > l1):
+        print(f"Dropped {l1 -l0} repeated embeddings points.")
+
+    # setting lims
+    pad = 0.35
+    dx = plot_df['x'].max()-plot_df['x'].min()
+    dy = plot_df['y'].max()-plot_df['y'].min()
+    xlims = (plot_df['x'].min()-pad*dx, plot_df['x'].max()+pad*dx)
+    ylims = (plot_df['y'].min()-pad*dy, plot_df['y'].max()+pad*dy)
+
+    # This turned out to be 6x6 figsize
+    kwargs = {
+        'x': 'x',
+        'y': 'y',
+        'space': 0,
+        'ratio': 10,
+        'height': 5,
+        'color': "deepskyblue",
+        'kind': 'hex',
+        'data': plot_df,
+    }
+
+    # plot sources and targets embeddings
+    g = sns.jointplot(**kwargs)
 
     # get unique groups and build color dictionary
-    unique_groups = targets_groups.party_acronym.unique().tolist()
+    unique_groups = targets_groups.party.unique().tolist()
     nunique_groups = len(set(unique_groups))
 
     if palette is None:
@@ -108,17 +140,19 @@ def visualize_ide(
 
     # plot colored by groups target embeddings
     ax = g.ax_joint
-    for p in unique_groups:
-        sample = targets_coord_ide[targets_coord_ide.party_acronym == p]
+    texts = []
+    for party in unique_groups:
+
+        sample = targets_coord_ide[targets_coord_ide.party == party]
 
         ax.scatter(
             sample['x'],
             sample['y'],
             marker='+',
-            s=30,
-            alpha=0.75,
-            color=palette[p],
-            label=p
+            s=20,
+            alpha=0.5,
+            color=palette[party],
+            label=party
         )
 
         # plot estimated groups mean
@@ -128,24 +162,43 @@ def visualize_ide(
             mean_group_estimated['y'],
             marker='o',
             mec='k',
-            color=palette[p],
-            ms=7
+            mew=1.0,
+            ms=5,
+            color=palette[party],
         )
 
-    plt.legend(loc='best', title='PARTY')
+        text = ax.text(
+            mean_group_estimated['x']+nudges[party][0],
+            mean_group_estimated['y']+nudges[party][1],
+            party,
+            color='white',
+            bbox=dict(
+                boxstyle="round",
+                ec='black',
+                fc=palette[party],
+                alpha=1),
+            fontsize=9)
+        texts.append(text)
 
-    ax.set_xlabel(
-        fr'{latent_dim_x}th latent dimension $\delta_{latent_dim_x}$',
-        fontsize=fs)
-    ax.set_ylabel(
-        fr'{latent_dim_y}th latent dimension $\delta_{latent_dim_y}$',
-        fontsize=fs)
+    adjust_text(texts)
 
-    ax.legend(handles=custom_legend, loc='lower right', fontsize=fs-2)
+    xl = fr'{get_ordinal(latent_dim_x+1)} latent dimension '
+    xl += fr'$\delta_{latent_dim_x+1}$'
+    yl = fr'{get_ordinal(latent_dim_y+1)} latent dimension '
+    yl += fr'$\delta_{latent_dim_y+1}$'
+    ax.set_xlabel(xl, fontsize=fs)
+    ax.set_ylabel(yl, fontsize=fs)
+
+    ax.legend(handles=custom_legend, loc=legend_loc, fontsize=fs-2)
     ax.tick_params(axis='x', labelsize=fs)
     ax.tick_params(axis='x', labelsize=fs)
 
-    # ax.set_aspect('equal')
+    ax.set_xlim(limits['x'])
+    ax.set_ylim(limits['y'])
+
+    cbar_ax = g.fig.add_axes(cbar_rect)
+    plt.colorbar(cax=cbar_ax)
+
     plt.tight_layout()
 
     if output_folder:
@@ -153,6 +206,9 @@ def visualize_ide(
         path = os.path.join(output_folder, figname)
         plt.savefig(path, dpi=300)
         print(f"Figure saved at {path}.")
+
+    if show:
+        plt.show()
 
 
 def visualize_att(
@@ -175,8 +231,8 @@ def visualize_att(
     )
 
     # get unique groups and build color dictionary
-    unique_groups = targets_coord_att.party_acronym.unique().tolist()
-    nunique_groups = targets_coord_att.party_acronym.nunique()
+    unique_groups = targets_coord_att.party.unique().tolist()
+    nunique_groups = targets_coord_att.party.nunique()
     if palette is None:
         unique_groups.sort()
         palette = dict(zip(
@@ -192,7 +248,7 @@ def visualize_att(
     for p in unique_groups:
 
         # plot colored by groups target embeddings
-        sample = targets_coord_att[targets_coord_att.party_acronym == p] \
+        sample = targets_coord_att[targets_coord_att.party == p] \
             .drop_duplicates()
 
         ax.scatter(

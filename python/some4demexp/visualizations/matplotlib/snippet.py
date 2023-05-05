@@ -44,10 +44,77 @@ associate parties.
 [Jimena] Ok. Import from yaml.
 
 """
-config = "parties_colors.yaml"
-with open(config, "r", encoding='utf-8') as fh:
-    params = yaml.load(fh, Loader=yaml.SafeLoader)
-
+party_colors="""
+    # uk
+    Alliance: green
+    Conservative: blue
+    Democratic Unionist Party: purple
+    Green Party: green
+    Independent: black
+    Labour: red
+    Labour (Co-op): red
+    Liberal Democrat: gold
+    Plaid Cymru: orangered
+    Respect: pink
+    Scottish National Party: green
+    "Sinn F\xE9in": tab:brown
+    Social Democratic & Labour Party: magenta
+    Speaker: white
+    The Independent Group for Change: orangered
+    UK Independence Party: magenta
+    Ulster Unionist Party: purple
+    # france
+    EELV: tab:green
+    LFI: tab:purple
+    LR: tab:blue
+    RE: tab:brown
+    MoDem: orangered
+    PCF: red
+    PRG: blue
+    PS: tab:pink
+    RN: magenta
+    DLF: gold
+    # germany
+    AfD: magenta
+    CDU: black
+    CSU: tab:blue
+    GRÜNE: tab:green
+    LINKE: mediumvioletred
+    Die blaue Partei: navy
+    FDP: gold
+    Parteilos: tab:pink
+    SPD: red
+    # italy
+    Azione: tab:blue
+    CPE: orangered
+    FI: cornflowerblue
+    FdI: navy
+    IV: mediumvioletred
+    LeU: tab:pink
+    Lega: tab:green
+    M5S: gold
+    MAIE: tab:green
+    Misto: black
+    PD: red
+    PSI: magenta
+    RI: gold
+    SVP: darkgreen
+    UV: tab:brown
+    emeritus: black
+    # spain
+    CDC: tab:pink
+    Cs: orangered
+    ECP: purple
+    "ERC-CATS\xCD ": gold
+    IU: tab:red
+    'NCa ': black
+    PNV: tab:green
+    PP: tab:blue
+    PPP: tab:blue
+    PSOE: red
+    UP: mediumvioletred
+    UPM: magenta
+"""
 
 """
 [Pedro] I used here a dictionary of acronyms, but in theory Hiroki's data,
@@ -193,7 +260,6 @@ disp = {
       'UK Independence Party': (-0.5, 0.3)
 
       }
-
 
 colrename = {
     'latent_dimension_0': 'x',

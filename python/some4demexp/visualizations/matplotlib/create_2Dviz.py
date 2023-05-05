@@ -19,25 +19,26 @@ from some4demexp.bivariate_marginal import \
 # parse arguments and set paths
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
-ap.add_argument('--output', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
-ap.add_argument('--show', type=str, required=False, default=False)
+ap.add_argument('--output', type=str, required=True)
+ap.add_argument('--vizconfig', type=str, required=True)
+ap.add_argument('--show', type=bool, required=False, default=False)
 args = ap.parse_args()
 config = args.config
+vizconfig = args.vizconfig
 output = args.output
 country = args.country
 show = args.show
 
+with open(vizconfig, "r", encoding='utf-8') as fh:
+    vizparams = yaml.load(fh, Loader=yaml.SafeLoader)[country]
+print(yaml.dump(vizparams, default_flow_style=False))
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
 ATTDIMS = params['attitudinal_dimensions']
-
-palette_path = Template(params['palette_path']).substitute(country=country)
-with open(palette_path, "r", encoding='utf-8') as fh:
-    palette = yaml.load(fh, Loader=yaml.SafeLoader)
 
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
@@ -57,8 +58,9 @@ for x, y in combinations(ide_dims, 2):
         targets_groups,
         latent_dim_x=x,
         latent_dim_y=y,
-        palette=palette,
-        output_folder=ide_images_folder
+        output_folder=ide_images_folder,
+        show=show,
+        **vizparams
     )
 
 exit()
@@ -78,6 +80,3 @@ for dimpair in combinations(ATTDIMS, 2):
         palette=palette,
         path=os.path.join(att_folder, "attitudinal.png")
         )
-
-if show:
-    plt.show
