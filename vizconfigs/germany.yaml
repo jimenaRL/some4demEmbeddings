@@ -1,0 +1,104 @@
+ideological:
+  cbar_rect:
+      - 0.775
+      - 0.55
+      - 0.05
+      - 0.35
+  legend_loc: "lower right"
+  limits:
+    x:
+      - -1
+      - 3.5
+    y:
+      - -2
+      - 2.5
+  nudges:
+    SPD:
+      - 0.5
+      - -0.1
+    FDP:
+      - 0.3
+      - 0
+    CDU:
+      - -0.9
+      - 0
+    GRUNEN:
+      - 0.4
+      - -0.1
+    LINKE:
+      - 0.3
+      - -0.1
+    CSU:
+      - -0.6
+      - 0
+    AfD:
+      - -0.2
+      - -0.45
+palette:
+  AfD: magenta
+  CDU: black
+  CSU: tab:blue
+  GRUNEN: tab:green
+  LINKE: mediumvioletred
+  FDP: gold
+  SPD: red
+ideological:
+  cbar_rect:
+    - 0.15
+    - 0.4
+    - 0.05
+    - 0.5
+  legend_loc: "lower right"
+  limits:
+    x:
+      - -3
+      - 2
+    y:
+      - -4.5
+      - 2.5
+  nudges:
+    PSOE:
+      - 0.35
+      - 0
+    Vox:
+      - 0
+      - -0.7
+    EHB:
+      - 0.2
+      - -0.2
+    PPP:
+      - 0.4
+      - 0
+    ERC:
+      - 0.2
+      - -0.2
+    Cs:
+      - 0
+      - -0.8
+    PNV:
+      - 0.25
+      - -0.4
+    Podemos:
+      - -1.2
+      - 0.3
+    Pais:
+      - 0.25
+      - 0.1
+    CC:
+      - 0
+      - -0.8
+    BNG:
+      - 0.2
+      - -0.5
+palette:
+  PSOE: red
+  Vox: magenta
+  EHB: mediumvioletred
+  PPP: tab:blue
+  ERC: gold
+  Cs: orangered
+  PNV: tab:green
+  Podemos: tab:purple
+  Pais: tab:pink
+  CC: purple
+  BNG: tab:brown

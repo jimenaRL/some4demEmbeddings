@@ -22,7 +22,7 @@ ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
 ap.add_argument('--output', type=str, required=True)
 ap.add_argument('--vizconfig', type=str, required=True)
-ap.add_argument('--show', type=bool, required=False)
+ap.add_argument('--show',  action='store_true', required=False,)
 args = ap.parse_args()
 config = args.config
 vizconfig = args.vizconfig
@@ -31,7 +31,7 @@ country = args.country
 show = args.show
 
 with open(vizconfig, "r", encoding='utf-8') as fh:
-    vizparams = yaml.load(fh, Loader=yaml.SafeLoader)[country]
+    vizparams = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(vizparams, default_flow_style=False))
 
 with open(config, "r", encoding='utf-8') as fh:
@@ -60,10 +60,10 @@ for x, y in combinations(ide_dims, 2):
         latent_dim_y=y,
         output_folder=ide_images_folder,
         show=show,
-        **vizparams
+        palette=vizparams['palette'],
+        **vizparams['ideological']
     )
 
-exit()
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
@@ -77,6 +77,8 @@ for dimpair in combinations(ATTDIMS, 2):
         att_groups,
         targets_groups,
         dims=dict(zip(['x', 'y'], dimpair)),
-        palette=palette,
-        path=os.path.join(att_folder, "attitudinal.png")
+        path=os.path.join(att_folder, "attitudinal.png"),
+        show=show,
+        palette=vizparams['palette'],
+        **vizparams['attitudinal']['_vs_'.join(dimpair)]
         )

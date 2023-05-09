@@ -1,11 +1,11 @@
 attitudinal_dimensions:
-- lrgen
-- lrecon
-- antielite_salience
-- eu_position
-- immigrate_policy
-- galtan
-- environment
+  - lrgen
+  - lrecon
+  - antielite_salience
+  - eu_position
+  - immigrate_policy
+  - galtan
+  - environment
 attitudinal_model:
   N: 2
   random_state: 666
@@ -15,7 +15,7 @@ ideological_model:
   force_bipartite: true
   force_full_rank: false
   in_degree_threshold: 3
-  n_latent_dimensions: 2
+  n_latent_dimensions: 20
   out_degree_threshold: null
   random_state: null
   standardize_mean: true
