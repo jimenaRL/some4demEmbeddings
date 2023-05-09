@@ -48,6 +48,10 @@ ATT_DICT = {
     'lrgen': 'Left- Right',
     'eu_position': 'EU integration',
     'antielite_salience': 'Anti-elite salience',
+    'lrecon': 'Left- Right economy',
+    'immigrate_policy': 'Immigration',
+    'galtan': 'Liberal - Traditional',
+    'environment': 'Importance of ecology'
 }
 
 def get_ordinal(n):
@@ -174,9 +178,9 @@ def visualize_ide(
     adjust_text(texts)
 
     xl = fr'{get_ordinal(latent_dim_x+1)} latent dimension '
-    xl += r'$\delta_{1}$'
+    xl += fr'$\delta_{latent_dim_x+1}$'
     yl = fr'{get_ordinal(latent_dim_y+1)} latent dimension '
-    yl += r'$\delta_{2}$'
+    yl += fr'$\delta_{latent_dim_y+1}$'
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 

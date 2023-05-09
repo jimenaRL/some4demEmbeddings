@@ -15,7 +15,7 @@ ideological_model:
   force_bipartite: true
   force_full_rank: false
   in_degree_threshold: 3
-  n_latent_dimensions: 20
+  n_latent_dimensions: 15
   out_degree_threshold: null
   random_state: null
   standardize_mean: true

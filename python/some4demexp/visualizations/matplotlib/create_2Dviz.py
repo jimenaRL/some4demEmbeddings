@@ -50,8 +50,7 @@ data_folder = set_output_folder(params, country, output)
 targets_groups = load_targets_groups(data_folder)
 
 # visualize ideological space
-ide_dims = range(params['ideological_model']['n_latent_dimensions'])
-for x, y in combinations(ide_dims, 2):
+for x, y in combinations([0, 1, 2, 3], 2):
     visualize_ide(
         ide_sources,
         ide_targets,
