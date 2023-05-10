@@ -1,0 +1,75 @@
+ideological:
+  cbar_rect:
+      - 0.15
+      - 0.35
+      - 0.03
+      - 0.45
+  legend_loc: "upper right"
+  limits:
+    x:
+      - -2.5
+      - 3.5
+    y:
+      - -1
+      - 10
+  nudges:
+    LN:
+      - 0
+      - 0.3
+    FI:
+      - 0
+      - -0.5
+    PD:
+      - 0.2
+      - 0.3
+    SI:
+      - 0
+      - 0.3
+    FdI:
+      - -0.2
+      - 0.3
+    M5S:
+      - 0.35
+      - 0
+attitudinal:
+  lrgen_vs_antielite_salience:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      LN:
+        - 0
+        - 0
+      FI:
+        - 0
+        - 0
+      PD:
+        - 0
+        - 0
+      SI:
+        - 0
+        - 0.2
+      FdI:
+        - 0
+        - 0
+      M5S:
+        - 0
+        - 0
+palette:
+  LN: tab:green
+  FI: cornflowerblue
+  SVP: darkgreen
+  PD: red
+  SI: magenta
+  FdI: navy
+  M5S: gold

@@ -1,6 +1,5 @@
 attitudinal_dimensions:
   - lrgen
-  - eu_position
   - antielite_salience
 attitudinal_model:
   N: 2
