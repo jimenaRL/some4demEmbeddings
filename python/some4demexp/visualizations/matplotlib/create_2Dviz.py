@@ -49,8 +49,10 @@ os.makedirs(ide_images_folder, exist_ok=True)
 data_folder = set_output_folder(params, country, output)
 targets_groups = load_targets_groups(data_folder)
 
+n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 4)
+
 # visualize ideological space
-for x, y in combinations([0, 1, 2, 3], 2):
+for x, y in combinations(range(n_dims_to_viz), 2):
     visualize_ide(
         ide_sources,
         ide_targets,
@@ -63,6 +65,7 @@ for x, y in combinations([0, 1, 2, 3], 2):
         **vizparams['ideological']
     )
 
+exit()
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
