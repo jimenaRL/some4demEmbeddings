@@ -1,0 +1,96 @@
+ideological:
+  cbar_rect:
+      - 0.15
+      - 0.35
+      - 0.03
+      - 0.45
+  legend_loc: "upper right"
+  limits:
+    x:
+      - -2.5
+      - 3
+    y:
+      - -2
+      - 4
+  nudges:
+    SDS:
+      - 0
+      - 0
+    SD:
+      - 0
+      - 0
+    NSI:
+      - 0
+      - 0
+    DeSUS:
+      - 0
+      - 0
+    SNS:
+      - 0
+      - 0
+    SMC:
+      - 0
+      - 0
+    Levica:
+      - 0
+      - 0
+    Alenka Bratusek:
+      - 0
+      - 0
+    LMS:
+      - 0
+      - 0
+attitudinal:
+  lrgen_vs_antielite_salience:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -2
+        - 12
+      y:
+        - -2
+        - 12
+    nudges:
+      SDS:
+        - 0
+        - 0
+      SD:
+        - 0
+        - 0
+      NSI:
+        - 0
+        - 0
+      DeSUS:
+        - 0
+        - 0
+      SNS:
+        - 0
+        - 0
+      SMC:
+        - 0
+        - 0
+      Levica:
+        - 0
+        - 0
+      Alenka Bratusek:
+        - 0
+        - 0
+      LMS:
+        - 0
+        - 0
+palette:
+  SDS: magenta
+  SD: magenta
+  NSI: magenta
+  DeSUS: magenta
+  SNS: magenta
+  SMC: magenta
+  Levica: magenta
+  Alenka Bratusek: magenta
+  LMS: magenta
+
