@@ -11,6 +11,7 @@ plt.rc('text', usetex=True)
 plt.rc('font', family='sans-serif', size=12)
 
 fs = 12
+dpi = 150
 
 legend_mps = Line2D(
     [0],
@@ -199,7 +200,7 @@ def visualize_ide(
     if output_folder:
         figname = f"latent_dims_{latent_dim_x}_vs_{latent_dim_y}.png"
         path = os.path.join(output_folder, figname)
-        plt.savefig(path, dpi=300)
+        plt.savefig(path, dpi=dpi)
         print(f"Figure saved at {path}.")
 
     if show:
@@ -332,7 +333,7 @@ def visualize_att(
     plt.tight_layout()
 
     if path:
-        plt.savefig(path, dpi=150)
+        plt.savefig(path, dpi=dpi)
         print(f"Figure saved at {path}.")
 
     if show:
