@@ -1,0 +1,1092 @@
+ideological:
+  cbar_rect:
+      - 0.15
+      - 0.35
+      - 0.03
+      - 0.45
+  legend_loc: "upper right"
+  limits:
+    x:
+      - -2.5
+      - 3
+    y:
+      - -2
+      - 4
+  nudges:
+      PS:
+        - 0.3
+        - -0.2
+      SP/SPA:
+        - -0.8
+        - -0.4
+      ECOLO:
+        - 0.2
+        - -0.3
+      AGALEV:
+        - 0.25
+        - -0.25
+      PRL/MR:
+        - -0.75
+        - 0.15
+      VLD/PVV:
+        - -1.6
+        - 0.25
+      PSC/CDH:
+        - -0.1
+        - 0.4
+      CDV:
+        - -0.7
+        - 0
+      VU/NVA:
+        - 0.15
+        - 0.05
+      VB:
+        - 0.2
+        - 0
+      PVDA-PTB:
+        - 0
+        - -0.4
+attitudinal:
+  lrgen_vs_lrecon:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrgen_vs_antielite_salience:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrgen_vs_eu_position:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrgen_vs_immigrate_policy:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrgen_vs_galtan:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrgen_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrecon_vs_antielite_salience:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrecon_vs_eu_position:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrecon_vs_immigrate_policy:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrecon_vs_galtan:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  lrecon_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  antielite_salience_vs_eu_position:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  antielite_salience_vs_immigrate_policy:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  antielite_salience_vs_galtan:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  antielite_salience_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  eu_position_vs_immigrate_policy:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  eu_position_vs_galtan:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  eu_position_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  immigrate_policy_vs_galtan:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  immigrate_policy_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+  galtan_vs_environment:
+      cbar_rect:
+          - 0.15
+          - 0.6
+          - 0.02
+          - 0.3
+      legend_loc: "lower center"
+      limits:
+        x:
+          - -3
+          - 12.2
+        y:
+          - -2
+          - 11
+      nudges:
+        PS:
+          - 0
+          - 0
+        SP/SPA:
+          - 0
+          - 0
+        ECOLO:
+          - 0
+          - 0
+        AGALEV:
+          - 0
+          - 0
+        PRL/MR:
+          - 0
+          - 0
+        VLD/PVV:
+          - 0
+          - 0
+        PSC/CDH:
+          - 0
+          - 0
+        CDV:
+          - 0
+          - 0
+        VU/NVA:
+          - 0
+          - 0
+        VB:
+          - 0
+          - 0
+        PVDA-PTB:
+          - 0
+          - 0
+
+
+palette:
+  PS: tab:pink
+  SP/SPA: tab:purple
+  ECOLO: tab:green
+  AGALEV: tab:green
+  PRL/MR: navy
+  VLD/PVV: magenta
+  PSC/CDH: gold
+  CDV: blue
+  VU/NVA: tab:brown
+  VB: orangered
+  PVDA-PTB: red
+

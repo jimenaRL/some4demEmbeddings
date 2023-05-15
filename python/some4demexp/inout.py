@@ -112,12 +112,11 @@ def set_output_folder(params, country, output):
 
     os.makedirs(output_folder, exist_ok=True)
 
-    # config_file = os.path.join(output_folder, 'config.yaml')
-    # if not os.path.exists(config_file):
-    #     with open(config_file, 'w') as file:
-    #         yaml.dump(params, file)
+    config_file = os.path.join(output_folder, 'config.yaml')
+    with open(config_file, 'w') as file:
+        yaml.dump(params, file)
 
-    # print(f"YAML config saved at {output_folder}.")
+    print(f"YAML config saved at {output_folder}.")
 
     return output_folder
 
@@ -140,7 +139,7 @@ def set_output_folder_att(folder, dims):
 
 def save_targets_groups(targets_groups, folder):
 
-    targets_groups.to_csv(
-        os.path.join(folder, "targets_groups.csv"),
-        index=False
-    )
+    file = os.path.join(folder, "targets_groups.csv")
+    targets_groups.to_csv(file, index=False)
+    print(f"Target groups saved at {file}.")
+

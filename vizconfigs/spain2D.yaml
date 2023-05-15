@@ -46,6 +46,55 @@ ideological:
     BNG:
       - 0.2
       - -0.5
+attitudinal:
+  lrgen_vs_antielite_salience:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -2
+        - 12
+      y:
+        - -2
+        - 12
+    nudges:
+      PSOE:
+        - 0.35
+        - 0
+      Vox:
+        - 0
+        - -0.7
+      EHB:
+        - 0.2
+        - -0.2
+      PPP:
+        - 0.4
+        - 0
+      ERC:
+        - 0.2
+        - -0.2
+      Cs:
+        - 0
+        - -0.8
+      PNV:
+        - 0.25
+        - -0.4
+      Podemos:
+        - -1.2
+        - 0.3
+      Pais:
+        - 0.25
+        - 0.1
+      CC:
+        - 0
+        - -0.8
+      BNG:
+        - 0.2
+        - -0.5
 palette:
   PSOE: red
   Vox: magenta

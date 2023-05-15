@@ -251,7 +251,7 @@ attitudinal:
       DLF:
         - -1.4
         - 0
-  eu_position_vs_antielite_salience:
+  lrgen_vs_eu_position:
     cbar_rect:
         - 0.15
         - 0.6
@@ -267,33 +267,621 @@ attitudinal:
         - 11
     nudges:
       EELV:
-        - 0
-        - 0
+        - -0.8
+        - 0.3
       FI:
         - 0
-        - 0
+        - -0.8
       LR:
-        - 0
+        - 0.4
         - 0
       LREM:
-        - 0
+        - 0.8
         - 0
       MoDem:
-        - 0
-        - 0
+        - -0.8
+        - 0.2
       PCF:
-        - 0
-        - 0
+        - 0.6
+        - 0.2
       PS:
-        - 0
+        - 0.4
         - 0
       RN:
-        - 0
+        - 0.6
         - 0
       DLF:
+        - -1.4
         - 0
+  lrecon_vs_antielite_salience:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
         - 0
-  lrgen_vs_eu_position:
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  lrecon_vs_eu_position:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  lrecon_vs_immigrate_policy:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  lrecon_vs_galtan:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  lrecon_vs_environment:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  antielite_salience_vs_eu_position:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  antielite_salience_vs_immigrate_policy:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  antielite_salience_vs_galtan:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  antielite_salience_vs_environment:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  eu_position_vs_immigrate_policy:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  eu_position_vs_galtan:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  eu_position_vs_environment:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  immigrate_policy_vs_galtan:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  immigrate_policy_vs_environment:
+    cbar_rect:
+        - 0.15
+        - 0.6
+        - 0.02
+        - 0.3
+    legend_loc: "lower center"
+    limits:
+      x:
+        - -3
+        - 12.2
+      y:
+        - -2
+        - 11
+    nudges:
+      EELV:
+        - -0.8
+        - 0.3
+      FI:
+        - 0
+        - -0.8
+      LR:
+        - 0.4
+        - 0
+      LREM:
+        - 0.8
+        - 0
+      MoDem:
+        - -0.8
+        - 0.2
+      PCF:
+        - 0.6
+        - 0.2
+      PS:
+        - 0.4
+        - 0
+      RN:
+        - 0.6
+        - 0
+      DLF:
+        - -1.4
+        - 0
+  galtan_vs_environment:
     cbar_rect:
         - 0.15
         - 0.6
