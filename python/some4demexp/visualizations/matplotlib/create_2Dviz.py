@@ -65,8 +65,6 @@ for x, y in combinations(range(n_dims_to_viz), 2):
         **vizparams['ideological']
     )
 
-exit()
-
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
 
