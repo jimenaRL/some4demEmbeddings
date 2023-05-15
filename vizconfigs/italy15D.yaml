@@ -1,3 +1,63 @@
+attitudinal:
+  antielite_salience_vs_environment: &id001
+    cbar_rect:
+    - 0.15
+    - 0.6
+    - 0.02
+    - 0.3
+    legend_loc: lower center
+    limits:
+      x:
+      - -2
+      - 12
+      y:
+      - -2
+      - 12
+    nudges:
+      FI:
+      - 0
+      - 0
+      FdI:
+      - 0
+      - 0
+      LN:
+      - 0
+      - 0
+      M5S:
+      - 0
+      - 0
+      PD:
+      - 0
+      - 0
+      RI:
+      - 0
+      - 0
+      SI:
+      - 0
+      - 0
+      SVP:
+      - 0
+      - 0
+  antielite_salience_vs_eu_position: *id001
+  antielite_salience_vs_galtan: *id001
+  antielite_salience_vs_immigrate_policy: *id001
+  eu_position_vs_environment: *id001
+  eu_position_vs_galtan: *id001
+  eu_position_vs_immigrate_policy: *id001
+  galtan_vs_environment: *id001
+  immigrate_policy_vs_environment: *id001
+  immigrate_policy_vs_galtan: *id001
+  lrecon_vs_antielite_salience: *id001
+  lrecon_vs_environment: *id001
+  lrecon_vs_eu_position: *id001
+  lrecon_vs_galtan: *id001
+  lrecon_vs_immigrate_policy: *id001
+  lrgen_vs_antielite_salience: *id001
+  lrgen_vs_environment: *id001
+  lrgen_vs_eu_position: *id001
+  lrgen_vs_galtan: *id001
+  lrgen_vs_immigrate_policy: *id001
+  lrgen_vs_lrecon: *id001
 ideological:
   cbar_rect:
       - 0.15
@@ -31,40 +91,6 @@ ideological:
     M5S:
       - 0.35
       - 0
-attitudinal:
-  lrgen_vs_antielite_salience:
-    cbar_rect:
-        - 0.15
-        - 0.6
-        - 0.02
-        - 0.3
-    legend_loc: "lower center"
-    limits:
-      x:
-        - -3
-        - 12.2
-      y:
-        - -2
-        - 11
-    nudges:
-      LN:
-        - 0
-        - 0
-      FI:
-        - 0
-        - 0
-      PD:
-        - 0
-        - 0
-      SI:
-        - 0
-        - 0.2
-      FdI:
-        - 0
-        - 0
-      M5S:
-        - 0
-        - 0
 palette:
   LN: tab:green
   FI: cornflowerblue

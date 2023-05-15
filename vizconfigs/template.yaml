@@ -17,7 +17,7 @@ ideological:
         - 0
         - 0
 attitudinal:
-  lrgen_vs_antielite_salience:
+  att1_vs_att2:
     cbar_rect:
         - 0.15
         - 0.6
