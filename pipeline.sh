@@ -1,15 +1,15 @@
 #!/bin/bash
 
 declare -a StringArray=(
-    # belgium
-    # france
-    # germany
-    # italy
-    # netherlands
-    # poland
-    # # romania  # create_ide_emb fails on SVD computation with prince
-    # slovenia
-    # spain
+    belgium
+    france
+    germany
+    italy
+    netherlands
+    poland
+    # romania  # create_ide_emb fails on SVD computation with prince
+    slovenia
+    spain
 )
 
 outputs=outputs
@@ -21,9 +21,9 @@ for country in ${StringArray[@]}; do
 
     echo "################# ${country} #################"
 
-    # python python/some4demexp/embeddings/preprocess_data.py --config=config$suffix --country=$country --output=$outputs
-    # python python/some4demexp/embeddings/create_ide_emb.py --config=config$suffix --country=$country --output=$outputs
-    # python python/some4demexp/embeddings/create_att_emb.py --config=config$suffix  --country=$country --output=$outputs
+    python python/some4demexp/embeddings/preprocess_data.py --config=config$suffix --country=$country --output=$outputs
+    python python/some4demexp/embeddings/create_ide_emb.py --config=config$suffix --country=$country --output=$outputs
+    python python/some4demexp/embeddings/create_att_emb.py --config=config$suffix  --country=$country --output=$outputs
 
     python python/some4demexp/visualizations/matplotlib/create_vizconfig.py  \
         --config=config$suffix \
@@ -34,7 +34,7 @@ for country in ${StringArray[@]}; do
         --country=$country \
         --vizconfig="vizconfigs/$country$suffix" \
         --output=$outputs \
-        # --show
+        --show
     python python/some4demexp/visualizations/matplotlib/parse_images.py \
         --config=config$suffix \
         --country=$country \
