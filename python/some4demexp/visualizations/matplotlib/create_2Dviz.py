@@ -54,9 +54,9 @@ n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 4)
 # visualize ideological space
 for x, y in combinations(range(n_dims_to_viz), 2):
     visualize_ide(
-        ide_sources,
-        ide_targets,
-        targets_groups,
+        sources_coord_ide=ide_sources,
+        targets_coord_ide=ide_targets,
+        targets_parties=targets_groups,
         latent_dim_x=x,
         latent_dim_y=y,
         output_folder=ide_images_folder,
@@ -65,6 +65,9 @@ for x, y in combinations(range(n_dims_to_viz), 2):
         **vizparams['ideological']
     )
 
+
+
+
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
 
@@ -72,10 +75,9 @@ for dimpair in combinations(ATTDIMS, 2):
     att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
 
     visualize_att(
-        att_sources,
-        att_targets,
-        att_groups,
-        targets_groups,
+        sources_coord_att=att_sources,
+        targets_coord_att=att_targets,
+        parties_coord_att=att_groups,
         dims=dict(zip(['x', 'y'], dimpair)),
         path=os.path.join(att_folder, "attitudinal.png"),
         show=show,
