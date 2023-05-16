@@ -211,7 +211,6 @@ def visualize_att(
     sources_coord_att,
     targets_coord_att,
     parties_coord_att,
-    targets_parties,
     dims,
     palette,
     nudges,
