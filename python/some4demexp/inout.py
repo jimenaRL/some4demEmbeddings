@@ -103,7 +103,7 @@ def load_experiment_data(folder):
     return X, targets_pids, sources_pids
 
 
-def set_output_folder(params, country, output):
+def set_output_folder(params, country, output="outputs"):
 
     emb_folder = f"min_followers_{params['sources_min_followers']}"
     emb_folder += f"_min_outdegree_{params['sources_min_outdegree']}"
@@ -113,15 +113,16 @@ def set_output_folder(params, country, output):
     os.makedirs(output_folder, exist_ok=True)
 
     config_file = os.path.join(output_folder, 'config.yaml')
-    with open(config_file, 'w') as file:
-        yaml.dump(params, file)
 
-    print(f"YAML config saved at {output_folder}.")
+    if not os.path.exists(config_file):
+        with open(config_file, 'w') as file:
+            yaml.dump(params, file)
+        print(f"YAML config saved at {output_folder}.")
 
     return output_folder
 
 
-def set_output_folder_emb(params, country, output):
+def set_output_folder_emb(params, country, output="outputs"):
     output_folder_emb = os.path.join(
         set_output_folder(params, country, output),
         f"ideN_{params['ideological_model']['n_latent_dimensions']}")
