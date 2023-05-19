@@ -5,8 +5,6 @@ from glob import glob
 from argparse import ArgumentParser
 from some4demexp.inout import set_output_folder_emb
 
-
-
 # parse arguments and set paths
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
@@ -27,7 +25,13 @@ sources = [
     for y in glob(os.path.join(x[0], '*.png'))
 ]
 
-output_folder = os.path.join(images, country)
+
+
+output_folder = os.path.join(
+    images,
+    country,
+    f"ideN_{params['ideological_model']['n_latent_dimensions']}_attM_{params['attitudinal_model']['N']}"
+)
 os.makedirs(output_folder, exist_ok=True)
 
 for src in sources:
@@ -36,12 +40,8 @@ for src in sources:
         dst = os.path.join(
             output_folder,
             f"{country}-{os.path.split(src)[-1]}")
-    elif kind == "attitudinal":
-        dst = os.path.join(
-            output_folder,
-            f"{country}-{os.path.split(os.path.split(src)[0])[-1]}.png")
-    else:
-        raise ValueError(f"Unexpected image path: {src}.")
+    else:  # "attitudinal" kind
+        dst = os.path.join(output_folder, f"{country}-{os.path.split(src)[1]}")
     shutil.copyfile(src, dst)
     print(dst)
 
