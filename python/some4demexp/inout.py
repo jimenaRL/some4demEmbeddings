@@ -130,12 +130,13 @@ def set_output_folder_emb(params, country, output="outputs"):
     return output_folder_emb
 
 
-def set_output_folder_att(folder, dims):
+def set_output_folder_att(params, country, output="outputs"):
+    output_folder_att = os.path.join(
+        set_output_folder_emb(params, country, output),
+        f"attM_{params['attitudinal_model']['N']}")
+    os.makedirs(output_folder_att, exist_ok=True)
 
-    folder = os.path.join(folder, '_vs_'.join(dims))
-    os.makedirs(folder, exist_ok=True)
-
-    return folder
+    return output_folder_att
 
 
 def save_targets_groups(targets_groups, folder):
