@@ -131,11 +131,12 @@ def set_output_folder_emb(params, country, output="outputs"):
 
 
 def set_output_folder_att(params, country, output="outputs"):
+
     output_folder_att = os.path.join(
         set_output_folder_emb(params, country, output),
-        f"attM_{params['attitudinal_model']['N']}")
+        f"attM_{params['attitudinal_model']['N']}",
+        '_vs_'.join(params["attitudinal_dimensions"]))
     os.makedirs(output_folder_att, exist_ok=True)
-
     return output_folder_att
 
 
