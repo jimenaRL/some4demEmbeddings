@@ -7,12 +7,8 @@ attitudinal:
     - 0.3
     legend_loc: lower center
     limits:
-      x:
-      - -2
-      - 12
-      y:
-      - -2
-      - 12
+    - -2
+    - 12
     nudges:
       Alenka Bratusek:
       - 0
@@ -63,53 +59,53 @@ attitudinal:
   lrgen_vs_lrecon: *id001
 ideological:
   cbar_rect:
-      - 0.175
-      - 0.45
-      - 0.03
-      - 0.45
-  legend_loc: "upper right"
+  - 0.175
+  - 0.45
+  - 0.03
+  - 0.45
+  legend_loc: upper right
   limits:
     x:
-      - -1.5
-      - 2.5
+    - -1.5
+    - 2.5
     y:
-      - -1
-      - 3
+    - -1
+    - 3
   nudges:
-    SDS:
-      - -0.5
-      - -0.2
-    SD:
-      - -0.2
-      - -0.4
-    NSI:
-      - 0
-      - -0.4
-    DeSUS:
-      - 0
-      - 0.2
-    SNS:
-      - 0
-      - 0.2
-    SMC:
-      - 0.2
-      - -0.25
-    Levica:
-      - 0.2
-      - 0
     Alenka Bratusek:
-      - 0.2
-      - -0.2
+    - 0.2
+    - -0.2
+    DeSUS:
+    - 0
+    - 0.2
     LMS:
-      - 0.2
-      - 0.2
+    - 0.2
+    - 0.2
+    Levica:
+    - 0.2
+    - 0
+    NSI:
+    - 0
+    - -0.4
+    SD:
+    - -0.2
+    - -0.4
+    SDS:
+    - -0.5
+    - -0.2
+    SMC:
+    - 0.2
+    - -0.25
+    SNS:
+    - 0
+    - 0.2
 palette:
-  SDS: mediumvioletred
-  SD: tab:purple
-  NSI: tab:pink
-  DeSUS: cornflowerblue
-  SNS: tab:green
-  SMC: orangered
-  Levica: red
   Alenka Bratusek: magenta
+  DeSUS: cornflowerblue
   LMS: gold
+  Levica: red
+  NSI: tab:pink
+  SD: tab:purple
+  SDS: mediumvioletred
+  SMC: orangered
+  SNS: tab:green

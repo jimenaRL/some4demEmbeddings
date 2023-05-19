@@ -7,38 +7,31 @@ attitudinal:
     - 0.3
     legend_loc: lower center
     limits:
-      x:
-      - -2
-      - 12
-      y:
-      - -2
-      - 12
+    - -2
+    - 12
     nudges:
-      Konfederacia:
+      FI:
       - 0
       - 0
-      Kukiz:
+      FdI:
       - 0
       - 0
-      Lewica Razem:
+      LN:
       - 0
       - 0
-      Nowo:
+      M5S:
       - 0
       - 0
-      PO:
+      PD:
       - 0
       - 0
-      PSL:
+      RI:
       - 0
       - 0
-      PiS:
+      SI:
       - 0
       - 0
-      SLD:
-      - 0
-      - 0
-      Wiosnia:
+      SVP:
       - 0
       - 0
   antielite_salience_vs_eu_position: *id001
@@ -63,53 +56,42 @@ attitudinal:
   lrgen_vs_lrecon: *id001
 ideological:
   cbar_rect:
-      - 0.175
-      - 0.35
-      - 0.03
-      - 0.45
-  legend_loc: "lower left"
+  - 0.15
+  - 0.35
+  - 0.03
+  - 0.45
+  legend_loc: upper right
   limits:
     x:
-      - -2.5
-      - 2
+    - -2.5
+    - 3.5
     y:
-      - -2.5
-      - 2
+    - -1
+    - 10
   nudges:
-    SLD:
-      - -0.8
-      - 0
-    PO:
-      - 0
-      - 0.3
-    PiS:
-      - 0.1
-      - 0.1
-    PSL:
-      - 0.1
-      - 0.1
-    Kukiz:
-      - 0.1
-      - 0.1
-    Nowo:
-      - 0.2
-      - -0.2
-    Konfederacia:
-      - 0.1
-      - 0.1
-    Lewica Razem:
-      - -0.2
-      - -0.5
-    Wiosnia:
-      - -1.1
-      - -0.2
+    FI:
+    - 0
+    - -0.8
+    FdI:
+    - -0.2
+    - 0.3
+    LN:
+    - 0
+    - 0.3
+    M5S:
+    - 0.35
+    - 0
+    PD:
+    - 0.2
+    - 0.3
+    SI:
+    - 0
+    - 0.3
 palette:
-  SLD: mediumvioletred
-  PO: tab:purple
-  PiS: tab:pink
-  PSL: cornflowerblue
-  Kukiz: tab:green
-  Nowo: orangered
-  Konfederacia: red
-  Lewica Razem: magenta
-  Wiosnia: gold
+  FI: cornflowerblue
+  FdI: navy
+  LN: tab:green
+  M5S: gold
+  PD: red
+  SI: magenta
+  SVP: darkgreen
