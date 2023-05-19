@@ -5,16 +5,11 @@ from argparse import ArgumentParser
 from itertools import combinations
 
 from some4demexp.inout import \
-    set_output_folder, \
     set_output_folder_emb, \
     set_output_folder_att, \
-    load_ide_embeddings, \
-    load_att_embeddings, \
-    load_targets_groups \
+    load_att_embeddings
 
-from some4demexp.bivariate_marginal import \
-    visualize_ide, \
-    visualize_att
+from some4demexp.bivariate_marginal import visualize_att
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -41,46 +36,25 @@ print(yaml.dump(params, default_flow_style=False))
 ATTDIMS = params['attitudinal_dimensions']
 
 ide_folder = set_output_folder_emb(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(ide_folder)
-ide_images_folder = os.path.join(ide_folder, 'pairwise_latent_dimensions_images')
-os.makedirs(ide_images_folder, exist_ok=True)
-
-# Load target groups
-data_folder = set_output_folder(params, country, output)
-targets_groups = load_targets_groups(data_folder)
-
-n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 4)
-
-# visualize ideological space
-for x, y in combinations(range(n_dims_to_viz), 2):
-    visualize_ide(
-        sources_coord_ide=ide_sources,
-        targets_coord_ide=ide_targets,
-        targets_parties=targets_groups,
-        latent_dim_x=x,
-        latent_dim_y=y,
-        output_folder=ide_images_folder,
-        show=show,
-        palette=vizparams['palette'],
-        **vizparams['ideological']
-    )
-
-
-
+att_folder = set_output_folder_att(params, country, output)
+att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
 
-    att_folder = set_output_folder_att(ide_folder, dimpair)
-    att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
+    dimpair_str = '_vs_'.join(dimpair)
+
+    # # to debug
+    # if dimpair_str != 'eu_position_vs_immigrate_policy':
+    #     continue
 
     visualize_att(
         sources_coord_att=att_sources,
         targets_coord_att=att_targets,
         parties_coord_att=att_groups,
         dims=dict(zip(['x', 'y'], dimpair)),
-        path=os.path.join(att_folder, "attitudinal.png"),
+        path=os.path.join(att_folder, f"{dimpair_str}.png"),
         show=show,
         palette=vizparams['palette'],
-        **vizparams['attitudinal']['_vs_'.join(dimpair)]
+        **vizparams['attitudinal'][dimpair_str]
         )
