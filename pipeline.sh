@@ -1,43 +1,63 @@
 #!/bin/bash
 
 declare -a StringArray=(
-    belgium
+    # belgium
     france
-    germany
-    italy
-    netherlands
-    poland
-    # romania  # create_ide_emb fails on SVD computation with prince
-    slovenia
-    spain
+    # germany
+    # italy
+    # netherlands
+    # poland
+    # # romania  # create_ide_emb fails on SVD computation with prince
+    # slovenia
+    # spain
 )
 
 outputs=outputs
-suffix=15D.yaml
 images=images
 vizfolder=vizconfigs
+
 
 for country in ${StringArray[@]}; do
 
     echo "################# ${country} #################"
 
-    python python/some4demexp/embeddings/preprocess_data.py --config=config$suffix --country=$country --output=$outputs
-    python python/some4demexp/embeddings/create_ide_emb.py --config=config$suffix --country=$country --output=$outputs
-    python python/some4demexp/embeddings/create_att_emb.py --config=config$suffix  --country=$country --output=$outputs
+    # configs=('configs/N2M2/*')
 
-    python python/some4demexp/visualizations/matplotlib/create_vizconfig.py  \
-        --config=config$suffix \
-        --country=$country \
-        --vizfolder=$vizfolder
-    python python/some4demexp/visualizations/matplotlib/create_2Dviz.py \
-        --config=config$suffix \
-        --country=$country \
-        --vizconfig="vizconfigs/$country$suffix" \
-        --output=$outputs \
-        --show
-    python python/some4demexp/visualizations/matplotlib/parse_images.py \
-        --config=config$suffix \
-        --country=$country \
-        --images=$images
+    # configs=("configs/determined/${country}.yaml")
+
+    configs=('configs/N2M2/lrgen_vs_antielite_salience.yaml')
+
+    for config in ${configs[@]}; do
+
+        vizconfig="configs/vizconfigs/${country}.yaml"
+
+        # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --output=$outputs
+
+        python python/some4demexp/embeddings/tmp.py --config=$config --country=$country --output=$outputs
+
+        # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
+
+        # python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --vizconfig=$vizconfig \
+        #     --output=$outputs \
+        #     # --show
+
+        # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --vizconfig=$vizconfig \
+        #     --output=$outputs \
+        #     # --show
+
+        # python python/some4demexp/visualizations/matplotlib/parse_images.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --images=$images
+
+    done
 
 done

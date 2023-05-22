@@ -1,4 +1,5 @@
 import os
+import copy
 import pandas as pd
 import seaborn as sns
 import matplotlib as mpl
@@ -12,6 +13,17 @@ plt.rc('font', family='sans-serif', size=12)
 
 fs = 12
 dpi = 150
+
+CHESLIMS = {
+  'lrgen': [0, 10],
+  'lrecon': [0, 10],
+  'antielite_salience': [0, 10],
+  'eu_position': [0, 7],
+  'immigrate_policy': [0, 10],
+  'galtan': [0, 10],
+  'environment': [0, 10],
+}
+
 
 legend_mps = Line2D(
     [0],
@@ -46,15 +58,14 @@ custom_legend = [legend_mps, legend_parties, legend_followers]
 
 
 ATT_DICT = {
-    'lrgen': 'Left- Right',
-    'eu_position': 'EU integration',
-    'antielite_salience': 'Anti-elite salience',
-    'lrecon': 'Left- Right economy',
-    'immigrate_policy': 'Immigration',
-    'galtan': 'Liberal - Traditional',
-    'environment': 'Importance of ecology'
+    'lrgen': 'Left – Right',
+    'eu_position': 'EU Integration',
+    'antielite_salience': 'Anti-elite Salience',
+    'lrecon': 'Economic Left – Right',
+    'immigrate_policy': 'Immigration Policy',
+    'galtan': 'GAL – TAN',
+    'environment': 'Environment – Economy'
 }
-
 def get_ordinal(n):
     if n < 0 or not isinstance(n, int):
         raise ValueError(f"Input must be a strictly positive interger.")
@@ -189,13 +200,11 @@ def visualize_ide(
     ax.tick_params(axis='x', labelsize=fs)
     ax.tick_params(axis='x', labelsize=fs)
 
-    ax.set_xlim(limits['x'])
-    ax.set_ylim(limits['y'])
+    ax.set_xlim(xlims)
+    ax.set_ylim(ylims)
 
     cbar_ax = g.fig.add_axes(cbar_rect)
     cbar = plt.colorbar(cax=cbar_ax)
-
-    plt.tight_layout()
 
     if output_folder:
         figname = f"latent_dims_{latent_dim_x}_vs_{latent_dim_y}.png"
@@ -230,46 +239,98 @@ def visualize_att(
     plot_df = plot_df.drop_duplicates()
     l1 = len(plot_df)
     if (l0 > l1):
-        print(f"Dropped {l1 -l0} repeated embeddings points.")
+        print(f"Dropped {l0 -l1} repeated embeddings points.")
 
-    # setting lims
-    pad = 0.35
-    dx = plot_df[dims['x']].max()-plot_df[dims['x']].min()
-    dy = plot_df[dims['y']].max()-plot_df[dims['y']].min()
-    xlims = (plot_df[dims['x']].min()-pad*dx, plot_df[dims['x']].max()+pad*dx)
-    ylims = (plot_df[dims['y']].min()-pad*dy, plot_df[dims['y']].max()+pad*dy)
 
-    # This turned out to be 6x6 figsize
+    def get_limits(df, dims, q0, q1):
+
+        x0 = min(CHESLIMS[dims['x']][0], df[dims['x']].quantile(q0))
+        x1 = max(CHESLIMS[dims['x']][1], df[dims['x']].quantile(q1))
+        y0 = min(CHESLIMS[dims['x']][0], df[dims['y']].quantile(q0))
+        y1 = max(CHESLIMS[dims['x']][1], df[dims['y']].quantile(q1))
+
+        return x0, x1, y0, y1
+
+    def drop_extremes(df, dims, x0, x1, y0, y1):
+
+        l0 = len(df)
+
+        dfd = copy.deepcopy(df)
+
+        dfd = dfd[dfd[dims['x']] > x0]
+        dfd = dfd[dfd[dims['x']] < x1]
+        dfd = dfd[dfd[dims['y']] > y0]
+        dfd = dfd[dfd[dims['y']] < y1]
+
+        diff = l0 - len(dfd)
+        prop = 100 * diff / l0
+
+        m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
+        m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
+        m2 += f"\t[{x0:.2f}, {x1:.2f}] x [{y0:.2f}, {y1:.2f}]."
+        print(m2)
+
+        return dfd
+
+    #####################################################################
+    ############################## HOT FIX ##############################
+    #####################################################################
+
+    # Set quantiles q0 and q1 in vizconfig
+    x0, x1, y0, y1 = get_limits(plot_df, dims, q0=0.005, q1=0.995)
+
+    #####################################################################
+    #####################################################################
+    #####################################################################
+
+    plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
+
+    targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
+
     kwargs = {
         'x': dims['x'],
         'y': dims['y'],
-        'space': 0,
+        'color': "deepskyblue",
+        'space': 2,
         'ratio': 10,
         'height': 5,
-        'color': "deepskyblue",
         'kind': 'hex',
+        # 'bins': 'log',  # to debug or make appear hexbins with low density
         'data': plot_df,
     }
 
     # plot sources and targets embeddings
-    g = sns.jointplot(**kwargs)
+    g = sns.jointplot(
+        **kwargs)
 
     # get unique parties and build color dictionary
     unique_parties = targets_coord_att.party.unique().tolist()
     nunique_parties = targets_coord_att.party.nunique()
 
+    ax = g.ax_joint
+
+    # plot square showing CHES limits
+    lowlim_x = CHESLIMS[dims['x']][0]
+    upperlim_x = CHESLIMS[dims['x']][1]
+    lowlim_y = CHESLIMS[dims['y']][0]
+    upperlim_y = CHESLIMS[dims['y']][1]
+    A = [lowlim_x, lowlim_x, upperlim_x, upperlim_x, lowlim_x]
+    B = [lowlim_y, upperlim_y, upperlim_y, lowlim_y, lowlim_y]
+    ax.plot(A, B, color='white', linestyle='-')
+    ax.plot(A, B, color='black', linestyle='--')
+    txt = ax.text(2, 10.25, 'CHES survey bounds', fontsize=12)
+    txt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
     # plot colored by parties targets attitudinal embeddings
-    ax = g.ax_joint
     texts = []
     for party in unique_parties:
 
         # plot colored by parties target embeddings
-        sample = targets_coord_att[targets_coord_att.party == party]
+        mps_coord_att = targets_coord_att[targets_coord_att.party == party]
 
         ax.scatter(
-            sample[dims['x']],
-            sample[dims['y']],
+            mps_coord_att[dims['x']],
+            mps_coord_att[dims['y']],
             marker='+',
             s=20,
             alpha=0.5,
@@ -307,29 +368,27 @@ def visualize_att(
 
     adjust_text(texts)
 
-    # the next lines plot the [0, 10]^2 square showing CHES limits
-    ax.plot([0, 10, 10, 0, 0], [0, 0, 10, 10, 0], color='white', linestyle='-')
-    ax.plot([0, 10, 10, 0, 0], [0, 0, 10, 10, 0], color='black', linestyle='--')
-    txt = ax.text(2, 10.25, 'CHES survey bounds', fontsize=12)
-    txt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
-
     xl = f"CHES {ATT_DICT[dims['x']]}"
     yl = f"CHES {ATT_DICT[dims['y']]}"
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 
-    ax.legend(handles=custom_legend, loc=legend_loc, fontsize=fs-2, framealpha=0.98)
+    ax.legend(
+        handles=custom_legend,
+        loc=legend_loc,
+        fontsize=fs-2,
+        framealpha=0.98
+    )
 
     ax.tick_params(axis='x', labelsize=fs)
     ax.tick_params(axis='x', labelsize=fs)
 
-    ax.set_xlim(limits['x'])
-    ax.set_ylim(limits['y'])
+    # setting lims
+    ax.set_xlim(limits)
+    ax.set_ylim(limits)
 
     cbar_ax = g.fig.add_axes(cbar_rect)
     cbar = plt.colorbar(cax=cbar_ax)
-
-    plt.tight_layout()
 
     if path:
         plt.savefig(path, dpi=dpi)
@@ -337,3 +396,5 @@ def visualize_att(
 
     if show:
         plt.show()
+    else:
+        plt.close('all')
