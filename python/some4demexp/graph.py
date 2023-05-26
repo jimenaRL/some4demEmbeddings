@@ -43,8 +43,31 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     columns_id = columns_id[idx_valid_j]
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
-    mssg = f"Drop {ja - jb} of {ja} repeated sources "
+    mssg = f"Drop {ja - jb} repeated sources "
     mssg += f"({100*(ja - jb)/ja:.2f}%), keeped {jb}."
+
+    # remove targets (columns) with no source associated
+    idx_valid_i = np.argwhere((np.abs(ntwrk_csr).sum(axis=0) != 0).tolist()[0])[:, 0]
+
+    ia = ntwrk_csr.shape[1]
+    ntwrk_csr = ntwrk_csr[:, idx_valid_i]
+    ib = ntwrk_csr.shape[1]
+    rows_id = rows_id[idx_valid_i]
+
+    assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
+    mssg = f"Drop {ia - ib} targets with no sources associated "
+    mssg += f"({100*(ia - ib)/ia:.2f}%), keeped {ib}."
+
+
+    # # checking if final network is bipartite:
+    # common_nodes_np = np.intersect1d(
+    #     input_df['source'], input_df['target'])
+    # self.is_bipartite_ = common_nodes_np.size == 0
+    # if not self.is_bipartite_:
+    #     if self.force_bipartite:
+    #         input_df = input_df[~input_df['source'].isin(common_nodes_np)]
+    # print('Bipartite network:', self.is_bipartite_)
+
 
     mssg1 = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} unique sources "
     mssg1 += f"to {len(rows_id)} unique targets."
