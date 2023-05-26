@@ -1,0 +1,1761 @@
+Catholicism:
+  ca:
+  - \bsacerdots?\b
+  da: []
+  de: []
+  el: []
+  el-Latn: []
+  en:
+  - \bpriests?\b
+  es:
+  - \bsacerdotes?\b
+  eu: []
+  fi: []
+  fr: []
+  ga: []
+  gl: []
+  is: []
+  it: []
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+ClimateChange:
+  ca: []
+  da: []
+  de:
+  - \b\b
+  el: []
+  el-Latn: []
+  en:
+  - \bclimate change\b
+  - \bglobal warming\b
+  es:
+  - "\\bcambio clim[\xE1|a]tigoc\\b"
+  - \becalentamiento global\b
+  eu: []
+  fi: []
+  fr:
+  - \bchangement climatique\b
+  - "\\br[\xE9|e]chauffement climatique\\b"
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bcambiamento climatico\b
+  - \briscaldamento globale\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+Communism:
+  ca:
+  - \bcomunis(tas?|me)\b
+  da:
+  - \bkommunis(mo|t|er|en|terne|ter)?\b
+  de:
+  - \bkomm?unis(mus|tisch|tinnen|ten)\b
+  el:
+  - "\\b\u03BA\u03BF\u03BC\u03BC\u03BF\u03C5\u03BD\u03B9\u03C3\u03BC[\u03CC|\u03BF\
+    ]\u03C2"
+  - "\\b\u03BA\u03BF\u03BC\u03BC\u03BF\u03C5\u03BD\u03B9\u03C3\u03C4\u03B9\u03BA[\u03CC\
+    |\u03BF]\u03C2\\b"
+  el-Latn:
+  - "\\bkommounis(tik[\xF3|o]s|m[\xF3|o]s)\\b"
+  en:
+  - \bcommu?nis(ts?|m)\b
+  es:
+  - \bcomunis(tas?|mo)\b
+  eu:
+  - \bkommunis(moa|tak?)\b
+  fi:
+  - \bkommunis(mi|tit?)\b
+  fr:
+  - \bcomm?unis(me|te?s?)\b
+  ga:
+  - \bcomm?unn?a(ch|ithe|chas)\b
+  gl:
+  - \bcomunis(mo|tas?)\b
+  is:
+  - "\\bkomm?[u|\xFA]nis(ti|tar|mi)\\b"
+  it:
+  - \bcomunis(mo|ta|ti)\b
+  lb:
+  - \bkommunis(mus|tesch|ten)\b
+  lv:
+  - \bkomunis(ts|ti|ms)\b
+  mt:
+  - \bkomunist[i|a]\b
+  nl:
+  - \bcomm?unis(me|tisch|ten)\b
+  'no':
+  - \bkomm?unis(ter|tik|me)\b
+  pl:
+  - "\\bkomuni[s|\u015B|z](ci|tyczny|m)\\b"
+  pt:
+  - \bcomunis(mo|tas?)\b
+  sl:
+  - "\\bkomm?uni(izma|sti|sti[\u010D|c]na)\\b"
+  sv:
+  - \bkomm?unis(ter|t|men)\b
+  tr:
+  - "\\bkom[\xFC|u]uni(st|zm|istler)\\b"
+Conservative:
+  ca:
+  - \bconservador(a|s|es)?\b
+  da:
+  - \bkonservative?\b
+  de:
+  - \bkonservativen?\b
+  el:
+  - "\\b\u03C3\u03C5\u03BD\u03C4\u03B7\u03C1\u03B7\u03C4\u03B9\u03BA([\u03CC|o][\u03C2\
+    |c]|[\u03CC|o]|\u03BF[\u03CD|\u03C5][\u03C2|c]|[\u03CE|\u03C9]\u03BD|\u03BF[\u03AF\
+    |\u03B9])\\b"
+  el-Latn:
+  - "\\bsyntiritik[\xF3|o]s?\\b"
+  en:
+  - \bconservatives?\b
+  es:
+  - \bconservador(a|es)?\b
+  eu:
+  - \bkontserbadore(a|ei|en|ari|entzat|ek)?\b
+  fi:
+  - \bkonservatiiv(i|inen|eille|eista|ille|it|ien)\b
+  fr:
+  - \bconservat(eur|rice)s?\b
+  ga:
+  - "\\bcoime[\xE1|a]da(ch|igh)\\b"
+  gl:
+  - \bconservador(a|es)?\b
+  is:
+  - "\\b[\xED|i]hald(i[\xF0|d]|ss[o|\xF6]m|sins|smenn|inu)\\b"
+  it:
+  - \bconservat(rice|ore|ori)\b
+  lb:
+  - \bkonservativ(en)?\b
+  lv:
+  - "\\bkonservat[\u012B|i]v(s|ais|ajam|ie|ajiem)\\b"
+  mt:
+  - \bkonservattiv(a|i)?\b
+  nl:
+  - \bconservatie(f|ve|ven)\b
+  'no':
+  - \bkonservative?\b
+  pl:
+  - "\\bkonserwaty(wny|st[o|\xF3]w|wna|[\u015B|s]ci|sty)\\b"
+  pt:
+  - \bconservador(a|es)?\b
+  sl:
+  - \bkonservativ(ec|na|cev|ca|ce)\b
+  sv:
+  - \bkonservativa?\b
+  tr:
+  - "\\bmuhafazakar(lar|lara|lar\u0131n)?\\b"
+ConservativeUK:
+  ca:
+  - (?!x)x
+  da:
+  - (?!x)x
+  de:
+  - (?!x)x
+  el:
+  - (?!x)x
+  el-Latn:
+  - (?!x)x
+  en:
+  - \btor(y|ies)\b
+  es:
+  - (?!x)x
+  eu:
+  - (?!x)x
+  fi:
+  - (?!x)x
+  fr:
+  - (?!x)x
+  ga:
+  - (?!x)x
+  gl:
+  - (?!x)x
+  is:
+  - (?!x)x
+  it:
+  - (?!x)x
+  lb:
+  - (?!x)x
+  lv:
+  - (?!x)x
+  mt:
+  - (?!x)x
+  nl:
+  - (?!x)x
+  'no':
+  - (?!x)x
+  pl:
+  - (?!x)x
+  pt:
+  - (?!x)x
+  sl:
+  - (?!x)x
+  sv:
+  - (?!x)x
+  tr:
+  - (?!x)x
+Corruption:
+  ca:
+  - \bcorrupcio\b
+  da: []
+  de:
+  - \bkorrupt(ion)?\b
+  el: []
+  el-Latn: []
+  en:
+  - \bcorrupt(ion)?\b
+  es:
+  - "\\bcorrup(ci[o|\xF3]n|t[o|a]s?)\\b"
+  eu: []
+  fi: []
+  fr:
+  - \bcorruption\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bcorruzione\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - \byolsuzluk\b
+Crime:
+  ca:
+  - \bdelicte\b
+  - \bdelictes\b
+  - \bcriminal\b
+  - \bcriminals\b
+  da: []
+  de:
+  - "\\bkrimin(elle?|alit[\xE4|a]t)\\b"
+  - \bverbrecher\b
+  - "\\bstraft[\xE4|a]ter\\b"
+  el: []
+  el-Latn: []
+  en:
+  - \bcrime\b
+  - \bcriminal\b
+  es:
+  - \bcrimen\b
+  - \bcriminal\b
+  eu: []
+  fi: []
+  fr:
+  - \bcriminalite\b
+  - \bcriminel\b
+  - \bcriminelle\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bcrimine\b
+  - \bcriminale\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - "\\bsu\xE7\\b"
+Defense:
+  ca: []
+  da: []
+  de:
+  - \bverteidigung\b
+  - \bheer\b
+  - \bmarine\b
+  - \bluftfahrt\b
+  - \bluftwaffe\b
+  el: []
+  el-Latn: []
+  en:
+  - \bdefense\b
+  - \barmy\b
+  - \bnavy\b
+  - \bair.?force\b
+  - \bmilitary\b
+  es:
+  - \bdefensa\b
+  - "\\bej[e|\xE9]rcito\\b"
+  - \bmarina\b
+  - "\\baviaci[\xF3|o]n\\b"
+  - "\\bfuerza.a[e|\xE9]rea\\b"
+  eu: []
+  fi: []
+  fr:
+  - "\\barm[e|\xE9]e\\b"
+  - "\\bd[e|\xE9]fence\\b"
+  - \baviation\b
+  - \bmilitaire\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bdifesa\b
+  - \bmilitare\b
+  - \bmarina\b
+  - \baviazione\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+DemocratUS:
+  ca:
+  - (?!x)x
+  da:
+  - (?!x)x
+  de:
+  - (?!x)x
+  el:
+  - (?!x)x
+  el-Latn:
+  - (?!x)x
+  en:
+  - \bdemocrats?\b
+  es:
+  - (?!x)x
+  eu:
+  - (?!x)x
+  fi:
+  - (?!x)x
+  fr:
+  - (?!x)x
+  ga:
+  - (?!x)x
+  gl:
+  - (?!x)x
+  is:
+  - (?!x)x
+  it:
+  - (?!x)x
+  lb:
+  - (?!x)x
+  lv:
+  - (?!x)x
+  mt:
+  - (?!x)x
+  nl:
+  - (?!x)x
+  'no':
+  - (?!x)x
+  pl:
+  - (?!x)x
+  pt:
+  - (?!x)x
+  sl:
+  - (?!x)x
+  sv:
+  - (?!x)x
+  tr:
+  - (?!x)x
+Elites:
+  ca:
+  - "\\b[e|\xE9]lit\\b"
+  - "\\b[e|\xE9]lits\\b"
+  da:
+  - \beliter?\b
+  de:
+  - \beliten?\b
+  el:
+  - "\\b\u03B1\u03C6\u03C1\u03CC\u03BA\u03C1\u03B5\u03BC\u03B1\\b"
+  - "\\b\u03B5\u03BB\u03AF\u03C4\\b"
+  el-Latn:
+  - "\\bafr[\xF3|o]krema\\b"
+  - "\\bel[\xED|i]t\\b"
+  en:
+  - "\\b[e|\xE9]lite\\b"
+  - "\\b[e|\xE9]lites\\b"
+  es:
+  - "\\b[e|\xE9]lite\\b"
+  - "\\b[e|\xE9]lites\\b"
+  eu:
+  - \beliteak?\b
+  fi:
+  - \beliit(ti|it)\b
+  fr:
+  - "\\b[e|\xE9]lites?\\b"
+  ga:
+  - \bmionlach\b
+  - \belites\b
+  gl:
+  - "\\b[e|\xE9]lite\\b"
+  - "\\b[e|\xE9]lites\\b"
+  is:
+  - \belite\b
+  - "\\bel[\xED|i]tur\\b"
+  it:
+  - "\\b[e|\xE9]lite\\b"
+  - "\\b[e|\xE9]lites\\b"
+  lb:
+  - \beliten?\b
+  lv:
+  - \belites?\b
+  mt:
+  - \belites?\b
+  nl:
+  - \belites?\b
+  'no':
+  - \beliter?\b
+  pl:
+  - \belit[a|y]\b
+  pt:
+  - "\\b[e|\xE9]lite\\b"
+  - "\\b[e|\xE9]lites\\b"
+  sl:
+  - \belit[a|e]\b
+  sv:
+  - \belit(er)\b
+  tr:
+  - "\\bse\xE7kinler\\b"
+Entrepreneur:
+  ca:
+  - \bemprenedora?\b
+  da:
+  - "\\biv(\xE6|ae)rks(\xE6|ae)tter(en)?\\b"
+  de:
+  - \bunternehmer\b
+  - \banlaufen\b
+  el:
+  - "\\b\u03B5\u03C0\u03B9\u03C7\u03B5\u03B9\u03C1\u03B7\u03BC\u03B1\u03C4\u03AF\u03B1\
+    \u03C2\\b"
+  el-Latn:
+  - "\\bepicheirimat\xEDas\\b"
+  en:
+  - \bentrepreneurs?\b
+  es:
+  - \bemprendedor(a|es)?\b
+  eu:
+  - \bekintzailea\b
+  fi:
+  - "\\byritt[\xE4|a]j[\xE4|a]\\b"
+  fr:
+  - \bentrepreneure?s?\b
+  ga:
+  - \bneach-?tionnsgain\b
+  gl:
+  - \bempresario\b
+  - \bemprendedora?\b
+  is:
+  - "\\bfrumkv\xF6\xF0ull(inn)?\\b"
+  it:
+  - \bimprenditor[e|i]\b
+  - \bstart.?ups?\b
+  lb:
+  - \bentrepreneure?\b
+  lv:
+  - "\\buz[\u0146|n][\u0113|e]m([\u0113|e]j|[\u012B|i]g)s\\b"
+  mt:
+  - \bintraprendituri?\b
+  nl:
+  - \bonderneme(r|nd)\b
+  'no':
+  - "\\bgr[\xFC|u]nder\\b"
+  pl:
+  - "\\bprzedsi\u0119biorc(a|zy)\\b"
+  pt:
+  - \bempreendedor\b
+  sl:
+  - \bpodjetnik?\b
+  sv:
+  - "\\bentrepren\xF6r\\b"
+  - "\\bf\xF6retagsam\\b"
+  tr:
+  - "\\bgiri[\u015F|s]imci\\b"
+Environment:
+  ca:
+  - \bentorn\b
+  - \becologia\b
+  - \becologic\b
+  da: []
+  de:
+  - \bumwelt\b
+  - "\\b[\xF6|o]kolog(ie|isch)\\b"
+  el: []
+  el-Latn: []
+  en:
+  - \benvironment(al)?\b
+  - \becology\b
+  - \becologic(al?)s?\b
+  es:
+  - \bmedio ambiente\b
+  - "\\becolog[i|\xED]a\\b"
+  - "\\becol[o|\xF3]gic[o|a]s?\\b"
+  eu: []
+  fi: []
+  fr:
+  - \benvironnement\b
+  - \benvironement\b
+  - \becologie\b
+  - \becologique\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bambiente\b
+  - \becologia\b
+  - \becologico\b
+  - \becologica\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - "\\b\xE7evre\\b"
+  - \bekoloji\b
+  - \bekolojik\b
+Europe:
+  ca:
+  - \beurop(a|eu|ea|ees|eus)\b
+  - "\\buni[o|\xF3] europea\\b"
+  - \beurope(istas?|anists?)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  da:
+  - \beuropa\b
+  - "\\beurop(\xE6|a|e|ae|[\xE4|a]isch)(iske?|re|ere|ist)\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  de:
+  - "\\beurop(a|[a|\xE4]ische?|[a|\xE4]er|[a|\xE4]ismus)\\b"
+  - \bunion europa\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  el:
+  - "\\b\u03B5\u03C5\u03C1[\u03CE|\u03C9]\u03C0(\u03B1|\u03B1\u03CA\u03BA[\u03CC|\u03BF\
+    ]\u03C2|[\u03AF|\u03B9]\u03C3\u03C4\u03B1\u03C2|\u03B1[\u03AF|\u03B9]\u03BF\u03B9\
+    )\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  el-Latn:
+  - "\\bevr[\xF3|\u03BF]p(a|[i|\xED]stas|a[\xED|i]oi)\\b"
+  - "\\bevropa\xEFk[\xF3|\u03BF]s\\b"
+  - "\\bevropa[\xEF|i]k[i|\xED] [e|\xE9]nosi\\b"
+  - \b#e.?e.?\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  en:
+  - \beurop(e|eans?)\b
+  - \beuropean union\b
+  - \beurope(ists?|anist?m?)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  - \b.*european\b
+  es:
+  - \beurop(a|eo|ea)s?\b
+  - "\\buni[o|\xF3]n europea\\b"
+  - \beuropeista\b
+  - \b.*europe[o|a]\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  eu:
+  - \beuropa(rra)?k?\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  fi:
+  - \beuroop(assa|palainen|palaiset)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  fr:
+  - \beurop[e|a]\b
+  - "\\beurop[\xE9|e]e?n(n?e)?\\b"
+  - \bunion europeenne\b
+  - "\\beurop[\xE9|e]iste\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  ga:
+  - "\\be[o|\xF2]rpa(ch|ich)?\\b"
+  - \be.?a.?\b
+  - \ba.?e.?\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  gl:
+  - \beurop(a|eo|ea)s?\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  is:
+  - "\\bevr[\xF3|o]p(u|skt|ub[u|\xFA]ar)\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  it:
+  - \beurop(a|eo|ea|ei|eista)\b
+  - \bunione europea\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  lb:
+  - "\\beurop[a|\xE4](esch|er)?\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  lv:
+  - "\\beirop([\u0101|a]|ie[s|\u0161]u|ie[s|\u0161]i)\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  - \be.?s.?\b
+  - \bs.?e.?\b
+  mt:
+  - \b(l.?)?ewrop(a|ew|ej)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  nl:
+  - \beurop(a|ese|eanen)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  'no':
+  - \beurop(a|eisk|eere)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  pl:
+  - \beurop(a|ejski|ejczycy)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  pt:
+  - \beurop(a|eu|eus)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  sl:
+  - \bevrop(i|ski|ejci)\b
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  sv:
+  - "\\beuro(a|eisk|[e|\xE9]er)\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  tr:
+  - "\\bavrupa(l\u0131|li)?(lar)\\b"
+  - \be.?u.?\b
+  - \bu.?e.?\b
+  - \ba.?b.?\b
+  - \bb.?a.?\b
+Immigration:
+  ca:
+  - \bimmigracio\b
+  - \bimigracio\b
+  - \bmigrant\b
+  - \bmigrants\b
+  - \bimmigrant\b
+  - \bimigrant\b
+  da:
+  - \bindvandr(ing|er)\b
+  - \bimmigranten\b
+  de:
+  - \beinwander(ung|er)\b
+  - \b(im)?migration\b
+  - \b(im)?migrant(in|en)?\b
+  - \bwanderarbeiter\b
+  - ''
+  el:
+  - "\\b\u03BC\u03B5\u03C4\u03B1\u03BD\u03AC\u03C3\u03C4\u03B7\u03C2\\b"
+  - "\\b\u03BC\u03B5\u03C4\u03B1\u03BD\u03AC\u03C3\u03C4\u03B5\u03C5\u03C3\u03B7\\\
+    b"
+  - "\\b\u03BC\u03B5\u03C4\u03B1\u03BD\u03AC\u03C3\u03C4\u03B5\u03C2\\b"
+  el-Latn:
+  - "\\bmetan[\xE1|a]stefsi\\b"
+  - "\\bmetan[\xE1|a]stis\\b"
+  - "\\bmetan[\xE1|a]stes\\b"
+  en:
+  - \bimmigration\b
+  - \bimigration\b
+  - \bmigrant\b
+  - \bmigrants\b
+  - \bimmigrant\b
+  es:
+  - \binmigracion\b
+  - \bmigrante\b
+  - \binmigrante\b
+  eu:
+  - \betorkinak?\b
+  - \betorkinak\b
+  - \bimmigrazioa\b
+  fi:
+  - \bmaahanmuutt(o|aja)\b
+  fr:
+  - \bimm?igrante?s?\b
+  - \bimm?igrations?\b
+  - \bmigrante?s?\b
+  ga:
+  - \bin-?imriche\b
+  gl:
+  - \binmigracion\b
+  - \bmigrante\b
+  - \binmigrante\b
+  is:
+  - \binnflytj(enda|andi|andanum)\b
+  it:
+  - \bimmigrato\b
+  - \bimigrato\b
+  - \bimmigrata\b
+  - \bimigrata\b
+  - \bmigrante\b
+  - \bmigranti\b
+  - \bimmigrati\b
+  - \bimigrati\b
+  - \bimmigrazione\b
+  - \bimigrazione\b
+  lb:
+  - \bimmigrat(ioun|ant)\b
+  lv:
+  - "\\bimigr([\u0101c|a]ija|ants|)\\b"
+  mt:
+  - \bl?-?immigra(zzjoni|nt)\b
+  nl:
+  - \bi?m?migra(tie|ant)\b
+  'no':
+  - \binnvandr(ing|er|eren)\b
+  pl:
+  - \bimigra(cja|nt)\b
+  pt:
+  - "\\bimigra([\xE7|c][\xE3|a]o|nte)\\b"
+  sl:
+  - \bpriselje(vanje|nec)\b
+  sv:
+  - \binnvandr(ing|er|eren)\b
+  tr:
+  - "\\bgo\xE7menlik\\b"
+  - "\\bgo\xE7men\\b"
+International:
+  ca: []
+  da: []
+  de:
+  - \binternational\b
+  el: []
+  el-Latn: []
+  en:
+  - \binternational\b
+  es:
+  - \binternacional\b
+  eu: []
+  fi: []
+  fr:
+  - \binternationa(l|le|aux)s?\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \binternazional[e|i]\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+Islam:
+  ca:
+  - \bislam\b
+  - \bmusulma\b
+  da: []
+  de:
+  - \bislam\b
+  - \bm[u|o]sl(im|imin|eme?|[i|e]misch)\b
+  el: []
+  el-Latn: []
+  en:
+  - \bislam\b
+  - \bmuslim\b
+  es:
+  - \bislam\b
+  - \bmusulman\b
+  eu: []
+  fi: []
+  fr:
+  - \bislam\b
+  - \bmusulman\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bislam\b
+  - \bmusulmano\b
+  - \bmusulmana\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - \bislam\b
+  - \bmusulman\b
+Islamophobia:
+  ca: []
+  da: []
+  de:
+  - \bIslam(ophobie|feindlich)\b
+  el: []
+  el-Latn: []
+  en:
+  - \bislamophobi(a|c)s?\b
+  es:
+  - "\\bislamof[o|\xF3]bi(a|co|ca)s?\\b"
+  eu: []
+  fi: []
+  fr:
+  - \bislamophobi(e|ique)s?\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bislamofob(ia|o)\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+LabourUK:
+  ca:
+  - (?!x)x
+  da:
+  - (?!x)x
+  de:
+  - (?!x)x
+  el:
+  - (?!x)x
+  el-Latn:
+  - (?!x)x
+  en:
+  - \blabou?r\b
+  es:
+  - (?!x)x
+  eu:
+  - (?!x)x
+  fi:
+  - (?!x)x
+  fr:
+  - (?!x)x
+  ga:
+  - (?!x)x
+  gl:
+  - (?!x)x
+  is:
+  - (?!x)x
+  it:
+  - (?!x)x
+  lb:
+  - (?!x)x
+  lv:
+  - (?!x)x
+  mt:
+  - (?!x)x
+  nl:
+  - (?!x)x
+  'no':
+  - (?!x)x
+  pl:
+  - (?!x)x
+  pt:
+  - (?!x)x
+  sl:
+  - (?!x)x
+  sv:
+  - (?!x)x
+  tr:
+  - (?!x)x
+Left:
+  ca:
+  - \besquerra\b
+  - \besquerres?\b
+  da:
+  - \bvenstre(orienteret)?\b
+  de:
+  - \blink(s|en?)\b
+  el:
+  - "\\b\u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1[\u03B1|\u03AC]\\b"
+  - "\\b\u03B1\u03C1\u03B9\u03C3\u03C4\u03B5\u03C1[\u03CC|\u03BF]\u03C6\u03C1\u03BF\
+    \u03BD\u03B1\u03C2\\b"
+  el-Latn:
+  - "\\barister([\xE1|a]|[\xF3|o]fronas)\\b"
+  en:
+  - \bleft\b
+  - \bleftists?\b
+  es:
+  - \bizquierda\b
+  - \bzurd[a|o]\b
+  - \bizquierdistas?\b
+  eu:
+  - \bezkerretara\b
+  - \bezkertiarrak?\b
+  fi:
+  - \bvasemmalle\b
+  - \bvasemmistolai(nen|set)\b
+  fr:
+  - \bgauche\b
+  - \bgauchiste?s?\b
+  ga:
+  - "\\bchl[e|\xE9]\\b"
+  - \bleftists?\b
+  gl:
+  - \besquerd(as?|istas?)\b
+  is:
+  - \bvinstri\b
+  it:
+  - \bsinistra\b
+  lb:
+  - "\\bl[e|\xE9]nks?\\b"
+  lv:
+  - \bkreis(ais|ie)\b
+  - \bkreisi\b
+  mt:
+  - \b(tax.?)?xellug(in)?\b
+  - "\\bso[\u010B|c]jalist(a|i)\\b"
+  - \bkomunist[i|a]\b
+  nl:
+  - \blinkse?n?\b
+  'no':
+  - \bvenstreorienterte\b
+  pl:
+  - \blewo\b
+  - \blew(icowy|acy)\b
+  pt:
+  - \besquerd(istas?|a)\b
+  sl:
+  - "\\blev(o|i[\u010D|c]ar|i[\u010D|c]arji)\\b"
+  sv:
+  - \bvanster\b
+  tr:
+  - "\\bayr[i|\u0131]ld[i|\u0131]\\b"
+  - \bsolcu(lar)?\b
+Liberal:
+  ca:
+  - \bliberals?\b
+  da:
+  - \bliberale?\b
+  de:
+  - \bliberale(r|n)?\b
+  el:
+  - "\\b\u03C6\u03B9\u03BB\u03B5\u03BB\u03B5\u03CD\u03B8\u03B5\u03C1(\u03BF\u03C2\
+    |\u03BF\u03B9|\u03C9\u03BD)\\b"
+  el-Latn:
+  - "\\bfilel[\xE9|e]fther(os|i)\\b"
+  en:
+  - \bliberals?\b
+  es:
+  - \bliberal(es)?\b
+  eu:
+  - \bliberal(a|ak|en|entzat)\b
+  fi:
+  - \bliberaal(i|it|eista|eille)\b
+  fr:
+  - "\\blib[e|\xE9]ral(e|aux|s|es)\\b"
+  ga:
+  - "\\bliobr[\xE1|a]l(ach|aithe|acha)\\b"
+  gl:
+  - \bliber(al|ais)\b
+  is:
+  - "\\bfrj[\xE1|a]lslynd(a|ur|ir|um)\\b"
+  - "\\bfrj\xE1lshyggjumenn(irnir)?\\b"
+  it:
+  - \bliberal(e|i)\b
+  lb:
+  - \bliberal(en)?\b
+  lv:
+  - "\\bliber[\u0101|a][l|\u013C]i(s|em)?\\b"
+  mt:
+  - \bliberali\b
+  nl:
+  - \bliberalen?\b
+  'no':
+  - \bliberale\b
+  pl:
+  - "\\blibera[\u0142|l](owie|[o|\xF3]w)?\\b"
+  pt:
+  - \blibera(l|ais)\b
+  sl:
+  - \bliberal(ni|ec|ci|cev|ce)\b
+  sv:
+  - \bliberal(a|er|erna)?\b
+  tr:
+  - \bliberal(ler|lerin)?\b
+LifeStyle:
+  ca:
+  - \bgai\b
+  - \bgais\b
+  - \bhomosexual\b
+  - \bhomosexuals\b
+  - \bfeminista\b
+  - \bfeministas\b
+  - lgbt
+  da: []
+  de:
+  - \bschwul\b
+  - \blesbisch\b
+  - \bhomosexuell\b
+  - \bfeminist(ich|in)?\b
+  - lgbt
+  el: []
+  el-Latn: []
+  en:
+  - \bgay\b
+  - \bhomosexual\b
+  - \bfeminist\b
+  - \bfeminists\b
+  - \bfeminism\b
+  - lgbt
+  es:
+  - \bgay\b
+  - \bhomosexual\b
+  - \bfeminismo\b
+  - \bfeminista\b
+  - lgbt
+  eu: []
+  fi: []
+  fr:
+  - \bgay\b
+  - \bhomosexuel\b
+  - \bfeminisme\b
+  - \bfeministe\b
+  - lgbt
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bgay\b
+  - \bomosessuale\b
+  - \bfeminista\b
+  - \bfeminismo\b
+  - lgbt
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - "\\be\u015Fcinsel\\b"
+  - \bfeminizm\b
+  - \bfeminist\b
+  - lgbt
+Negative:
+  ca: []
+  da: []
+  de: []
+  el: []
+  el-Latn: []
+  en: []
+  es: []
+  eu: []
+  fi: []
+  fr:
+  - anti
+  - contre
+  - "d[e|\xE9]teste"
+  ga: []
+  gl: []
+  is: []
+  it: []
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+Nuclear:
+  ca: []
+  da: []
+  de:
+  - \bkernenergie\b
+  el: []
+  el-Latn: []
+  en:
+  - \bnuclear\b
+  es:
+  - \bnuclear\b
+  eu: []
+  fi: []
+  fr:
+  - "\\bnucl[e|\xE9]aire\\b"
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bnucleare\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+Patriot:
+  ca:
+  - \bpatriot(a|es)\b
+  da:
+  - \bpatriot(er)?\b
+  de:
+  - \bvatansever(lik)?\b
+  el:
+  - "\\b\u03C0\u03B1\u03C4\u03C1\u03B9\u03CE\u03C4\u03B7\u03C2\\b"
+  - "\\b\u03C0\u03B1\u03C4\u03C1\u03B9\u03CE\u03C4\u03B5\u03C2\\b"
+  el-Latn:
+  - "\\bpatri\xF3tis\\b"
+  - "\\bpatri\xF3tes\\b"
+  en:
+  - \bpatriot(ic|ism)?s?\b
+  es:
+  - "\\bpatri[o|\xF3]t(a|ico)?s?\\b"
+  eu:
+  - \babertzale\b
+  fi:
+  - "\\bis\xE4nmaalli(nen|set)\\b"
+  fr:
+  - \bpatriot(ism|ique|e)?s?\b
+  ga:
+  - "\\b(fear|luch)?-?(gr[\xE0|a]dhach|d[\xF9|u]thcha)\\b"
+  gl:
+  - "\\bpatri[o|\xF3]t(a|ico)?s?\\b"
+  is:
+  - "\\bf\xF6\xF0urlandsvinur\\b"
+  - "\\b\xE6ttjar\xF0ar\xE1star\\b"
+  it:
+  - \bpatriot(a|ico|ica|ici|ismo)\b
+  lb:
+  - \bpatriot(en)?\b
+  lv:
+  - \bpatriot[s|i]\b
+  mt:
+  - \bpatrijotti?\b
+  nl:
+  - \bpatrio(ten)?\b
+  'no':
+  - \bpatriot(er)?\b
+  pl:
+  - \bpatrio(ta|ci)\b
+  pt:
+  - "\\bpatri[o|\xF3]t(a|ico)?s?\\b"
+  sl:
+  - \bdomoljubi?\b
+  sv:
+  - \bpatriot(er)?\b
+  tr:
+  - \bvatansever(ler)?\b
+People:
+  ca:
+  - \bgents?\b
+  - \bpobles\b
+  da:
+  - \bby(er)?\b
+  de:
+  - "\\bv[o|\xF6]lk(es)?\\b"
+  el:
+  - "\\b\u03C0[\u03CC|\u03BF]\u03BB(\u03B7|\u03B5\u03B9\u03C2)\\b"
+  el-Latn:
+  - "\\bp[o|\xF3]l(i|eis)\\b"
+  en:
+  - \bpeople\b
+  es:
+  - \bgentes?\b
+  - \bpueblos?\b
+  eu:
+  - \bherriak?\b
+  fi:
+  - \bkaupun(ki|git)\b
+  fr:
+  - \bgens\b
+  - \bpeuple\b
+  ga:
+  - \bbailtean\b
+  - \bbhaile\b
+  gl:
+  - \bcidades?\b
+  is:
+  - "\\bb(\xE6|a|e|ae)(inn|jum)\\b"
+  it:
+  - \bpersone\b
+  - \bpopolo\b
+  lb:
+  - \bst(ie|a)d\b
+  lv:
+  - "\\bpils[\u0113|e]tas?\\b"
+  mt:
+  - \bbliet\b
+  - \bbelt\b
+  nl:
+  - \bsteden\b
+  - \bdorp\b
+  'no':
+  - \bby(er)?\b
+  pl:
+  - \bmiast[o|a]\b
+  pt:
+  - \bcidades?\b
+  sl:
+  - \bmest[o|a]\b
+  sv:
+  - "\\bst[\xE4|a]d(er)?\\b"
+  tr:
+  - \binsanlar\b
+Police:
+  ca: []
+  da: []
+  de:
+  - \b\b
+  el: []
+  el-Latn: []
+  en:
+  - \bpolice\b
+  es:
+  - "\\bpolic[\xED|i]a\\b"
+  - \bcarabineros?\b
+  eu: []
+  fi: []
+  fr:
+  - \bpolice\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bpolizie\b
+  - \bgendarme\b
+  - \bguardia\b
+  - \bcarabiner[o|i]\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+Politicians:
+  ca:
+  - \bpolitic\b
+  - \bpolitics\b
+  da:
+  - \bpolitik(ere)?\b
+  de:
+  - \bpoliti(kers?|kerin|kerinnen)\b
+  el:
+  - "\\b\u03C0\u03BF\u03BB\u03B9\u03C4\u03B9\u03BA[\u03BF\u03AF|\u03AE]\\b"
+  el-Latn:
+  - "\\bpolitiko[\xED|i]\\b"
+  en:
+  - \bpolitician\b
+  - \bpoliticians\b
+  es:
+  - \bpolitic[o|a]\b
+  - \bpolitic[o|a]s\b
+  eu:
+  - \bpolitika(riak)?\b
+  fi:
+  - \bpoli(itikot|tiikka)\b
+  fr:
+  - \bpoliticien(ne)?\b
+  ga:
+  - \b(luchd)?-?poileataigs\b
+  gl:
+  - \bpolitic[o|a]\b
+  - \bpolitic[o|a]s\b
+  is:
+  - "\\bp[\xF3|o]lit[\xED|i]k\\b"
+  - "\\bstj[\xF3|o]rnm[\xE1|a]lamenn\\b"
+  it:
+  - \bpolitic[i|o]\b
+  lb:
+  - \bpolitik(er)?\b
+  lv:
+  - "\\bpolit(ik[\u0101|a]|iem)\\b"
+  mt:
+  - "\\bpoliti([\u010B|c]i|kanti|ka)\\b"
+  nl:
+  - \bpoliti(ci|ek)\b
+  'no':
+  - \bpolitik(k|ere)\b
+  pl:
+  - \bpolity(cy|ka)\b
+  pt:
+  - \bpolitic[o|a]\b
+  - \bpolitic[o|a]s\b
+  sl:
+  - \bpolitik[a|i]\b
+  sv:
+  - \bpolitik(er)?\b
+  tr:
+  - "\\bpolitikac\u0131\\b"
+  - "\\bpolitikac[\u0131|i]lar\\b"
+Populism:
+  ca:
+  - \bpopulis(ta|tes|me)\b
+  da:
+  - \bpopulis(ten|ter|me|terne|tiske)\b
+  de:
+  - \bpopulis(t|ten|mus|tische)\b
+  el:
+  - "\\b\u03BB\u03B1\u03CA\u03BA\u03B9\u03C3(\u03C4\u03AE\u03C2|\u03C4[\u03AD|\u03B5\
+    ][\u03C2|c]|\u03BC[\u03CC|o][\u03C2|c]|\u03C4\u03B9\u03BA\u03BF[\u03CD|\u03C5\
+    ]\u03C2|\u03C4[\u03CE|\u03C9]\u03BD)\\b"
+  el-Latn:
+  - "\\bla[\xEF|i]kis(t[\xED|i]s|t[e|\xE9]s|m[\xF3|o]s|tiko[u\\\xFA]s|t[o|\xF3]n)\\\
+    b"
+  en:
+  - \bpopulis(t|ts|m)\b
+  es:
+  - \bpopulis(ta|mo|tas)\b
+  eu:
+  - \bpopulis(ta|moa|tenak|tentzat|tak)\b
+  fi:
+  - \bpopulist(i|it|mi|teista|eille|tisia)\b
+  fr:
+  - \bpopulis(te|tes|me)\b
+  ga:
+  - \bpopulists?\b
+  - "\\bchoinn\xEDonn\\b"
+  gl:
+  - \bpopulis(ta|mo|tas)\b
+  is:
+  - "\\bpop[\xFA|u]l[i|\xED]s(tinn|tar|ma|tana|sk)\\b"
+  it:
+  - \bpopulis(ta|ti|te|mo)\b
+  lb:
+  - \bpopulis(tesche|ten|mus|tesch)\b
+  lv:
+  - \bpopulis(ts|ti|ms|tiem|tiskie)\b
+  mt:
+  - \bpopulis(ta|ti|)\b
+  - "\\bpopuli[\u017C|z]mu\\b"
+  nl:
+  - \bpopulis(tische|ten|me|tische)\b
+  'no':
+  - \bpopulis(ten|ter|me|tene|tiske)\b
+  pl:
+  - "\\bpopuli[\u015B|s](ci|ta|t[o|\xF3]w|tyczne)\\b"
+  - \bpopulizm\b
+  pt:
+  - \bpopulis(tas|mo|ta)\b
+  sl:
+  - "\\bpopulis(t|ti|tov|te|ti[\u010D|c]ni)\\b"
+  sv:
+  - \bpopulis(ten|ter|terna|m|tiska)\b
+  tr:
+  - "\\bpop[\xFC|u]li[s|z](t|tler|tlerin)\\b"
+Recycling:
+  ca:
+  - \b\b
+  da: []
+  de:
+  - \brecycling\b
+  - \bwieder(verwer|aufberei)tung\b
+  el: []
+  el-Latn: []
+  en:
+  - \brecycling\b
+  - \brecyclage\b
+  es:
+  - \breciclage\b
+  - \becologia\b
+  - \becologic\b
+  eu: []
+  fi: []
+  fr:
+  - \brecyclage\b
+  - \brecycler\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \bricupero\b
+  - \braccolta\b
+  - \becologico\b
+  - \becologica\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - "\\bgeri d[o|\xF6]n[u|\xFC][s|\u015F]um\\b"
+Religion:
+  ca:
+  - \breligio\b
+  - \breligions\b
+  da: []
+  de:
+  - \breligion\b
+  - "\\breligi[\xF6|o]s\\b"
+  - \bgott\b
+  el: []
+  el-Latn: []
+  en:
+  - \breligion\b
+  - \breligions\b
+  - \breligious\b
+  - \bgod\b
+  es:
+  - "\\breligi[o|\xF3]n\\b"
+  - \breligios(o|a)\b
+  - \bdios\b
+  eu: []
+  fi: []
+  fr:
+  - \breligion\b
+  - \breligieux\b
+  - \breligieuse\b
+  - \bdieu\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \breligione\b
+  - \breligioso\b
+  - \breligiosa\b
+  - \bdio\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr:
+  - \bdin\b
+  - \bdini\b
+  - \btanri\b
+Renewable:
+  ca: []
+  da: []
+  de:
+  - \berneuerbare\b
+  el: []
+  el-Latn: []
+  en:
+  - \brenewables?\b
+  es:
+  - \brenovables?\b
+  eu: []
+  fi: []
+  fr:
+  - \brenouvelables?\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \brinn?ovabil[e|i]\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
+RepublicanUS:
+  ca:
+  - (?!x)x
+  da:
+  - (?!x)x
+  de:
+  - (?!x)x
+  el:
+  - (?!x)x
+  el-Latn:
+  - (?!x)x
+  en:
+  - \brepublicans?\b
+  es:
+  - (?!x)x
+  eu:
+  - (?!x)x
+  fi:
+  - (?!x)x
+  fr:
+  - (?!x)x
+  ga:
+  - (?!x)x
+  gl:
+  - (?!x)x
+  is:
+  - (?!x)x
+  it:
+  - (?!x)x
+  lb:
+  - (?!x)x
+  lv:
+  - (?!x)x
+  mt:
+  - (?!x)x
+  nl:
+  - (?!x)x
+  'no':
+  - (?!x)x
+  pl:
+  - (?!x)x
+  pt:
+  - (?!x)x
+  sl:
+  - (?!x)x
+  sv:
+  - (?!x)x
+  tr:
+  - (?!x)x
+Right:
+  ca:
+  - \bdret\b
+  - "\\bdret([\xE0\\a]|es)\\b"
+  da:
+  - "\\bh[\xF8|o]jrefl[\xF8|o]j?\\b"
+  - "\\bh[\xF8|o]jre\\b"
+  de:
+  - \brechts?\b
+  - \brechte\b
+  - \brechtling\b
+  el:
+  - "\\b\u03C3\u03C9\u03C3\u03C4[\u03AC|\u03B1]\\b"
+  - "\\b\u03B4\u03B5\u03BE\u03B9[\u03CC|\u03BF]\u03C6\u03C1\u03C9\u03BD\\b"
+  - "\\b\u03B4\u03B5\u03BE\u03B9\u03BF[\u03AF|\u03B9]\\b"
+  el-Latn:
+  - "\\bsost[\xE1\\a]\\b"
+  - "\\bdexi[\xF3|o]fron\\b"
+  - "\\bdexio[\xED|i]\\b"
+  en:
+  - \bright\b
+  - \brightist\b
+  es:
+  - \bderech(a|ista)\b
+  eu:
+  - \besku(indarrak?|bidea)\b
+  fi:
+  - \boiken\b
+  - \boikeistolai(set|nen)\b
+  fr:
+  - \bdroite\b
+  - "\\bdroit[\xE8|e]res?\\b"
+  - \bdroitiers?\b
+  ga:
+  - \bceart\b
+  - \bceartaitheoir\b
+  gl:
+  - \bdereita\b
+  - \bdereitistas?\b
+  is:
+  - "\\bh(\xE6|a|e|ae)grima(\xF0|d|dh|ed)ur\\b"
+  - "\\bh(\xE6|a|e|ae)gri\\b"
+  it:
+  - \bdestra\b
+  lb:
+  - \briet(s|ser)\b
+  lv:
+  - "\\blab(i|ais|[\u0113|e]jais)\\b"
+  mt:
+  - \b(tal.?)?lemin(ista)?\b
+  nl:
+  - \brechtervleugel\b
+  - \brecht\b
+  - \brechtsen?\b
+  'no':
+  - "\\bh[\xF8|o]yre(ist|ister)?\\b"
+  pl:
+  - \bprawicow(cy|iec)\b
+  - \bprawica\b
+  - \bprawo\b
+  pt:
+  - \bdireit(a|istas?)\b
+  sl:
+  - \bprav\b
+  - "\\bdesni[\u010D|c]ar(ji)?\\b"
+  sv:
+  - "\\bh[\xF6|o]ger(man|ister)\\b"
+  - "\\bh[\xF6|o]gra\\b"
+  tr:
+  - "\\bsa[g|\u011F]\\b"
+  - "\\bsa[\u011F|g]c[i|\u0131](lar)?\\b"
+Socialism:
+  ca:
+  - \bsocialis(tas?|me)\b
+  da:
+  - \bsocialis(mo|t|er|en|terne|ter)?\b
+  de:
+  - \bsozialis(mus|tisch|tinnen|ten)\b
+  el:
+  - "\\b\u03C3\u03BF\u03C3\u03B9\u03B1\u03BB\u03B9\u03C3\u03C4\u03AE\u03C2\\b"
+  - "\\b\u03C3\u03BF\u03BB\u03B9\u03B1\u03BB\u03B9\u03C3\u03BC[\u03CC|\u03BF]\u03C2\
+    \\b"
+  el-Latn:
+  - "\\bsosialis(t[\xED|i]s|t[\xE9|e]s)\\b"
+  - "\\bsolialism[\xF3|o]s\\b"
+  en:
+  - \bsocialis(ts?|m)\b
+  es:
+  - \bsocialis(tas?|mo)\b
+  eu:
+  - \bsozialis(tak?|moa)\b
+  fi:
+  - \bsosialis(mi|tit|tinen)\b
+  fr:
+  - \bsocialis(me|te?s?)\b
+  ga:
+  - "\\bs[\xF3|o]isiala(ch|igh|chas)\\b"
+  gl:
+  - \bsocialis(mo|tas?)\b
+  is:
+  - "\\bs[o|\xF3]s[i|\xED]alis(ti|tar|mi)\\b"
+  it:
+  - \bsocialis(mo|ta|ti)\b
+  lb:
+  - \bsozialis(mus|tesch|ten)\b
+  lv:
+  - "\\bsoci[a|\u0101]lis(ts|ti|ms)\\b"
+  mt:
+  - "\\bso[\u010B|c]jalist(a|i)\\b"
+  nl:
+  - \bsocialis(me|tisch|ten)\b
+  'no':
+  - \bsocialis(ter|t|me)\b
+  pl:
+  - "\\bsocjali(zm|sta|[s|\u015B]ci)\\b"
+  pt:
+  - \bsocialis(mo|tas?)\b
+  sl:
+  - "\\bsociali(sti|zem|sti[\u010D|c]na)\\b"
+  sv:
+  - \bsocialis(m|tisk|ter)\b
+  tr:
+  - \bsosyali(zm|st|stler)\b
+StartUp:
+  ca:
+  - \bstart.?ups?\b
+  da:
+  - \bstart.?ups?\b
+  de:
+  - \bstart.?ups?\b
+  el:
+  - \bstart.?ups?\b
+  el-Latn:
+  - \bstart.?ups?\b
+  en:
+  - \bstart.?ups?\b
+  es:
+  - \bstart.?ups?\b
+  eu:
+  - \bstart.?ups?\b
+  fi:
+  - \bstart.?ups?\b
+  fr:
+  - \bstart.?ups?\b
+  ga:
+  - \bstart.?ups?\b
+  gl:
+  - \bstart.?ups?\b
+  is:
+  - \bstart.?ups?\b
+  it:
+  - \bstart.?ups?\b
+  lb:
+  - \bstart.?ups?\b
+  lv:
+  - \bstart.?ups?\b
+  mt:
+  - \bstart.?ups?\b
+  nl:
+  - \bstart.?ups?\b
+  'no':
+  - \bstart.?ups?\b
+  pl:
+  - \bstart.?ups?\b
+  pt:
+  - \bstart.?ups?\b
+  sl:
+  - \bstart.?ups?\b
+  sv:
+  - \bstart.?ups?\b
+  tr:
+  - \bstart.?ups?\b
+Traditional:
+  ca: []
+  da: []
+  de:
+  - \bgelenek(sel)?\b
+  el: []
+  el-Latn: []
+  en:
+  - \btradition(al|s)?\b
+  es:
+  - "\\btradici[o|\xF3]n(al|ales|es)\\b"
+  eu: []
+  fi: []
+  fr:
+  - \btradition(nel|el|s|elle|nelle)s?\b
+  ga: []
+  gl: []
+  is: []
+  it:
+  - \btradizion(e|ale)\b
+  lb: []
+  lv: []
+  mt: []
+  nl: []
+  'no': []
+  pl: []
+  pt: []
+  sl: []
+  sv: []
+  tr: []
