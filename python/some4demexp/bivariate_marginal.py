@@ -8,22 +8,13 @@ from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
 from adjustText import adjust_text
 
+from some4demexp.conf import CHESLIMS, ATTDICT
+
 plt.rc('text', usetex=True)
 plt.rc('font', family='sans-serif', size=12)
 
 fs = 12
 dpi = 150
-
-CHESLIMS = {
-  'lrgen': [0, 10],
-  'lrecon': [0, 10],
-  'antielite_salience': [0, 10],
-  'eu_position': [0, 7],
-  'immigrate_policy': [0, 10],
-  'galtan': [0, 10],
-  'environment': [0, 10],
-}
-
 
 legend_mps = Line2D(
     [0],
@@ -57,15 +48,6 @@ legend_followers = Line2D(
 custom_legend = [legend_mps, legend_parties, legend_followers]
 
 
-ATT_DICT = {
-    'lrgen': 'Left – Right',
-    'eu_position': 'EU Integration',
-    'antielite_salience': 'Anti-elite Salience',
-    'lrecon': 'Economic Left – Right',
-    'immigrate_policy': 'Immigration Policy',
-    'galtan': 'GAL – TAN',
-    'environment': 'Environment – Economy'
-}
 def get_ordinal(n):
     if n < 0 or not isinstance(n, int):
         raise ValueError(f"Input must be a strictly positive interger.")
@@ -76,6 +58,35 @@ def get_ordinal(n):
     else:
         return f"{n}th"
 
+def get_limits(df, dims, q0, q1):
+
+    x0 = min(CHESLIMS[dims['x']][0], df[dims['x']].quantile(q0))
+    x1 = max(CHESLIMS[dims['x']][1], df[dims['x']].quantile(q1))
+    y0 = min(CHESLIMS[dims['x']][0], df[dims['y']].quantile(q0))
+    y1 = max(CHESLIMS[dims['x']][1], df[dims['y']].quantile(q1))
+
+    return x0, x1, y0, y1
+
+def drop_extremes(df, dims, x0, x1, y0, y1):
+
+    l0 = len(df)
+
+    dfd = copy.deepcopy(df)
+
+    dfd = dfd[dfd[dims['x']] > x0]
+    dfd = dfd[dfd[dims['x']] < x1]
+    dfd = dfd[dfd[dims['y']] > y0]
+    dfd = dfd[dfd[dims['y']] < y1]
+
+    diff = l0 - len(dfd)
+    prop = 100 * diff / l0
+
+    m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
+    m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
+    m2 += f"\t[{x0:.2f}, {x1:.2f}] x [{y0:.2f}, {y1:.2f}]."
+    print(m2)
+
+    return dfd
 
 def visualize_ide(
     sources_coord_ide,
@@ -88,6 +99,7 @@ def visualize_ide(
     limits,
     cbar_rect,
     legend_loc,
+    gridsize=100,
     output_folder=None,
     show=False
 ):
@@ -111,12 +123,16 @@ def visualize_ide(
     if (l0 > l1):
         print(f"Dropped {l1 -l0} repeated embeddings points.")
 
+    # # setting lims
+    # pad = 0.35
+    # dx = plot_df['x'].max()-plot_df['x'].min()
+    # dy = plot_df['y'].max()-plot_df['y'].min()
+    # xlims = (plot_df['x'].min()-pad*dx, plot_df['x'].max()+pad*dx)
+    # ylims = (plot_df['y'].min()-pad*dy, plot_df['y'].max()+pad*dy)
     # setting lims
-    pad = 0.35
-    dx = plot_df['x'].max()-plot_df['x'].min()
-    dy = plot_df['y'].max()-plot_df['y'].min()
-    xlims = (plot_df['x'].min()-pad*dx, plot_df['x'].max()+pad*dx)
-    ylims = (plot_df['y'].min()-pad*dy, plot_df['y'].max()+pad*dy)
+
+    xlims = limits['x']
+    ylims = limits['y']
 
     # This turned out to be 6x6 figsize
     kwargs = {
@@ -126,6 +142,7 @@ def visualize_ide(
         'ratio': 10,
         'height': 5,
         'color': "deepskyblue",
+        'gridsize': gridsize,
         'kind': 'hex',
         'data': plot_df,
     }
@@ -187,7 +204,7 @@ def visualize_ide(
             fontsize=9)
         texts.append(text)
 
-    adjust_text(texts)
+    # adjust_text(texts)
 
     xl = fr'{get_ordinal(latent_dim_x+1)} latent dimension '
     xl += fr'$\delta_{latent_dim_x+1}$'
@@ -226,6 +243,7 @@ def visualize_att(
     limits,
     cbar_rect,
     legend_loc,
+    quantiles=(0, 1),
     path=None,
     show=False,
     **kwargs
@@ -241,47 +259,8 @@ def visualize_att(
     if (l0 > l1):
         print(f"Dropped {l0 -l1} repeated embeddings points.")
 
-
-    def get_limits(df, dims, q0, q1):
-
-        x0 = min(CHESLIMS[dims['x']][0], df[dims['x']].quantile(q0))
-        x1 = max(CHESLIMS[dims['x']][1], df[dims['x']].quantile(q1))
-        y0 = min(CHESLIMS[dims['x']][0], df[dims['y']].quantile(q0))
-        y1 = max(CHESLIMS[dims['x']][1], df[dims['y']].quantile(q1))
-
-        return x0, x1, y0, y1
-
-    def drop_extremes(df, dims, x0, x1, y0, y1):
-
-        l0 = len(df)
-
-        dfd = copy.deepcopy(df)
-
-        dfd = dfd[dfd[dims['x']] > x0]
-        dfd = dfd[dfd[dims['x']] < x1]
-        dfd = dfd[dfd[dims['y']] > y0]
-        dfd = dfd[dfd[dims['y']] < y1]
-
-        diff = l0 - len(dfd)
-        prop = 100 * diff / l0
-
-        m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
-        m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
-        m2 += f"\t[{x0:.2f}, {x1:.2f}] x [{y0:.2f}, {y1:.2f}]."
-        print(m2)
-
-        return dfd
-
-    #####################################################################
-    ############################## HOT FIX ##############################
-    #####################################################################
-
     # Set quantiles q0 and q1 in vizconfig
-    x0, x1, y0, y1 = get_limits(plot_df, dims, q0=0.005, q1=0.995)
-
-    #####################################################################
-    #####################################################################
-    #####################################################################
+    x0, x1, y0, y1 = get_limits(plot_df, dims, q0=quantiles[0], q1=quantiles[1])
 
     plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
 
@@ -300,8 +279,7 @@ def visualize_att(
     }
 
     # plot sources and targets embeddings
-    g = sns.jointplot(
-        **kwargs)
+    g = sns.jointplot(**kwargs)
 
     # get unique parties and build color dictionary
     unique_parties = targets_coord_att.party.unique().tolist()
@@ -368,8 +346,8 @@ def visualize_att(
 
     adjust_text(texts)
 
-    xl = f"CHES {ATT_DICT[dims['x']]}"
-    yl = f"CHES {ATT_DICT[dims['y']]}"
+    xl = f"{ATTDICT[dims['x']]}"
+    yl = f"{ATTDICT[dims['y']]}"
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 

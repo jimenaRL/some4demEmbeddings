@@ -7,7 +7,7 @@ declare -a StringArray=(
     # italy
     # netherlands
     # poland
-    # # romania  # create_ide_emb fails on SVD computation with prince
+    # romania
     # slovenia
     # spain
 )
@@ -23,9 +23,9 @@ for country in ${StringArray[@]}; do
 
     # configs=('configs/N2M2/*')
 
-    # configs=("configs/determined/${country}.yaml")
+    configs=("configs/determined/${country}.yaml")
 
-    configs=('configs/N2M2/lrgen_vs_antielite_salience.yaml')
+    # configs=('configs/N2M2/lrgen_vs_antielite_salience.yaml')
 
     for config in ${configs[@]}; do
 
@@ -35,8 +35,6 @@ for country in ${StringArray[@]}; do
         # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --output=$outputs
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --output=$outputs
 
-        python python/some4demexp/embeddings/tmp.py --config=$config --country=$country --output=$outputs
-
         # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
 
         # python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
@@ -44,7 +42,7 @@ for country in ${StringArray[@]}; do
         #     --country=$country \
         #     --vizconfig=$vizconfig \
         #     --output=$outputs \
-        #     # --show
+        #     --show
 
         # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
         #     --config=$config \
@@ -57,6 +55,10 @@ for country in ${StringArray[@]}; do
         #     --config=$config \
         #     --country=$country \
         #     --images=$images
+
+        # python python/some4demexp/validation/label_followers.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/validation/viz_densities.py --config=$config --country=$country --output=$outputs
 
     done
 
