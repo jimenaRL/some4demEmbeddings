@@ -42,10 +42,10 @@ ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
 folder = set_output_folder(params, country, output)
 
 ide_folder = set_output_folder_emb(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+ide_sources, _ = load_ide_embeddings(ide_folder)
 
 att_folder = set_output_folder_att(params, country, output)
-att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
+att_sources, _, _ = load_att_embeddings(att_folder)
 
 data = {}
 for attdim in ATTDIMISSUES.keys():
@@ -240,3 +240,4 @@ plt.tight_layout()
 
 
 plt.show()
+
