@@ -2,7 +2,7 @@
 
 declare -a StringArray=(
     # belgium
-    # france
+    france
     # germany
     # italy
     # netherlands
@@ -44,17 +44,21 @@ for country in ${StringArray[@]}; do
         #     --output=$outputs \
         #     --show
 
-        python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
-            --config=$config \
-            --country=$country \
-            --vizconfig=$vizconfig \
-            --output=$outputs \
-            # --show
+        # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --vizconfig=$vizconfig \
+        #     --output=$outputs \
+        #     # --show
 
-        python python/some4demexp/visualizations/matplotlib/parse_images.py \
-            --config=$config \
-            --country=$country \
-            --images=$images
+        # python python/some4demexp/visualizations/matplotlib/parse_images.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --images=$images
+
+        # python python/some4demexp/validation/label_followers.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/validation/viz_densities.py --config=$config --country=$country --output=$outputs
 
     done
 

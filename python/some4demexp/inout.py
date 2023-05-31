@@ -18,7 +18,7 @@ from scipy.sparse import csr_matrix
 
 def load_ide_embeddings(folder):
 
-    print(f"Ideological embeddings load from folder {folder}.")
+    print(f"Ideological embeddings lofsave_issues_descriptionsad from folder {folder}.")
 
     ide_sources = pd.read_csv(os.path.join(folder, 'ide_sources.csv'))
     ide_targets = pd.read_csv(os.path.join(folder, 'ide_targets.csv'))
@@ -102,6 +102,16 @@ def load_experiment_data(folder):
 
     return X, targets_pids, sources_pids
 
+def load_pids(folder):
+
+    targets_pids = np.load(
+        os.path.join(folder, "targets_pids.npy"),
+        allow_pickle=True).tolist()
+    sources_pids = np.load(
+        os.path.join(folder, "sources_pids.npy"),
+        allow_pickle=True).tolist()
+
+    return targets_pids, sources_pids
 
 def set_output_folder(params, country, output="outputs"):
 
@@ -131,7 +141,6 @@ def set_output_folder_emb(params, country, output="outputs"):
 
 
 def set_output_folder_att(params, country, output="outputs"):
-
     output_folder_att = os.path.join(
         set_output_folder_emb(params, country, output),
         f"attM_{params['attitudinal_model']['N']}",
@@ -141,8 +150,17 @@ def set_output_folder_att(params, country, output="outputs"):
 
 
 def save_targets_groups(targets_groups, folder):
-
     file = os.path.join(folder, "targets_groups.csv")
     targets_groups.to_csv(file, index=False)
     print(f"Target groups saved at {file}.")
 
+
+def save_issues_descriptions(folder, data, issue):
+    filepath = os.path.join(folder, f'{issue}.csv')
+    data.to_csv(filepath, index=False, encoding='utf8')
+    print(f"Descriptions, issues and sentiments save at {filepath}.")
+
+def load_issues_descriptions(folder, issue):
+    filepath = os.path.join(folder, f'{issue}.csv')
+    print(f"Loading issues and sentiments from {filepath}.")
+    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')

@@ -24,7 +24,11 @@ ATTDIMISSUES = {
         'only_pos': True
     },
     'antielite_salience': {
-        'issues': ['Elites', 'People', 'Politicians'],
+        'issues': ['Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur'],
         'only_pos': False
     }
+}
+
+LANG = {
+    'france': 'fr'
 }
