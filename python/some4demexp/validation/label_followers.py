@@ -48,9 +48,9 @@ SQLITE = SQLite(params['sqlite_db'])
 
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
-targets_pids, sources_pids = load_pids(folder)
+_, sources_pids = load_pids(folder)
 
-entities = targets_pids + sources_pids
+entities = sources_pids
 
 data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
     .rename(columns={'pseudo_id': 'entity'})
@@ -76,8 +76,40 @@ for issue in ISSUES:
     query = f"{issue} == 1"
     print(f"{issue}: {len(data.query(query))}")
 
+query = ' or '.join([f"{i} == 1" for i in ISSUES])
+data = data.query(query)
 
-# (2) Compute sentiment analysis on descriptions with
+# (2) Detect description language and filter out non local languages
+# https://huggingface.co/papluca/xlm-roberta-base-language-detection
+
+print(f"Computing languages for {len(lrdata)} descriptions...")
+
+model_name = "papluca/xlm-roberta-base-language-detection"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
+inputs = tokenizer(
+    data.description.tolist(),
+    return_tensors="pt",
+    padding=True)
+
+with torch.no_grad():
+    logits = model(**inputs).logits
+
+predicted_class_id = logits.argmax(axis=1).numpy().tolist()
+predicted_language = [model.config.id2label[i] for i in predicted_class_id]
+
+l0 = len(data)
+data = data \
+    .assign(predicted_language=predicted_language) \
+    .query(f"predicted_language == '{LANG[country]}'")
+l1 = len(data)
+
+mss = f"Dropped {l0 - l1} followers with descriptions not written in "
+mss += f"{LANG[country]}, left {l1}."
+print(mss)
+
+
+# (3) Compute sentiment analysis on descriptions with
 # https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment
 
 query = ' or '.join([f"{i} == 1" for i in ATTDIMISSUES['lrgen']['issues']])
@@ -85,11 +117,9 @@ lrdata = data.query(query)
 
 print(f"Computing sentiments for {len(lrdata)} descriptions...")
 
-tokenizer = AutoTokenizer.from_pretrained(
-    "nlptown/bert-base-multilingual-uncased-sentiment")
-
-model = AutoModelForSequenceClassification.from_pretrained(
-    "nlptown/bert-base-multilingual-uncased-sentiment")
+model_name = "nlptown/bert-base-multilingual-uncased-sentiment"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
 inputs = tokenizer(
     lrdata.description.tolist(),
@@ -110,7 +140,7 @@ data = data.merge(
 data = data.assign(predicted_sentiment=data.predicted_sentiment.fillna(-1))
 
 
-# (3) Get labels for axis
+# (4) Get labels for axis
 
 # CHES Left – Right
 
@@ -140,31 +170,7 @@ save_issues_descriptions(
     issue='Left-Right')
 
 
-# # CHES Anti-elite Salience A
-
-# attdim = 'antielite_salience'
-
-# query =' or '.join([f"{i} == 1" for i in ATTDIMISSUES[attdim]['issues']])
-# aedata = data \
-#     .query(query) \
-#     .assign(tag='Elites-People-Politicians') \
-#     .assign(label=1)
-# print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
-
-# odata = data
-# for issue in ISSUES:
-#     odata = odata[odata[issue]==0]
-# odata = odata \
-#     .sample(n=len(aedata), random_state=666) \
-#     .assign(tag='Other') \
-#     .assign(label=0)
-
-# save_issues_descriptions(
-#     folder,
-#     pd.concat([aedata, odata]),
-#     issue='Elites-People-Politicians')
-
-# CHES Anti-elite Salience B
+# CHES Anti-elite Salience
 
 attdim = 'antielite_salience'
 
