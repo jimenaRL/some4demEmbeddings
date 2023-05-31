@@ -42,10 +42,10 @@ ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
 folder = set_output_folder(params, country, output)
 
 ide_folder = set_output_folder_emb(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+ide_sources, _ = load_ide_embeddings(ide_folder)
 
 att_folder = set_output_folder_att(params, country, output)
-att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
+att_sources, _, _ = load_att_embeddings(att_folder)
 
 
 benchmark_records = []
@@ -56,7 +56,7 @@ for attdim in ATTDIMISSUES.keys():
     issue = '-'.join(ATTDIMISSUES[attdim]['issues'])
     data = load_issues_descriptions(folder, issue) \
         .merge(att_sources, on='entity', how='inner') \
-        .merge(ide_sources, on='entity', how='inner')
+        .merge(ide_sources, on='entity', how='inner') \
 
 
     # (1) Measure accuracy of estimated positions
@@ -129,54 +129,10 @@ for attdim in ATTDIMISSUES.keys():
     })
 
 benchmark_records = pd.DataFrame.from_records(benchmark_records)
-benchmark_records.to_csv('benchmark_records.csv', index=False)
+# benchmark_records.to_csv('benchmark_records.csv', index=False)
 print(benchmark_records)
 
 discover_records = pd.DataFrame.from_records(discover_records)
-discover_records.to_csv('discover_records.csv', index=False)
+# discover_records.to_csv('discover_records.csv', index=False)
 print(discover_records)
 
-
-
-data_records = [
-    {
-        'partition': 'Left/Right',
-        'label': 'Left',
-        'criteria': 'Description includes keyword “left” in local language AND does not have negative sentiment.',
-        'matches': 1017
-    },
-    {
-        'partition': 'Left/Right',
-        'label': 'Right',
-        'criteria': 'Description includes keyword “left” in local language AND does not have negative sentiment.',
-        'matches': 685
-    },
-    {
-        'partition': 'Anti-elitism',
-        'label': 'People',
-        'criteria': 'Description includes keyword “people” in local language.',
-        'matches': 1666
-    },
-    {
-        'partition': 'Anti-elitism',
-        'label': 'Elites',
-        'criteria': 'Description includes keyword “elites” in local language.',
-        'matches': 50
-    },
-    {
-        'partition': 'Anti-elitism',
-        'label': 'Politicians',
-        'criteria': 'Description includes keyword “politicians” in local language.',
-        'matches': 50
-    },
-    {
-        'partition': 'Anti-elitism',
-        'label': 'Other',
-        'criteria': 'Description does not include any of the previously mentioned keywords.',
-        'matches': 397388
-    }
-]
-
-stats = pd.DataFrame.from_records(data_records)
-stats.to_csv('stats.csv', index=False)
-print(stats)
