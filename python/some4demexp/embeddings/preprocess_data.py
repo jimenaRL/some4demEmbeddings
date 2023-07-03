@@ -43,11 +43,12 @@ valid_followers = users_metadata \
 res_graph = SQLITE.retrieveGraph(country, valid_followers)
 
 # Build adjency matrix
-X, targets_pids, sources_pids = graphToAdjencyMatrix(
+X, targets_pids, sources_pids, repeated_sources_counts = graphToAdjencyMatrix(
     res_graph, MIN_OUTDEGREE, sparce=False)
 
 # Save social graph and target/source pseudo ids
-save_experiment_data(X, targets_pids, sources_pids, folder)
+save_experiment_data(
+    X, targets_pids, sources_pids, repeated_sources_counts, folder)
 
 # Retrieve and save targets groups
 targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)

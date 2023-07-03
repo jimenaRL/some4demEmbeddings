@@ -44,7 +44,7 @@ ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
 # add group information
 t0 = len(ide_targets)
-ide_targets = ide_targets.merge(
+ide_targets_in_parties_with_valid_mapping = ide_targets.merge(
         targets_groups,
         left_on="entity",
         right_on="mp_pseudo_id",
@@ -56,14 +56,12 @@ if t0 > t1:
     print(
         f"Dropped {t0 - t1} targets with no group in mapping.")
 
-
 # Fit regression
 groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(country, ATTDIMS)
-ide_targets_cp = ide_targets.copy()
 ide_sources_cp = ide_sources.copy()
 
 # make estimate
-estimated_groups_coord_ide = ide_targets_cp \
+estimated_groups_coord_ide = ide_targets_in_parties_with_valid_mapping \
     .drop(columns=['entity']) \
     .groupby('party') \
     .mean() \
@@ -77,23 +75,20 @@ model_att.fit(
 )
 
 sources_coord_att = model_att.transform(ide_sources_cp)
-targets_coord_att = model_att.transform(ide_targets_cp.drop("party", axis=1))
+targets_coord_att = model_att.transform(ide_targets)
 
 # add group information
 targets_coord_att = targets_coord_att.merge(
         targets_groups,
         left_on="entity",
         right_on="mp_pseudo_id",
-        how="inner"
+        how="left"
     ) \
     .drop(columns="mp_pseudo_id")
 
 # save results
 att_folder = set_output_folder_att(params, country, output)
 save_att_embeddings(
-        sources_coord_att,
-        targets_coord_att,
-        groups_coord_att,
-        att_folder)
-
-print(yaml.dump(params, default_flow_style=False))
+    sources_coord_att,
+    targets_coord_att,
+    att_folder)
