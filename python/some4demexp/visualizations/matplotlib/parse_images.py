@@ -25,8 +25,6 @@ sources = [
     for y in glob(os.path.join(x[0], '*.png'))
 ]
 
-
-
 output_folder = os.path.join(
     images,
     country,
