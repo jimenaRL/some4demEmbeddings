@@ -14,6 +14,7 @@ from transformers import \
     AutoModelForSequenceClassification
 
 from some4demdb import SQLite
+
 from some4demexp.inout import \
     save_issues_descriptions, \
     set_output_folder, \
@@ -46,6 +47,8 @@ print(yaml.dump(params, default_flow_style=False))
 
 SQLITE = SQLite(params['sqlite_db'])
 
+predicted_sentiment_min_rate = 3
+
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
 _, sources_pids = load_pids(folder)
@@ -56,7 +59,6 @@ data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
     .rename(columns={'pseudo_id': 'entity'})
 
 l0 = len(data)
-print(f"Found {l0} followers attitudinal embeddings.")
 
 # (1) Find issues words in descriptions
 for issue, patterns in ISSUEDICT.items():
@@ -68,21 +70,17 @@ for issue, patterns in ISSUEDICT.items():
         .astype(int) \
         .apply(lambda n: 1 - n)
 
-l1 = len(data.query(' or '.join([f"{i} == 1" for i in ISSUES])))
+query = ' or '.join([f"{i} == 1" for i in ISSUES])
+data = data.query(query)
+l1 = len(data)
 prop = 100 * l1 / l0
 print(f"Found {l1} ({prop:.2f}%) followers with patterns in descriptions.")
 
-for issue in ISSUES:
-    query = f"{issue} == 1"
-    print(f"{issue}: {len(data.query(query))}")
-
-query = ' or '.join([f"{i} == 1" for i in ISSUES])
-data = data.query(query)
 
 # (2) Detect description language and filter out non local languages
 # https://huggingface.co/papluca/xlm-roberta-base-language-detection
 
-print(f"Computing languages for {len(lrdata)} descriptions...")
+print(f"Computing languages for {len(data)} descriptions...")
 
 model_name = "papluca/xlm-roberta-base-language-detection"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -107,7 +105,6 @@ l1 = len(data)
 mss = f"Dropped {l0 - l1} followers with descriptions not written in "
 mss += f"{LANG[country]}, left {l1}."
 print(mss)
-
 
 # (3) Compute sentiment analysis on descriptions with
 # https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment
@@ -139,15 +136,13 @@ data = data.merge(
 
 data = data.assign(predicted_sentiment=data.predicted_sentiment.fillna(-1))
 
-
 # (4) Get labels for axis
 
 # CHES Left – Right
-
 ldata = data \
     .query("Left == 1") \
     .query("Left != Right") \
-    .query("predicted_sentiment >= 3") \
+    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
     .assign(tag='Left (+)') \
     .assign(label=0)
 print(f"Found {len(ldata)} `Left-leaning` followers.")
@@ -160,15 +155,17 @@ rdata = data \
     .assign(label=1)
 print(f"Found {len(rdata)} `Rigth-leaning` followers.")
 
+# egalize sample
 n = min(len(ldata), len(rdata))
 ldata = ldata.sample(n=n)
 rdata = rdata.sample(n=n)
+
+print(f"Left-Right data downsampled to {n} samples of each categorie.")
 
 save_issues_descriptions(
     folder,
     pd.concat([ldata, rdata]),
     issue='Left-Right')
-
 
 # CHES Anti-elite Salience
 
@@ -192,7 +189,15 @@ odata = data \
     .assign(label=0)
 print(f"Found {len(odata)} `StartUp/Entrepreneur` followers.")
 
+m = min(len(odata), len(aedata))
+odata = odata.sample(n=m)
+aedata = aedata.sample(n=m)
+mssg = f"Elites-People-Politicians-StartUp-Entrepreneur data downsampled to"
+mssg += "{m} samples of each categorie."
+print(mssg)
+
 save_issues_descriptions(
     folder,
     pd.concat([aedata, odata]),
     issue='Elites-People-Politicians-StartUp-Entrepreneur')
+
