@@ -37,6 +37,9 @@ attitudinal:
       RN:
       - 0.7
       - -0.5
+    quantiles: &id002
+    - 0.01
+    - 0.99
   antielite_salience_vs_eu_position:
     cbar_rect:
     - 0.15
@@ -48,6 +51,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   antielite_salience_vs_galtan:
     cbar_rect:
     - 0.15
@@ -59,6 +63,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   antielite_salience_vs_immigrate_policy:
     cbar_rect:
     - 0.15
@@ -70,6 +75,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   eu_position_vs_environment:
     cbar_rect:
     - 0.15
@@ -81,6 +87,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   eu_position_vs_galtan:
     cbar_rect:
     - 0.15
@@ -92,6 +99,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   eu_position_vs_immigrate_policy:
     cbar_rect:
     - 0.15
@@ -103,6 +111,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   galtan_vs_environment:
     cbar_rect:
     - 0.15
@@ -114,6 +123,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   immigrate_policy_vs_environment:
     cbar_rect:
     - 0.15
@@ -125,6 +135,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   immigrate_policy_vs_galtan:
     cbar_rect:
     - 0.15
@@ -136,6 +147,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrecon_vs_antielite_salience:
     cbar_rect:
     - 0.15
@@ -147,6 +159,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrecon_vs_environment:
     cbar_rect:
     - 0.15
@@ -158,6 +171,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrecon_vs_eu_position:
     cbar_rect:
     - 0.15
@@ -169,6 +183,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrecon_vs_galtan:
     cbar_rect:
     - 0.15
@@ -180,6 +195,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrecon_vs_immigrate_policy:
     cbar_rect:
     - 0.15
@@ -191,17 +207,22 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_antielite_salience:
     cbar_rect:
     - 0.15
     - 0.6
     - 0.02
     - 0.3
+    quantiles:
+    - 0.01
+    - 0.99
     legend_loc: lower right
     limits:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_environment:
     cbar_rect:
     - 0.15
@@ -213,6 +234,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_eu_position:
     cbar_rect:
     - 0.15
@@ -224,6 +246,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_galtan:
     cbar_rect:
     - 0.15
@@ -235,6 +258,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_immigrate_policy:
     cbar_rect:
     - 0.15
@@ -246,6 +270,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
   lrgen_vs_lrecon:
     cbar_rect:
     - 0.15
@@ -257,6 +282,7 @@ attitudinal:
     - -2
     - 12
     nudges: *id001
+    quantiles: *id002
 ideological:
   cbar_rect:
   - 0.15
@@ -266,11 +292,11 @@ ideological:
   legend_loc: upper right
   limits:
     x:
-    - -2.5
-    - 2
+    - -3.5
+    - 3.5
     y:
-    - -2
-    - 4
+    - -3.5
+    - 3.5
   nudges:
     DLF:
     - -0.4
@@ -293,6 +319,9 @@ ideological:
     PCF:
     - 0
     - 0.35
+    PRG:
+    - 0
+    - 0
     PS:
     - 0
     - -0.6
@@ -307,6 +336,5 @@ palette:
   LREM: tab:brown
   MoDem: orangered
   PCF: red
-  PRG: blue
   PS: tab:pink
   RN: magenta
