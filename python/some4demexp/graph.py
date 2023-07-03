@@ -35,8 +35,14 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     mssg += f"with outdegree less than {min_outdegree}, keeped {j1}."
     print(mssg)
 
-    # remove repeated sources (rows)
-    _, idx_valid_j = np.unique(ntwrk_csr.toarray(), axis=0, return_index=True)
+    # remove and keep repeated sources (rows)
+
+    _, idx_valid_j, repeated_rows_counts = np.unique(
+        ntwrk_csr.toarray(),
+        axis=0,
+        return_index=True,
+        return_counts=True
+    )
     ja = ntwrk_csr.shape[0]
     ntwrk_csr = ntwrk_csr[idx_valid_j, :]
     jb = ntwrk_csr.shape[0]
@@ -45,6 +51,7 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
     mssg = f"Drop {ja - jb} repeated sources "
     mssg += f"({100*(ja - jb)/ja:.2f}%), keeped {jb}."
+    print(mssg)
 
     # remove targets (columns) with no source associated
     idx_valid_i = np.argwhere((np.abs(ntwrk_csr).sum(axis=0) != 0).tolist()[0])[:, 0]
@@ -58,16 +65,11 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     mssg = f"Drop {ia - ib} targets with no sources associated "
     mssg += f"({100*(ia - ib)/ia:.2f}%), keeped {ib}."
 
-
-    # # checking if final network is bipartite:
-    # common_nodes_np = np.intersect1d(
-    #     input_df['source'], input_df['target'])
-    # self.is_bipartite_ = common_nodes_np.size == 0
-    # if not self.is_bipartite_:
-    #     if self.force_bipartite:
-    #         input_df = input_df[~input_df['source'].isin(common_nodes_np)]
-    # print('Bipartite network:', self.is_bipartite_)
-
+    # checking if final network is bipartite:
+    nb_shared = len(np.intersect1d(rows_id, columns_id))
+    if not nb_shared == 0:
+        raise ValueError(
+            f"Created graph is not bipartited, found {nb_shared} common nodes.")
 
     mssg1 = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} unique sources "
     mssg1 += f"to {len(rows_id)} unique targets."
@@ -79,4 +81,4 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     print(mssg)
     print(mssg1)
 
-    return ntwrk_csr.toarray(), rows_id, columns_id
+    return ntwrk_csr.toarray(), rows_id, columns_id, repeated_rows_counts
