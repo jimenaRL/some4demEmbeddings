@@ -18,17 +18,14 @@ ATTDICT = {
     'environment': 'CHES Environment – Economy'
 }
 
-ATTDIMISSUES = {
-    'lrgen': {
-        'issues': ['Left', 'Right'],
-        'only_pos': True
-    },
-    'antielite_salience': {
-        'issues': ['Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur'],
-        'only_pos': False
-    }
-}
-
 LANG = {
-    'france': 'fr'
+    'belgium': 'fr',
+    'france': 'fr',
+    'germany': 'de',
+    'italy': 'it',
+    'netherlands': 'nl',
+    'poland': 'pl',
+    'romania': 'ro',
+    'slovenia': 'sl',
+    'spain': 'es',
 }
