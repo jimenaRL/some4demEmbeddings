@@ -3,6 +3,6 @@ __pycache__
 *.npy
 *.npz
 *.tar
-*outputs
+*outputs*
 *images
 .python-version

@@ -43,8 +43,8 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 ENV PYENV_ROOT /root/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 
-RUN pyenv install 3.6.15 && \
-    pyenv global 3.6.15
+RUN pyenv install 3.9.16 && \
+    pyenv global 3.9.16
 RUN pip install --upgrade pip
 
 # -----------------------------------------------------------------------------
@@ -67,13 +67,10 @@ RUN apt-get update && \
     apt-get install -y git && \
     apt-get install -y nano
 
+#RUN mkdir /some4demEmbeddings/images
+
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
-
 WORKDIR /some4demEmbeddings
-
-RUN git pull
-
-RUN mkdir /some4demEmbeddings/images
-
+RUN git checkout validation
 RUN pip install -r python/requirements.txt
-
+RUN pip install -r python/some4demexp/validation/requirements.txt
