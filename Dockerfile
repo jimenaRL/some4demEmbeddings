@@ -67,8 +67,6 @@ RUN apt-get update && \
     apt-get install -y git && \
     apt-get install -y nano
 
-RUN ls
-
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 WORKDIR /some4demEmbeddings
 RUN git checkout validation
