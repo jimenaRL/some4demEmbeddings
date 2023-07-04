@@ -67,10 +67,10 @@ RUN apt-get update && \
     apt-get install -y git && \
     apt-get install -y nano
 
-#RUN mkdir /some4demEmbeddings/images
+RUN ls
 
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 WORKDIR /some4demEmbeddings
 RUN git checkout validation
 RUN pip install -r python/requirements.txt
-RUN pip install -r python/some4demexp/validation/requirements.txt
+#RUN pip install -r python/some4demexp/validation/requirements.txt
