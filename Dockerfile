@@ -76,10 +76,6 @@ RUN pip install --upgrade pip
 ARG token
 ENV env_token $token
 RUN git clone https://${env_token}@github.com/jimenaRL/some4demDB.git
-WORKDIR /some4demDB
-RUN git checkout sqliteWrapper
-RUN git pull
-WORKDIR /
 
 # clone public project repo and install dependencies
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
