@@ -63,6 +63,7 @@ ENV PYENV_ROOT /root/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 ENV PYTHONIOENCODING utf-8
 
+
 RUN apt-get update && \
     apt-get install -y git && \
     apt-get install -y nano
@@ -70,5 +71,10 @@ RUN apt-get update && \
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 WORKDIR /some4demEmbeddings
 RUN git checkout validation
+
+RUN pyenv virtualenv some4demexp
+RUN pyenv global 3.9.16/envs/some4demexp
+RUN ln -fs /some4demEmbeddings/python/some4demexp /root/.pyenv/versions/some4demexp/lib/python3.9/site-packages/some4demexp
+
 RUN pip install -r python/requirements.txt
-#RUN pip install -r python/some4demexp/validation/requirements.txt
+RUN pip install -r python/some4demexp/validation/requirements.txt
