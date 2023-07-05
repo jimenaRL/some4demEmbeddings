@@ -33,7 +33,7 @@ dims = ['lrgen', 'antielite_salience']
 
 # Load attitudinal embeddigns
 att_folder = set_output_folder_att(params, country, output)
-att_sources, att_targets, att_groups = load_att_embeddings(att_folder)
+att_sources, att_targets = load_att_embeddings(att_folder)
 
 s0 = len(att_sources)
 t0 = len(att_targets)
