@@ -31,9 +31,9 @@ for country in ${StringArray[@]}; do
         vizconfig="configs/vizconfigs/${country}.yaml"
 
         # [0] EMBEDDINGS CREATION
-        # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
-        # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --output=$outputs
-        # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --output=$outputs
+        python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
+        python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --output=$outputs
+        python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --output=$outputs
 
         # # [1] ANALYSIS
         # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
