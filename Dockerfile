@@ -72,6 +72,8 @@ RUN pyenv virtualenv some4demexp
 RUN pyenv global 3.9.16/envs/some4demexp
 RUN pip install --upgrade pip
 
+RUN ls
+
 # clone private project repo and install dependencies
 ARG token
 ENV env_token $token
@@ -81,7 +83,6 @@ RUN git clone https://${env_token}@github.com/jimenaRL/some4demDB.git
 RUN git clone https://github.com/jimenaRL/some4demEmbeddings.git
 WORKDIR /some4demEmbeddings
 RUN git checkout validation
-RUN git pull
 
 RUN pip install -r python/requirements.txt
 RUN pip install -r python/some4demexp/validation/requirements.txt
