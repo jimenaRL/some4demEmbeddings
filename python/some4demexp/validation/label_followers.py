@@ -4,9 +4,12 @@ Scrip to assigne label to followers
 import os
 import re
 import yaml
-import pandas as pd
+from tqdm import tqdm
 from itertools import combinations
 from argparse import ArgumentParser
+
+import numpy as np
+import pandas as pd
 
 import torch
 from transformers import \
@@ -21,7 +24,6 @@ from some4demexp.inout import \
     load_pids
 
 from some4demexp.conf import \
-    ATTDIMISSUES, \
     LANG
 
 # parse arguments and set paths
@@ -38,8 +40,17 @@ issues = 'python/some4demexp/validation/issues.yaml'
 with open(issues, "r", encoding='utf-8') as fh:
     issues_dict = yaml.load(fh, Loader=yaml.SafeLoader)
 
-ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
+
+ISSUES = [
+    'Left', 'Right',
+    'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
+    'Immigration',
+    'Europe',
+    'Environment'
+]
+SENTIMENT_ISSUES = ['Left', 'Right', 'Immigration', 'Europe']
 ISSUEDICT = {k: issues_dict[k][LANG[country]] for k in ISSUES}
+
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
@@ -59,9 +70,10 @@ data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
     .rename(columns={'pseudo_id': 'entity'})
 
 l0 = len(data)
-
 # (1) Find issues words in descriptions
 for issue, patterns in ISSUEDICT.items():
+    toprint = '\n\t'+' | '.join(patterns)+'\n'
+    print(f"Checking for {toprint}patterns for issue {issue}.")
     regex = re.compile(f"(?:[\s]|^){'|'.join(patterns)}()(?=[\s]|$)")
     # for each row set 1 if issue is present in description
     data[issue] = data.description \
@@ -76,69 +88,153 @@ l1 = len(data)
 prop = 100 * l1 / l0
 print(f"Found {l1} ({prop:.2f}%) followers with patterns in descriptions.")
 
-
 # (2) Detect description language and filter out non local languages
 # https://huggingface.co/papluca/xlm-roberta-base-language-detection
 
-print(f"Computing languages for {len(data)} descriptions...")
+# #### NOTE : this should be doing at the creation of the DB by data enrichment
 
-model_name = "papluca/xlm-roberta-base-language-detection"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForSequenceClassification.from_pretrained(model_name)
-inputs = tokenizer(
-    data.description.tolist(),
-    return_tensors="pt",
-    padding=True)
+# model_name = "papluca/xlm-roberta-base-language-detection"
+# tokenizer = AutoTokenizer.from_pretrained(model_name)
+# model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-with torch.no_grad():
-    logits = model(**inputs).logits
+# print(f"Computing languages for {len(data)} descriptions...")
 
-predicted_class_id = logits.argmax(axis=1).numpy().tolist()
-predicted_language = [model.config.id2label[i] for i in predicted_class_id]
+# bsize = 500
+# tsize = len(data)
+# batchl= [(i*bsize, (i+1)*bsize) for i in range(np.int32(tsize/bsize+1))]
 
-l0 = len(data)
-data = data \
-    .assign(predicted_language=predicted_language) \
-    .query(f"predicted_language == '{LANG[country]}'")
-l1 = len(data)
+# predicted_language = []
+# for b in tqdm(batchl):
+#     batch = data.iloc[b[0]: b[1]]
+#     inputs = tokenizer(
+#         batch.description.tolist(),
+#         return_tensors="pt",
+#         padding=True)
+#     with torch.no_grad():
+#         logits = model(**inputs).logits
+#     predicted_class_id = logits.argmax(axis=1).numpy().tolist()
+#     predicted_language.extend(
+#         [model.config.id2label[i] for i in predicted_class_id]
+#     )
 
-mss = f"Dropped {l0 - l1} followers with descriptions not written in "
-mss += f"{LANG[country]}, left {l1}."
-print(mss)
+# l0 = len(data)
+# data = data \
+#     .assign(predicted_language=predicted_language) \
+#     .query(f"predicted_language == '{LANG[country]}'")
+# l1 = len(data)
+
+# mss = f"Dropped {l0 - l1} followers with descriptions not written in "
+# mss += f"{LANG[country]}, left {l1}."
+# print(mss)
 
 # (3) Compute sentiment analysis on descriptions with
 # https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment
 
-query = ' or '.join([f"{i} == 1" for i in ATTDIMISSUES['lrgen']['issues']])
-lrdata = data.query(query)
-
-print(f"Computing sentiments for {len(lrdata)} descriptions...")
 
 model_name = "nlptown/bert-base-multilingual-uncased-sentiment"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-inputs = tokenizer(
-    lrdata.description.tolist(),
-    return_tensors="pt",
-    padding=True)
+sentiment_query = ' or '.join([f"{i} == 1" for i in SENTIMENT_ISSUES])
+sentiment_data = data.query(sentiment_query)
 
-with torch.no_grad():
-    logits = model(**inputs).logits
-predicted_sentiment=logits.argmax(axis=1).numpy()
+print(f"Computing sentiments for {len(sentiment_data)} descriptions...")
 
-lrdata = lrdata.assign(predicted_sentiment=predicted_sentiment)
+bsize = 500
+tsize = len(sentiment_data)
+batchl= [(i*bsize, (i+1)*bsize) for i in range(np.int32(tsize/bsize+1))]
 
-print("done.")
+predicted_sentiment = []
+for b in tqdm(batchl):
+    batch = sentiment_data.iloc[b[0]: b[1]]
+    inputs = tokenizer(
+        batch.description.tolist(),
+        return_tensors="pt",
+        padding=True)
+    with torch.no_grad():
+        logits = model(**inputs).logits
+    predicted_sentiment.extend(
+        logits.argmax(axis=1).numpy()
+    )
 
-data = data.merge(
-    lrdata[['entity', 'predicted_sentiment']], on='entity', how='left')
+sentiment_data = sentiment_data.assign(predicted_sentiment=predicted_sentiment)
 
-data = data.assign(predicted_sentiment=data.predicted_sentiment.fillna(-1))
+import pdb; pdb.set_trace()  # breakpoint 1ce1406d //
+
+data = data \
+    .merge(
+        sentiment_data[['entity', 'predicted_sentiment']],
+        on='entity',
+        how='left') \
+    .assign(
+        predicted_sentiment=data.predicted_sentiment.fillna(-1)
+    )
+
+import pdb; pdb.set_trace()  # breakpoint 0a13155a //
 
 # (4) Get labels for axis
 
-# CHES Left – Right
+# Migrantion
+tag = 'Immigration (+)'
+
+migration_plus = data \
+    .query("Immigration == 1") \
+    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+    .assign(tag=tag) \
+    .assign(label=0)
+print(f"Found {len(migration_plus)} `{tag}` followers.")
+
+tag = 'Immigration (-)'
+migration_moins = data \
+    .query("Immigration == 1") \
+    .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+    .assign(tag=tag) \
+    .assign(label=0)
+print(f"Found {len(migration_moins)} `{tag}` followers.")
+
+# egalize sample
+j = min(len(migration_plus), len(migration_moins))
+migration_plus = migration_plus.sample(n=j)
+migration_moins = migration_moins.sample(n=j)
+
+print(f"Immigration (+)/(-) data downsampled to {j} samples of each categorie.")
+
+save_issues_descriptions(
+    folder,
+    pd.concat([migration_moins, migration_moins]),
+    issue='Immigration')
+
+
+# Europe
+tag = 'Europe (+)'
+euro_plus = data \
+    .query("Europe == 1") \
+    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+    .assign(tag=tag) \
+    .assign(label=0)
+print(f"Found {len(euro_plus)} `{tag}` followers.")
+
+tag = 'Europe (-)'
+euro_moins = data \
+    .query("Europe == 1") \
+    .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+    .assign(tag=tag) \
+    .assign(label=0)
+print(f"Found {len(euro_moins)} `{tag}` followers.")
+
+# egalize sample
+k = min(len(euro_plus), len(euro_moins))
+euro_plus = euro_plus.sample(n=k)
+euro_moins = euro_moins.sample(n=k)
+
+print(f"Europe (+)/(-) data downsampled to {k} samples of each categorie.")
+
+save_issues_descriptions(
+    folder,
+    pd.concat([euro_plus, euro_moins]),
+    issue='Europe')
+
+# Left-Right
 ldata = data \
     .query("Left == 1") \
     .query("Left != Right") \
@@ -167,9 +263,7 @@ save_issues_descriptions(
     pd.concat([ldata, rdata]),
     issue='Left-Right')
 
-# CHES Anti-elite Salience
-
-attdim = 'antielite_salience'
+# Anti-elite
 
 q1 = ' or '.join([f"{i} == 1" for i in ["Elites", "People", "Politicians"]])
 q2 = ' and '.join([f"{i} == 0" for i in ["StartUp", "Entrepreneur"]])
