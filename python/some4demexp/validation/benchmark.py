@@ -6,7 +6,7 @@ from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_issues_descriptions, \
+    load_issues, \
     save_issues_benckmarks, \
     set_output_folder_emb, \
     load_ide_embeddings
@@ -49,44 +49,57 @@ att_sources, _ = load_att_embeddings(att_folder)
 benchmark_records = []
 discover_records = []
 
-for issue in ['Left-Right', 'Elites-People-Politicians-StartUp-Entrepreneur']:
-    for attdim in ATTDIMS:
+for issue in ['Left-Right']: #, 'Elites-People-Politicians-StartUp-Entrepreneur']:
+    for attdim in ['lrgen']:
 
-        data = load_issues_descriptions(folder, issue) \
-            .merge(att_sources, on='entity', how='inner') \
-            .merge(ide_sources, on='entity', how='inner') \
-
+        labeled_data = load_issues(folder, issue)
+        # HOT FIX
+        labeled_data = labeled_data.merge(att_sources.drop_duplicates(), on='entity', how='left')
+        labeled_data = labeled_data.merge(ide_sources.drop_duplicates(), on='entity', how='left')
 
         # (1) Measure accuracy of estimated positions
-        Y = data[['entity', 'label']]
+        Y = labeled_data[['entity', 'label']]
+
 
         # (1.1) Benchmark attitudinal dimension
-        mb = BenchmarkDimension()
-        Xb = data[['entity', attdim]]
+        mb = BenchmarkDimension(
+            compute_train_error=True,
+            undersample_data=False,
+            random_state=666
+        )
+        Xb = labeled_data[['entity', attdim]]
+        mssg = f"Fitting regresion on {len(labeled_data)} samples for  "
+        mssg += f"attitudinal dimension {attdim}... "
+        print(mssg)
         mb.fit(Xb, Y)
 
         benchmark_records.append({
             'embedding': 'attitudinal',
             'dimension': attdim,
             'issue': issue,
-            # 'beta0': mb.beta0_,
-            # 'beta1': mb.beta1_,
+            'beta0': mb.beta0_,
+            'beta1': mb.beta1_,
             'precision_train_': mb.precision_train_,
             'recall_train_': mb.recall_train_,
             'f1_score_train_': mb.f1_score_train_,
         })
 
         for idedim in IDEDIMS:
-            mb = BenchmarkDimension()
-            Xb = data[['entity', f'latent_dimension_{idedim}']]
+            mb = BenchmarkDimension(
+                compute_train_error=True,
+                undersample_data=False,
+                random_state=666
+            )
+            Xb = labeled_data[['entity', f'latent_dimension_{idedim}']]
+            print(f"Fitting regresion for ide benchmark {idedim}... ")
             mb.fit(Xb, Y)
 
             benchmark_records.append({
                 'embedding': 'ideological',
                 'dimension': idedim,
                 'issue': issue,
-                # 'beta0': mb.beta0_,
-                # 'beta1': mb.beta1_,
+                'beta0': mb.beta0_,
+                'beta1': mb.beta1_,
                 'precision_train_': mb.precision_train_,
                 'recall_train_': mb.recall_train_,
                 'f1_score_train_': mb.f1_score_train_,
@@ -94,15 +107,30 @@ for issue in ['Left-Right', 'Elites-People-Politicians-StartUp-Entrepreneur']:
 
 
 
-        # (1.2) Discover Dimension
+        # # (1.2) Discover Dimension
 
-        # # ideological embedding
+        # # # ideological embedding
+        # # md = DiscoverDimension()
+        # # Xd = data[['entity']+[f'latent_dimension_{idedim}' for idedim in IDEDIMS]]
+        # # md.fit(Xd, Y)
+
+        # # discover_records.append({
+        # #     'embedding': 'ideological',
+        # #     'issue': issue,
+        # #     'model_decision_boundary_': md.model_decision_boundary_,
+        # #     'beta1': md.decision_hyperplane_unit_normal,
+        # #     'precision_train_': md.precision_train_,
+        # #     'recall_train_': md.recall_train_,
+        # #     'f1_score_train_': md.f1_score_train_,
+        # # })
+
+        # # attitudinal embedding
         # md = DiscoverDimension()
-        # Xd = data[['entity']+[f'latent_dimension_{idedim}' for idedim in IDEDIMS]]
+        # Xd = data[['entity']+ATTDIMS]
         # md.fit(Xd, Y)
 
         # discover_records.append({
-        #     'embedding': 'ideological',
+        #     'embedding': 'attitudinal',
         #     'issue': issue,
         #     'model_decision_boundary_': md.model_decision_boundary_,
         #     'beta1': md.decision_hyperplane_unit_normal,
@@ -110,21 +138,6 @@ for issue in ['Left-Right', 'Elites-People-Politicians-StartUp-Entrepreneur']:
         #     'recall_train_': md.recall_train_,
         #     'f1_score_train_': md.f1_score_train_,
         # })
-
-        # attitudinal embedding
-        md = DiscoverDimension()
-        Xd = data[['entity']+ATTDIMS]
-        md.fit(Xd, Y)
-
-        discover_records.append({
-            'embedding': 'attitudinal',
-            'issue': issue,
-            'model_decision_boundary_': md.model_decision_boundary_,
-            'beta1': md.decision_hyperplane_unit_normal,
-            'precision_train_': md.precision_train_,
-            'recall_train_': md.recall_train_,
-            'f1_score_train_': md.f1_score_train_,
-        })
 
 benchmark = pd.DataFrame \
     .from_records(benchmark_records) \

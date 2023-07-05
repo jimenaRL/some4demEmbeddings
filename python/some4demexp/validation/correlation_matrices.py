@@ -14,13 +14,11 @@ from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_issues_descriptions, \
     save_issues_benckmarks, \
     set_output_folder_emb, \
     load_ide_embeddings
 
 from some4demexp.conf import \
-    ATTDIMISSUES, \
     CHESLIMS, \
     ATTDICT
 
@@ -46,7 +44,6 @@ print(yaml.dump(params, default_flow_style=False))
 ATTDIMS = params['attitudinal_dimensions']
 NIDEDIMS = params['ideological_model']['n_latent_dimensions']
 IDEDIMS = range(NIDEDIMS)
-ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
 
 IDEDIMSNAMES = [fr'$\delta_{j+1}$' for j in IDEDIMS]
 ATTDIMSNAMES = [ATTDICT[i] for i in ATTDIMS]

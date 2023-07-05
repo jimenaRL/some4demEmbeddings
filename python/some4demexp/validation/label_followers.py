@@ -19,7 +19,8 @@ from transformers import \
 from some4demdb import SQLite
 
 from some4demexp.inout import \
-    save_issues_descriptions, \
+    save_issues, \
+    save_descriptions, \
     set_output_folder, \
     load_pids
 
@@ -43,12 +44,16 @@ with open(issues, "r", encoding='utf-8') as fh:
 
 ISSUES = [
     'Left', 'Right',
-    'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
-    'Immigration',
-    'Europe',
-    'Environment'
+    # 'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
+    # 'Immigration',
+    # 'Europe',
+    # 'Environment'
 ]
-SENTIMENT_ISSUES = ['Left', 'Right', 'Immigration', 'Europe']
+SENTIMENT_ISSUES = [
+    'Left', 'Right',
+    # 'Immigration',
+    # 'Europe'
+]
 ISSUEDICT = {k: issues_dict[k][LANG[country]] for k in ISSUES}
 
 
@@ -68,6 +73,11 @@ entities = sources_pids
 
 data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
     .rename(columns={'pseudo_id': 'entity'})
+
+
+save_descriptions(folder, data)
+exit()
+
 
 l0 = len(data)
 # (1) Find issues words in descriptions
@@ -101,7 +111,7 @@ print(f"Found {l1} ({prop:.2f}%) followers with patterns in descriptions.")
 
 # bsize = 500
 # tsize = len(data)
-# batchl= [(i*bsize, (i+1)*bsize) for i in range(np.int32(tsize/bsize+1))]
+# batchl = [(i*bsize, (i+1)*bsize) for i in range(np.int32(tsize/bsize+1))]
 
 # predicted_language = []
 # for b in tqdm(batchl):
@@ -159,80 +169,75 @@ for b in tqdm(batchl):
 
 sentiment_data = sentiment_data.assign(predicted_sentiment=predicted_sentiment)
 
-import pdb; pdb.set_trace()  # breakpoint 1ce1406d //
-
 data = data \
     .merge(
         sentiment_data[['entity', 'predicted_sentiment']],
         on='entity',
-        how='left') \
-    .assign(
-        predicted_sentiment=data.predicted_sentiment.fillna(-1)
-    )
+        how='left')
 
-import pdb; pdb.set_trace()  # breakpoint 0a13155a //
+data = data.assign(predicted_sentiment=data.predicted_sentiment.fillna(-1))
 
 # (4) Get labels for axis
 
-# Migrantion
-tag = 'Immigration (+)'
+# # Migrantion
+# tag = 'Immigration (+)'
 
-migration_plus = data \
-    .query("Immigration == 1") \
-    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
-    .assign(tag=tag) \
-    .assign(label=0)
-print(f"Found {len(migration_plus)} `{tag}` followers.")
+# migration_plus = data \
+#     .query("Immigration == 1") \
+#     .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+#     .assign(tag=tag) \
+#     .assign(label=0)
+# print(f"Found {len(migration_plus)} `{tag}` followers.")
 
-tag = 'Immigration (-)'
-migration_moins = data \
-    .query("Immigration == 1") \
-    .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
-    .assign(tag=tag) \
-    .assign(label=0)
-print(f"Found {len(migration_moins)} `{tag}` followers.")
+# tag = 'Immigration (-)'
+# migration_moins = data \
+#     .query("Immigration == 1") \
+#     .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+#     .assign(tag=tag) \
+#     .assign(label=0)
+# print(f"Found {len(migration_moins)} `{tag}` followers.")
 
-# egalize sample
-j = min(len(migration_plus), len(migration_moins))
-migration_plus = migration_plus.sample(n=j)
-migration_moins = migration_moins.sample(n=j)
+# # egalize sample
+# j = min(len(migration_plus), len(migration_moins))
+# migration_plus = migration_plus.sample(n=j)
+# migration_moins = migration_moins.sample(n=j)
 
-print(f"Immigration (+)/(-) data downsampled to {j} samples of each categorie.")
+# print(f"Immigration (+)/(-) data downsampled to {j} samples of each categorie.")
 
-save_issues_descriptions(
-    folder,
-    pd.concat([migration_moins, migration_moins]),
-    issue='Immigration')
+# save_issues(
+#     folder,
+#     pd.concat([migration_moins, migration_moins]),
+#     issue='Immigration')
 
 
-# Europe
-tag = 'Europe (+)'
-euro_plus = data \
-    .query("Europe == 1") \
-    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
-    .assign(tag=tag) \
-    .assign(label=0)
-print(f"Found {len(euro_plus)} `{tag}` followers.")
+# # Europe
+# tag = 'Europe (+)'
+# euro_plus = data \
+#     .query("Europe == 1") \
+#     .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+#     .assign(tag=tag) \
+#     .assign(label=0)
+# print(f"Found {len(euro_plus)} `{tag}` followers.")
 
-tag = 'Europe (-)'
-euro_moins = data \
-    .query("Europe == 1") \
-    .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
-    .assign(tag=tag) \
-    .assign(label=0)
-print(f"Found {len(euro_moins)} `{tag}` followers.")
+# tag = 'Europe (-)'
+# euro_moins = data \
+#     .query("Europe == 1") \
+#     .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+#     .assign(tag=tag) \
+#     .assign(label=0)
+# print(f"Found {len(euro_moins)} `{tag}` followers.")
 
-# egalize sample
-k = min(len(euro_plus), len(euro_moins))
-euro_plus = euro_plus.sample(n=k)
-euro_moins = euro_moins.sample(n=k)
+# # egalize sample
+# k = min(len(euro_plus), len(euro_moins))
+# euro_plus = euro_plus.sample(n=k)
+# euro_moins = euro_moins.sample(n=k)
 
-print(f"Europe (+)/(-) data downsampled to {k} samples of each categorie.")
+# print(f"Europe (+)/(-) data downsampled to {k} samples of each categorie.")
 
-save_issues_descriptions(
-    folder,
-    pd.concat([euro_plus, euro_moins]),
-    issue='Europe')
+# save_issues(
+#     folder,
+#     pd.concat([euro_plus, euro_moins]),
+#     issue='Europe')
 
 # Left-Right
 ldata = data \
@@ -246,7 +251,7 @@ print(f"Found {len(ldata)} `Left-leaning` followers.")
 rdata = data \
     .query("Right == 1") \
     .query("Left != Right") \
-    .query("predicted_sentiment >= 3") \
+    .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
     .assign(tag='Rigth (+)') \
     .assign(label=1)
 print(f"Found {len(rdata)} `Rigth-leaning` followers.")
@@ -258,40 +263,41 @@ rdata = rdata.sample(n=n)
 
 print(f"Left-Right data downsampled to {n} samples of each categorie.")
 
-save_issues_descriptions(
+save_issues(
     folder,
     pd.concat([ldata, rdata]),
     issue='Left-Right')
 
-# Anti-elite
 
-q1 = ' or '.join([f"{i} == 1" for i in ["Elites", "People", "Politicians"]])
-q2 = ' and '.join([f"{i} == 0" for i in ["StartUp", "Entrepreneur"]])
-query = f'{q1} and {q2}'
-aedata = data \
-    .query(query) \
-    .assign(tag='Elites-People-Politicians') \
-    .assign(label=1)
-print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
+# # Anti-elite
 
-q1 = ' or '.join([f"{i} == 1" for i in ["StartUp", "Entrepreneur"]])
-q2 = ' and '.join([f"{i} == 0" for i in ["Elites", "People", "Politicians"]])
-query = f'{q1} and {q2}'
-odata = data \
-    .query(query) \
-    .assign(tag='StartUp-Entrepreneur') \
-    .assign(label=0)
-print(f"Found {len(odata)} `StartUp/Entrepreneur` followers.")
+# q1 = ' or '.join([f"{i} == 1" for i in ["Elites", "People", "Politicians"]])
+# q2 = ' and '.join([f"{i} == 0" for i in ["StartUp", "Entrepreneur"]])
+# query = f'{q1} and {q2}'
+# aedata = data \
+#     .query(query) \
+#     .assign(tag='Elites-People-Politicians') \
+#     .assign(label=1)
+# print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
 
-m = min(len(odata), len(aedata))
-odata = odata.sample(n=m)
-aedata = aedata.sample(n=m)
-mssg = f"Elites-People-Politicians-StartUp-Entrepreneur data downsampled to"
-mssg += "{m} samples of each categorie."
-print(mssg)
+# q1 = ' or '.join([f"{i} == 1" for i in ["StartUp", "Entrepreneur"]])
+# q2 = ' and '.join([f"{i} == 0" for i in ["Elites", "People", "Politicians"]])
+# query = f'{q1} and {q2}'
+# odata = data \
+#     .query(query) \
+#     .assign(tag='StartUp-Entrepreneur') \
+#     .assign(label=0)
+# print(f"Found {len(odata)} `StartUp/Entrepreneur` followers.")
 
-save_issues_descriptions(
-    folder,
-    pd.concat([aedata, odata]),
-    issue='Elites-People-Politicians-StartUp-Entrepreneur')
+# m = min(len(odata), len(aedata))
+# odata = odata.sample(n=m)
+# aedata = aedata.sample(n=m)
+# mssg = f"Elites-People-Politicians-StartUp-Entrepreneur data downsampled to"
+# mssg += "{m} samples of each categorie."
+# print(mssg)
+
+# save_issues(
+#     folder,
+#     pd.concat([aedata, odata]),
+#     issue='Elites-People-Politicians-StartUp-Entrepreneur')
 

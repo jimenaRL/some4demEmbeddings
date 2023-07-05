@@ -13,20 +13,24 @@ import matplotlib as mpl
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import proj3d
-from adjustText import adjust_text
 import matplotlib.ticker as mtick
 import matplotlib.patheffects as PathEffects
 import seaborn as sn
+
+from sklearn.metrics import \
+    accuracy_score, \
+    precision_score, \
+    recall_score, \
+    f1_score
 
 from some4demexp.inout import \
     set_output_folder,  \
     set_output_folder_att,  \
     load_att_embeddings,  \
-    load_issues_descriptions, \
+    load_issues, \
     load_issues_benckmarks
 
 from some4demexp.conf import \
-    ATTDIMISSUES,  \
     CHESLIMS,  \
     ATTDICT
 
@@ -49,8 +53,16 @@ print(yaml.dump(params,  default_flow_style=False))
 
 ATTDIMS = params['attitudinal_dimensions']
 IDEDIMS = range(params['ideological_model']['n_latent_dimensions'])
-ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()],  [])
-
+ISSUES = [
+    'Left', 'Right',
+    # 'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
+    # 'Immigration',
+    # 'Europe',
+    # 'Environment'
+]
+ATTDIMISSUES = {
+    'lrgen': ['Left', 'Right']
+}
 #########################################
 # Preliminary functions and definitions #
 #########################################
@@ -58,7 +70,7 @@ ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()],  [])
 # Font & Latex definitions
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
-mpl.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
+# mpl.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
 plt.rc('text',  usetex=True)
 plt.rc('font', family = 'sans-serif',   size=12)
 
@@ -74,7 +86,7 @@ attdim = "lrgen"  # "lrecon" or "lrgen"
 labelA = 'Left'
 labelB = 'Right'
 
-issue = '-'.join(ATTDIMISSUES[attdim]['issues'])
+issue = '-'.join(ATTDIMISSUES[attdim])
 
 folder = set_output_folder(params,  country,  output)
 att_folder = set_output_folder_att(params,  country,  output)
@@ -88,7 +100,7 @@ f1 = benchmark.f1_score_train_.to_list()[0]
 
 att_sources,  _ = load_att_embeddings(att_folder)
 
-data =  load_issues_descriptions(folder,  issue) \
+data =  load_issues(folder,  issue) \
         .merge(att_sources,  on='entity',  how='inner')
 
 data = data[["label",  "tag",  attdim]] \
@@ -160,6 +172,7 @@ ax.legend(handles=custom_legend, loc='center left', fontsize=8.7, bbox_to_anchor
 ax.set_xticks([0, 2.5, 5, 7.5, 10])
 ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
 ax.set_title(f'{country.capitalize()}: precision=%.3f,  recall=%.3f,  F1=%.3f ' % (precision, recall, f1))
+
 
 plt.tight_layout()
 

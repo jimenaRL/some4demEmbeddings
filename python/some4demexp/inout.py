@@ -155,14 +155,24 @@ def save_targets_groups(targets_groups, folder):
     print(f"Target groups saved at {file}.")
 
 
-def save_issues_descriptions(folder, data, issue):
+def save_issues(folder, data, issue):
     filepath = os.path.join(folder, f'{issue}.csv')
     data.to_csv(filepath, index=False, encoding='utf8')
     print(f"Descriptions, issues and sentiments save at {filepath}.")
 
-def load_issues_descriptions(folder, issue):
+def load_issues(folder, issue):
     filepath = os.path.join(folder, f'{issue}.csv')
     print(f"Loading issues and sentiments from {filepath}.")
+    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
+
+def save_descriptions(folder, data):
+    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
+    data.to_csv(filepath, index=False, encoding='utf8')
+    print(f"Followers with descriptions save at {filepath}.")
+
+def load_descriptions(folder):
+    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
+    print(f"Loading followers with descriptions from {filepath}.")
     return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
 
 def save_issues_benckmarks(folder, benchmark):

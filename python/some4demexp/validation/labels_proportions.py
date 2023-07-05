@@ -16,10 +16,10 @@ from some4demexp.inout import \
     load_ide_embeddings, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_issues_descriptions
+    load_descriptions, \
+    load_issues
 
 from some4demexp.conf import \
-    ATTDIMISSUES, \
     CHESLIMS, \
     ATTDICT
 
@@ -43,7 +43,18 @@ print(yaml.dump(params, default_flow_style=False))
 
 ATTDIMS = params['attitudinal_dimensions']
 IDEDIMS = range(params['ideological_model']['n_latent_dimensions'])
-ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
+
+ISSUES = [
+    'Left', 'Right',
+    # 'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
+    # 'Immigration',
+    # 'Europe',
+    # 'Environment'
+]
+
+ATTDIMISSUES = {
+    'lrgen': ['Left', 'Right']
+}
 
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
@@ -56,26 +67,33 @@ att_sources, _ = load_att_embeddings(att_folder)
 
 NBINS = 11
 
-fig = plt.figure(figsize=(12, 8))
+fig = plt.figure(figsize=(12, 2*len(ISSUES)))
 
 tags = {
     'lrgen': ["Left (+)", "Rigth (+)"],
-    'lrecon': ["Left (+)", "Rigth (+)"],
-    'eu_position': ["Elites-People-Politicians", "StartUp-Entrepreneur"],
-    'antielite_salience': ["Elites-People-Politicians", "StartUp-Entrepreneur"],
-    'immigrate_policy': ["Immigration (+)", "Immigration (-)"],
+    # 'lrecon': ["Left (+)", "Rigth (+)"],
+    # 'eu_position': ["Elites-People-Politicians", "StartUp-Entrepreneur"],
+    # 'antielite_salience': ["Elites-People-Politicians", "StartUp-Entrepreneur"],
+    # 'immigrate_policy': ["Immigration (+)", "Immigration (-)"],
 }
+
+
 
 nb_plot = 0
 for attdim, color in zip(tags, sns.color_palette("husl", len(tags))):
 
-    issue = '-'.join(ATTDIMISSUES[attdim]['issues'])
-    data = load_issues_descriptions(folder, issue) \
-        .merge(att_sources[['entity', attdim]], on='entity', how='inner')
+    description_data = load_descriptions(folder)
+    description_data = description_data.merge(att_sources[['entity', attdim]].drop_duplicates(), on='entity', how='inner')
+
+    issue = '-'.join(ATTDIMISSUES[attdim])
+    data = load_issues(folder, issue)
+    # HOT FIX
+    data = data.merge(att_sources[['entity', attdim]].drop_duplicates(), on='entity', how='inner')
 
     bins = np.linspace(CHESLIMS[attdim][0], CHESLIMS[attdim][1], NBINS)
+
     baseline, _ = np.histogram(
-        att_sources[attdim],
+        description_data[attdim],
         range=CHESLIMS[attdim],
         bins=bins)
 
@@ -93,7 +111,7 @@ for attdim, color in zip(tags, sns.color_palette("husl", len(tags))):
             hist, baseline, method='beta', alpha=0.05)
 
         nb_plot += 1
-        ax = fig.add_subplot(4, 2, nb_plot)
+        ax = fig.add_subplot(len(tags), 2, nb_plot)
 
         half_step = np.mean(bin_edges[0:2])
         plot_x = (bin_edges+half_step)[:-1]
