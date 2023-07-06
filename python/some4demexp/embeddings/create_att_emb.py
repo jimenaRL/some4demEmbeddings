@@ -2,6 +2,7 @@ import yaml
 from itertools import combinations
 from argparse import ArgumentParser
 
+import numpy as np
 from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
@@ -74,6 +75,21 @@ model_att.fit(
     groups_coord_att.rename(columns={'party': 'entity'})
 )
 
+# Check affine transformation norms
+T_tilda_aff = model_att.T_tilda_aff_np_
+frobenius_norm = np.linalg.norm(T_tilda_aff, ord="fro")
+max_ = T_tilda_aff.max()
+min_ = T_tilda_aff.min()
+lsv = np.linalg.norm(T_tilda_aff, ord=2)
+ssv = np.linalg.norm(T_tilda_aff, ord=-2)
+print(f"Affine transformation T_tilda_aff: \n\n{T_tilda_aff}\n")
+print(f"T_tilda_aff max: {max_}")
+print(f"T_tilda_aff min: {min_}")
+print(f"T_tilda_aff largest singular value: {lsv}")
+print(f"T_tilda_aff smallest singular value: {ssv}")
+
+
+
 sources_coord_att = model_att.transform(ide_sources_cp)
 targets_coord_att = model_att.transform(ide_targets)
 
@@ -92,3 +108,6 @@ save_att_embeddings(
     sources_coord_att,
     targets_coord_att,
     att_folder)
+
+
+import pdb; pdb.set_trace()  # breakpoint d40dfd39 //
