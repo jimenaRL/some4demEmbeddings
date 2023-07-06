@@ -95,8 +95,10 @@ def compute_correlation_matrices(
             columns='Ideological'
         )
 
-        print(method)
-        # print(correlations)
+
+
+        print(f"----------------- {method} -----------------")
+        print(f"----------------- {info} -----------------")
         print(annotations)
 
         sns.heatmap(correlations, ax=ax, annot=annotations, fmt="", cmap=cmap)
