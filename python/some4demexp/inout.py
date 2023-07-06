@@ -63,11 +63,6 @@ def load_att_embeddings(folder):
     return att_source, att_targets
 
 
-def load_targets_groups(folder):
-
-    return pd.read_csv(os.path.join(folder, 'targets_groups.csv'))
-
-
 def save_experiment_data(X, targets_pids, sources_pids, sources_counts, folder):
 
     np.savez(os.path.join(folder, "graph.npz"), X=X)
@@ -147,13 +142,6 @@ def set_output_folder_att(params, country, output="outputs"):
         '_vs_'.join(params["attitudinal_dimensions"]))
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att
-
-
-def save_targets_groups(targets_groups, folder):
-    file = os.path.join(folder, "targets_groups.csv")
-    targets_groups.to_csv(file, index=False)
-    print(f"Target groups saved at {file}.")
-
 
 def save_issues(folder, data, issue):
     filepath = os.path.join(folder, f'{issue}.csv')

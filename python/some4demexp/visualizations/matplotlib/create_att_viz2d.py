@@ -9,7 +9,6 @@ from some4demexp.inout import \
     set_output_folder_emb, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_targets_groups, \
     set_output_folder
 
 from some4demexp.bivariate_marginal import visualize_att

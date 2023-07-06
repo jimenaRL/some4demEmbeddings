@@ -74,10 +74,7 @@ entities = sources_pids
 data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
     .rename(columns={'pseudo_id': 'entity'})
 
-
 save_descriptions(folder, data)
-exit()
-
 
 l0 = len(data)
 # (1) Find issues words in descriptions

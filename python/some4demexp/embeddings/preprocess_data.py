@@ -5,8 +5,7 @@ from some4demdb import SQLite
 from some4demexp.graph import graphToAdjencyMatrix
 from some4demexp.inout import \
     set_output_folder, \
-    save_experiment_data, \
-    save_targets_groups
+    save_experiment_data
 
 
 
@@ -49,8 +48,3 @@ X, targets_pids, sources_pids, repeated_sources_counts = graphToAdjencyMatrix(
 # Save social graph and target/source pseudo ids
 save_experiment_data(
     X, targets_pids, sources_pids, repeated_sources_counts, folder)
-
-# Retrieve and save targets groups
-targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
-
-save_targets_groups(targets_groups, folder)
