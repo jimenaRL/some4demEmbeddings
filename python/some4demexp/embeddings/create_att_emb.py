@@ -3,13 +3,14 @@ from itertools import combinations
 from argparse import ArgumentParser
 
 import numpy as np
+import pandas as pd
+
 from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_emb, \
     set_output_folder_att, \
-    load_targets_groups, \
     load_ide_embeddings, \
     save_att_embeddings
 
@@ -33,12 +34,17 @@ ATTDIMS = params['attitudinal_dimensions']
 
 # Load target groups
 data_folder = set_output_folder(params, country, output)
-targets_groups = load_targets_groups(data_folder)
 
 # Load data from ideological embedding
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
+
+# TO DO this in a sqlite wrapper
+parties_mapping = SQLITE.getPartiesMapping(country)
+valid_parties = [f"'{p}'" for p in parties_mapping.ches2019_party.to_list()]
+targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
+targets_groups = targets_groups.query(f"party in ({','.join(valid_parties)})")
 
 # Estimate target groups positions in ideological space by averaging
 # targets' individual positions
@@ -52,7 +58,7 @@ ide_targets_in_parties_with_valid_mapping = ide_targets.merge(
         how="inner"
     ) \
     .drop(columns="mp_pseudo_id")
-t1 = len(ide_targets)
+t1 = len(ide_targets_in_parties_with_valid_mapping)
 if t0 > t1:
     print(
         f"Dropped {t0 - t1} targets with no group in mapping.")
@@ -89,9 +95,58 @@ print(f"T_tilda_aff largest singular value: {lsv}")
 print(f"T_tilda_aff smallest singular value: {ssv}")
 
 
+sources_coord_att_tilda_aff = model_att.transform(ide_sources_cp.copy())
+targets_coord_att_tilda_aff = model_att.transform(ide_targets.copy())
 
-sources_coord_att = model_att.transform(ide_sources_cp)
-targets_coord_att = model_att.transform(ide_targets)
+
+################ RIDGE REGRESSION
+
+estimated_groups_coord_ide = estimated_groups_coord_ide.sort_values(by='party')
+groups_coord_att = groups_coord_att.sort_values(by='party')
+
+assert (estimated_groups_coord_ide.party.values != groups_coord_att.party.values).sum() == 0
+
+X = estimated_groups_coord_ide.drop(columns=['party']).values
+Y = groups_coord_att.drop(columns=['party']).values
+
+assert (len(X) == len(Y))
+
+from sklearn.linear_model import Ridge
+clf = Ridge(alpha=.75)
+clf.fit(X, Y)
+
+# Check affine transformation norms
+ridgr_reg_coeff = clf.coef_
+
+frobenius_norm = np.linalg.norm(ridgr_reg_coeff, ord="fro")
+max_ = ridgr_reg_coeff.max()
+min_ = ridgr_reg_coeff.min()
+lsv = np.linalg.norm(ridgr_reg_coeff, ord=2)
+ssv = np.linalg.norm(ridgr_reg_coeff, ord=-2)
+print(f"Affine transformation ridgr_reg_coeff: \n\n{ridgr_reg_coeff}\n")
+print(f"ridgr_reg_coeff max: {max_}")
+print(f"ridgr_reg_coeff min: {min_}")
+print(f"ridgr_reg_coeff largest singular value: {lsv}")
+print(f"ridgr_reg_coeff smallest singular value: {ssv}")
+
+sources_coord_att_values = clf.predict(ide_sources_cp.drop(columns=['entity']).values)
+targets_coord_att_values = clf.predict(ide_targets.drop(columns=['entity']).values)
+
+columns = groups_coord_att.drop(columns="party").columns
+sources_coord_att = pd.DataFrame(
+    data=sources_coord_att_values,
+    columns=columns) \
+    .assign(entity=ide_sources_cp.entity)
+targets_coord_att = pd.DataFrame(
+    data=targets_coord_att_values,
+    columns=columns) \
+    .assign(entity=ide_targets.entity)
+
+
+#####################
+# back to tilda aff
+# sources_coord_att = sources_coord_att_tilda_aff
+# targets_coord_att = targets_coord_att_tilda_aff
 
 # add group information
 targets_coord_att = targets_coord_att.merge(
@@ -108,6 +163,3 @@ save_att_embeddings(
     sources_coord_att,
     targets_coord_att,
     att_folder)
-
-
-import pdb; pdb.set_trace()  # breakpoint d40dfd39 //

@@ -3,11 +3,11 @@ import yaml
 from argparse import ArgumentParser
 from itertools import combinations
 
+from some4demdb import SQLite
 from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_emb, \
-    load_ide_embeddings, \
-    load_targets_groups \
+    load_ide_embeddings
 
 from some4demexp.bivariate_marginal import visualize_ide
 
@@ -33,19 +33,21 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+
+
+SQLITE = SQLite(params['sqlite_db'])
+
 # Load ideological embeddings
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
 # Load target groups
-data_folder = set_output_folder(params, country, output)
-targets_groups = load_targets_groups(data_folder)
 
-#  ################### HOT FIX 1 ###################
-targets_groups = targets_groups.assign(
-    party=targets_groups.party.apply(lambda p: p.replace('&', ''))
-)
-#####################################################
+# TO DO this in a sqlite wrapper
+parties_mapping = SQLITE.getPartiesMapping(country)
+valid_parties = [f"'{p}'" for p in parties_mapping.ches2019_party.to_list()]
+targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
+targets_groups = targets_groups.query(f"party in ({','.join(valid_parties)})")
 
 
 n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 8)
