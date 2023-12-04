@@ -29,7 +29,7 @@ show = args.show
 
 with open(vizconfig, "r", encoding='utf-8') as fh:
     vizparams = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(vizparams, default_flow_style=False))
+# print(yaml.dump(vizparams, default_flow_style=False))
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
@@ -45,7 +45,7 @@ att_folder = set_output_folder_att(params, country, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
 palette = vizparams['palette']
-parties_to_show = palette.keys()
+parties_to_show = SQLITE.getValidParties(country)
 
 parties_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(
     country,
@@ -56,9 +56,14 @@ for dimpair in combinations(ATTDIMS, 2):
 
     dimpair_str = '_vs_'.join(dimpair)
 
-    # #  FOR DEBUGGING
-    # if dimpair_str != 'lrgen_vs_antielite_salience':
-    #     continue
+    #  FOR DEBUGGING
+    if dimpair_str not in [
+        'lrgen_vs_antielite_salience',
+        'lrgen_vs_lrecon',
+        'galtan_vs_environment',
+        'eu_position_vs_immigrate_policy',
+    ]:
+        continue
 
     attvizparams = vizparams['attitudinal'][dimpair_str]
 

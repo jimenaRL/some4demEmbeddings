@@ -27,13 +27,11 @@ show = args.show
 
 with open(vizconfig, "r", encoding='utf-8') as fh:
     vizparams = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(vizparams, default_flow_style=False))
+# print(yaml.dump(vizparams, default_flow_style=False))
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
-
-
 
 SQLITE = SQLite(params['sqlite_db'])
 
@@ -41,7 +39,6 @@ SQLITE = SQLite(params['sqlite_db'])
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
-# Load target groups
 
 # TO DO this in a sqlite wrapper
 parties_mapping = SQLITE.getPartiesMapping(country)
@@ -49,12 +46,11 @@ valid_parties = [f"'{p}'" for p in parties_mapping.ches2019_party.to_list()]
 targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
 targets_groups = targets_groups.query(f"party in ({','.join(valid_parties)})")
 
-
-n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 8)
+n_dims_to_viz = min(params['ideological_model']['n_latent_dimensions'], 3)
 
 palette = vizparams['palette']
 idevizparams = vizparams['ideological']
-parties_to_show = palette.keys()
+parties_to_show = SQLITE.getValidParties(country)
 
 # visualize ideological space
 for x, y in combinations(range(n_dims_to_viz), 2):

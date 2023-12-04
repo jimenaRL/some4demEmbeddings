@@ -34,6 +34,8 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+SEED = params['validation']['seed']
+
 ATTDIMS = params['attitudinal_dimensions']
 IDEDIMS = range(params['ideological_model']['n_latent_dimensions'])
 
@@ -53,12 +55,30 @@ for issue in ['Left-Right']: #, 'Elites-People-Politicians-StartUp-Entrepreneur'
     for attdim in ['lrgen']:
 
         labeled_data = load_issues(folder, issue)
-        # HOT FIX
-        labeled_data = labeled_data.merge(att_sources.drop_duplicates(), on='entity', how='left')
-        labeled_data = labeled_data.merge(ide_sources.drop_duplicates(), on='entity', how='left')
+        labeled_data = labeled_data.merge(
+                ide_sources,
+                on='entity',
+                how='inner'
+            )
+        labeled_data = labeled_data.merge(
+            att_sources[['entity', attdim]],
+            on='entity',
+            how='inner'
+        )
+
+        ldata = labeled_data.query(f"tag == 'Left (+)'")[[attdim, 'entity', 'label']]
+        rdata = labeled_data.query(f"tag == 'Rigth (+)'")[[attdim, 'entity', 'label']]
+
+        # egalize sample
+        n = min(len(ldata), len(rdata))
+        data = pd.concat([
+            ldata.sample(n=n, random_state=SEED),
+            rdata.sample(n=n, random_state=SEED)
+        ])
+        print(f"Left-Right data downsampled to {n} samples of each categorie.")
 
         # (1) Measure accuracy of estimated positions
-        Y = labeled_data[['entity', 'label']]
+        Y = data[['entity', 'label']]
 
 
         # (1.1) Benchmark attitudinal dimension
@@ -104,8 +124,6 @@ for issue in ['Left-Right']: #, 'Elites-People-Politicians-StartUp-Entrepreneur'
                 'recall_train_': mb.recall_train_,
                 'f1_score_train_': mb.f1_score_train_,
             })
-
-
 
         # # (1.2) Discover Dimension
 

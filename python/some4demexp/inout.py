@@ -44,7 +44,7 @@ def save_ide_embeddings(sources_embeddings, targets_embeddings, folder):
 def save_att_embeddings(att_source, att_targets, folder):
 
     att_source.to_csv(
-        os.path.join(folder, 'att_source.csv'), index=False)
+        os.path.join(folder, 'att_sources.csv'), index=False)
     att_targets.to_csv(
         os.path.join(folder, 'att_targets.csv'), index=False)
 
@@ -57,28 +57,36 @@ def load_att_embeddings(folder):
 
     print(f"Attitudinal embeddings load from folder {folder}.")
 
-    att_source = pd.read_csv(os.path.join(folder, 'att_source.csv'))
+    att_source = pd.read_csv(os.path.join(folder, 'att_sources.csv'))
     att_targets = pd.read_csv(os.path.join(folder, 'att_targets.csv'))
 
     return att_source, att_targets
 
 
-def save_experiment_data(X, targets_pids, sources_pids, sources_counts, folder):
+def save_experiment_data(
+    X, targets_pids, sources_pids, sources_map_pids, folder):
 
+    # graph
     np.savez(os.path.join(folder, "graph.npz"), X=X)
+    # targets
     np.save(
         os.path.join(folder, "targets_pids.npy"),
         targets_pids,
         allow_pickle=True)
+    pd.DataFrame(data=targets_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "targets_pids.csv"), index=False)
+    # sources
     np.save(
         os.path.join(folder, "sources_pids.npy"),
         sources_pids,
         allow_pickle=True)
+    pd.DataFrame(data=sources_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "sources_pids.csv"), index=False)
+    # sources map pids
     np.save(
-        os.path.join(folder, "sources_counts.npy"),
-        sources_counts,
+        os.path.join(folder, "sources_map_pids.npy"),
+        sources_map_pids,
         allow_pickle=True)
-
     print(f"Social graph, pseudo ids and counts saved at {folder}.")
 
 
@@ -91,12 +99,11 @@ def load_experiment_data(folder):
     sources_pids = np.load(
         os.path.join(folder, "sources_pids.npy"),
         allow_pickle=True)
-    sources_counts = np.load(
-        os.path.join(folder, "sources_counts.npy"),
+    sources_map_pids = np.load(
+        os.path.join(folder, "sources_map_pids.npy"),
         allow_pickle=True)
 
-    return X, targets_pids, sources_pids, sources_counts
-
+    return X, targets_pids, sources_pids, sources_map_pids
 def load_pids(folder):
 
     targets_pids = np.load(

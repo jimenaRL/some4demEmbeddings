@@ -100,10 +100,14 @@ f1 = benchmark.f1_score_train_.to_list()[0]
 
 att_sources,  _ = load_att_embeddings(att_folder)
 
-data =  load_issues(folder,  issue) \
-        .merge(att_sources,  on='entity',  how='inner')
+labeled_data = load_issues(folder, issue)
+labeled_data = labeled_data.merge(
+        att_sources[['entity', attdim]],
+        on='entity',
+        how='inner'
+)
 
-data = data[["label",  "tag",  attdim]] \
+data = labeled_data[["label",  "tag",  attdim]] \
     .sort_values(by=attdim,  ascending=True,  inplace=False)
 
 X = data[attdim].values[:,  np.newaxis]

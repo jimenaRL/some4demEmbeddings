@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
 
-from some4demexp.conf import CHESLIMS, ATTDICT
+from some4demexp.conf import CHESLIMS, ATTDICT, VIZMAXDROP
 
 plt.rc('text', usetex=True)
 plt.rc('font', family='sans-serif', size=12)
@@ -79,6 +79,11 @@ def drop_extremes(df, dims, x0, x1, y0, y1):
 
     diff = l0 - len(dfd)
     prop = 100 * diff / l0
+
+    VIZMAXDROP = 1
+    if prop > VIZMAXDROP:
+        raise ValueError(
+            f"Droping a proportion of points ({prop}%) bigger than {VIZMAXDROP}.")
 
     m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
     m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
@@ -224,7 +229,7 @@ def visualize_att(
     limits,
     cbar_rect,
     legend_loc,
-    quantiles=(0, 1),
+    quantiles=None,
     path=None,
     show=False,
     **kwargs
@@ -234,12 +239,10 @@ def visualize_att(
         .reset_index() \
         .drop(columns="index")
 
-    # Set quantiles q0 and q1 in vizconfig
-    x0, x1, y0, y1 = get_limits(plot_df, dims, q0=quantiles[0], q1=quantiles[1])
-
-    plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
-
-    targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
+    if quantiles is not None:
+        x0, x1, y0, y1 = get_limits(plot_df, dims, q0=quantiles[0], q1=quantiles[1])
+        plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
+        targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
 
     kwargs = {
         'x': dims['x'],

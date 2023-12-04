@@ -27,7 +27,7 @@ country = args.country
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(params, default_flow_style=False))
+# print(yaml.dump(params, default_flow_style=False))
 
 SQLITE = SQLite(params['sqlite_db'])
 ATTDIMS = params['attitudinal_dimensions']
@@ -38,13 +38,11 @@ data_folder = set_output_folder(params, country, output)
 # Load data from ideological embedding
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+targets_groups = SQLITE.getMpsValidParties(country)
 
-
-# TO DO this in a sqlite wrapper
-parties_mapping = SQLITE.getPartiesMapping(country)
-valid_parties = [f"'{p}'" for p in parties_mapping.ches2019_party.to_list()]
-targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
-targets_groups = targets_groups.query(f"party in ({','.join(valid_parties)})")
+mssg = f"Find {len(targets_groups)} (out of {len(ide_targets)} in ideological "
+mssg += f"embedding) mps with valid party."
+print(mssg)
 
 # Estimate target groups positions in ideological space by averaging
 # targets' individual positions
@@ -64,7 +62,8 @@ if t0 > t1:
         f"Dropped {t0 - t1} targets with no group in mapping.")
 
 # Fit regression
-groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(country, ATTDIMS)
+groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(
+    country, ATTDIMS)
 ide_sources_cp = ide_sources.copy()
 
 # make estimate
@@ -104,6 +103,11 @@ targets_coord_att_tilda_aff = model_att.transform(ide_targets.copy())
 estimated_groups_coord_ide = estimated_groups_coord_ide.sort_values(by='party')
 groups_coord_att = groups_coord_att.sort_values(by='party')
 
+## HOT FIX !!!!
+valid_parties = [f"'{p}'" for p in estimated_groups_coord_ide.party.to_list()]
+groups_coord_att = groups_coord_att.query(f"party in ({','.join(valid_parties)})")
+###########################
+
 assert (estimated_groups_coord_ide.party.values != groups_coord_att.party.values).sum() == 0
 
 X = estimated_groups_coord_ide.drop(columns=['party']).values
@@ -112,7 +116,7 @@ Y = groups_coord_att.drop(columns=['party']).values
 assert (len(X) == len(Y))
 
 from sklearn.linear_model import Ridge
-clf = Ridge(alpha=.75)
+clf = Ridge(alpha=1.0)
 clf.fit(X, Y)
 
 # Check affine transformation norms

@@ -18,3 +18,6 @@ ideological_model:
 sources_min_followers: 25
 sources_min_outdegree: 3
 sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
+validation:
+  leftright_sentiment_min_rate: 3
+  seed: 666

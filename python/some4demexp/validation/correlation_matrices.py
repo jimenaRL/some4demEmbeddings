@@ -95,8 +95,6 @@ def compute_correlation_matrices(
             columns='Ideological'
         )
 
-
-
         print(f"----------------- {method} -----------------")
         print(f"----------------- {info} -----------------")
         print(annotations)
@@ -136,14 +134,17 @@ cmap_s = sns.diverging_palette(145, 300, s=60, as_cmap=True)
 
 groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(country, ATTDIMS)
 parties_mapping = SQLITE.getPartiesMapping(country)
-valid_parties = parties_mapping.ches2019_party
+
 
 l0 = len(ide_targets)
 ide_targets = ide_targets.merge(att_targets[["party", "entity"]])
 if not l0 == len(ide_targets):
     raise ValueError(f"Target loss during merge.")
 
+valid_parties = set(groups_coord_att.party) & set(ide_targets.party.to_list())
 ide_targets = ide_targets[ide_targets.party.isin(valid_parties)]
+groups_coord_att = groups_coord_att[groups_coord_att.party.isin(valid_parties)]
+
 
 estimated_groups_coord_ide = ide_targets \
     .groupby('party') \
@@ -156,8 +157,8 @@ small_samples_methods = [
 ]
 
 compute_correlation_matrices(
-    estimated_groups_coord_ide,
-    groups_coord_att,
+    estimated_groups_coord_ide.sort_values(by='party'),
+    groups_coord_att.sort_values(by='party'),
     "PARTIES",
     small_samples_methods)
 

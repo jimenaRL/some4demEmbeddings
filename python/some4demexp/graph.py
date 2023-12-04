@@ -1,19 +1,20 @@
 import os
+import copy
 import yaml
 import numpy as np
 import pandas as pd
 from scipy.sparse import csr_matrix
 
 
-def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
+def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     """
     # Format data from sqlite graph res and build (sparse) matrix
     """
 
     print(f"Building adjency matrix... ")
 
-    sources = [r[1] for r in res]
-    targets = [r[0] for r in res]
+    sources = [link[1] for link in graph]
+    targets = [link[0] for link in graph]
 
     # create sparse matrix
     n_i, rows_id = pd.factorize(targets)
@@ -36,20 +37,27 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     print(mssg)
 
     # remove and keep repeated sources (rows)
+    old_ntwrk = copy.deepcopy(ntwrk_csr)
+    old_columns_id = copy.deepcopy(columns_id)
+    values, unique_idx_j, inverse = np.unique(ntwrk_csr.toarray(), axis=0, return_index=True, return_inverse=True)
 
-    _, idx_valid_j, repeated_rows_counts = np.unique(
-        ntwrk_csr.toarray(),
-        axis=0,
-        return_index=True,
-        return_counts=True
-    )
     ja = ntwrk_csr.shape[0]
-    ntwrk_csr = ntwrk_csr[idx_valid_j, :]
+    ntwrk_csr = ntwrk_csr[unique_idx_j, :]
     jb = ntwrk_csr.shape[0]
-    columns_id = columns_id[idx_valid_j]
+    columns_id = columns_id[unique_idx_j]
+
+    assert np.abs(values - ntwrk_csr).sum() == 0
+    assert np.abs(old_ntwrk - ntwrk_csr[inverse]).sum() == 0
+
+    # TO DO; DOCUMENT !!!!!!!
+    # quitte hard to explain but must be done
+    # check np.unique doc at
+    # https://numpy.org/doc/stable/reference/generated/numpy.unique.html
+    # ['original_columns_id', 'idx_inv']
+    mapp = np.array([old_columns_id, old_columns_id[unique_idx_j][inverse]]).T
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
-    mssg = f"Drop {ja - jb} repeated sources "
+    mssg = f"Drop {ja - jb} of {ja} repeated sources "
     mssg += f"({100*(ja - jb)/ja:.2f}%), keeped {jb}."
     print(mssg)
 
@@ -75,10 +83,11 @@ def graphToAdjencyMatrix(res, min_outdegree, sparce=False):
     mssg1 += f"to {len(rows_id)} unique targets."
 
     if sparce:
-        return ntwrk_csr, rows_id, columns_id
+        return ntwrk_csr, rows_id, columns_id, original_columns_ids, unique_inverse_ids
 
     print("done.")
     print(mssg)
     print(mssg1)
 
-    return ntwrk_csr.toarray(), rows_id, columns_id, repeated_rows_counts
+    return ntwrk_csr.toarray(), rows_id, columns_id, mapp
+

@@ -10,13 +10,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
+from some4demdb import SQLite
+
 from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_emb, \
     load_ide_embeddings, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_descriptions, \
     load_issues
 
 from some4demexp.conf import \
@@ -40,6 +41,7 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+SQLITE = SQLite(params['sqlite_db'])
 
 ATTDIMS = params['attitudinal_dimensions']
 IDEDIMS = range(params['ideological_model']['n_latent_dimensions'])
@@ -78,31 +80,38 @@ tags = {
 }
 
 
-
 nb_plot = 0
 for attdim, color in zip(tags, sns.color_palette("husl", len(tags))):
 
-    description_data = load_descriptions(folder)
-    description_data = description_data.merge(att_sources[['entity', attdim]].drop_duplicates(), on='entity', how='inner')
+    description_data = SQLITE.getUsersDescriptions(country)
+    sources_description_data = description_data.merge(
+        att_sources[['entity', attdim]],
+        left_on='pseudo_id',
+        right_on='entity',
+        how='inner') \
+        .drop(columns=['pseudo_id'])
 
     issue = '-'.join(ATTDIMISSUES[attdim])
-    data = load_issues(folder, issue)
-    # HOT FIX
-    data = data.merge(att_sources[['entity', attdim]].drop_duplicates(), on='entity', how='inner')
+    labeled_data = load_issues(folder, issue)
+    l0 = len(labeled_data)
+    labeled_data = labeled_data.merge(
+        att_sources[['entity', attdim]],
+        on='entity',
+        how='inner')
+    assert l0 == len(labeled_data)
 
     bins = np.linspace(CHESLIMS[attdim][0], CHESLIMS[attdim][1], NBINS)
 
     baseline, _ = np.histogram(
-        description_data[attdim],
+        sources_description_data[attdim],
         range=CHESLIMS[attdim],
         bins=bins)
 
     for tag in tags[attdim]:
 
-        labeled_data = data.query(f"tag == '{tag}'")
-
+        tag_labeled_data = labeled_data.query(f"tag == '{tag}'")
         hist, bin_edges = np.histogram(
-            labeled_data[attdim],
+            tag_labeled_data[attdim],
             range=CHESLIMS[attdim],
             bins=bins)
 
@@ -129,7 +138,8 @@ for attdim, color in zip(tags, sns.color_palette("husl", len(tags))):
         )
         ax.set_xlim(CHESLIMS[attdim])
         ax.set_ylim((0, 200.0 * np.nanmax(p)))
-        ax.set_title(f"Labeled {tag}")
+
+        ax.set_title(f"Labeled {tag}\n({len(tag_labeled_data)} samples)")
         ax.set_xlabel(ATTDICT[attdim])
         fmt = '%.02f%%'
         pticks = ticker.FormatStrFormatter(fmt)
