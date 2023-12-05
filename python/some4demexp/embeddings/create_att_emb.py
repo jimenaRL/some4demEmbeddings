@@ -19,11 +19,13 @@ from some4demexp.inout import \
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
+ap.add_argument('--survey', type=str, required=True)
 ap.add_argument('--output', type=str, required=False, default='-1')
 args = ap.parse_args()
 config = args.config
 output = args.output
 country = args.country
+survey = args.survey
 
 
 with open(config, "r", encoding='utf-8') as fh:
@@ -34,20 +36,21 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
 SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
-ATTDIMS = params['attitudinal_dimensions']
+ATTDIMS = params['attitudinal_dimensions'][survey]
+SURVEYCOL = f'{survey.upper()}_party_acronym'
 
 # Load mp groups
 data_folder = set_output_folder(params, country, output)
 
 # Load parties attitudinal coordinaets
-parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes('CHES2019', ATTDIMS)
+parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
 
 # Load data from ideological embedding
 ide_folder = set_output_folder_emb(params, country, output)
 ide_followers, ide_mps = load_ide_embeddings(ide_folder)
 ide_followers_cp = ide_followers.copy()
 ide_mps_cp = ide_mps.copy()
-mps_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
+mps_parties = SQLITE.retrieveAndFormatMpParties(['MMS', survey])
 
 
 # drop mps with parties withou mapping and add parties to ideological positions
@@ -70,25 +73,26 @@ if t0 > t1:
         f"Dropped {t0 - t1} mps with no party in mapping.")
 
 
+
 # Fit ridge regression
 estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
     .drop(columns=['entity', 'MMS_party_acronym']) \
-    .groupby('CHES2019_party_acronym') \
+    .groupby(SURVEYCOL) \
     .mean() \
     .reset_index()
 
-estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by='CHES2019_party_acronym')
-parties_coord_att = parties_coord_att.sort_values(by='CHES2019_party_acronym')
+estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by=SURVEYCOL)
+parties_coord_att = parties_coord_att.sort_values(by=SURVEYCOL)
 
 ## HOT FIX !!!!
 # valid_parties = [f"'{p}'" for p in estimated_parties_coord_ide.party.to_list()]
 # parties_coord_att = parties_coord_att.query(f"party in ({','.join(valid_parties)})")
 ###########################
 
-assert (estimated_parties_coord_ide.CHES2019_party_acronym.values != parties_coord_att.CHES2019_party_acronym.values).sum() == 0
+assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
 
-X = estimated_parties_coord_ide.drop(columns=['CHES2019_party_acronym']).values
-Y = parties_coord_att.drop(columns=['CHES2019_party_acronym', 'MMS_party_acronym']).values
+X = estimated_parties_coord_ide.drop(columns=[SURVEYCOL]).values
+Y = parties_coord_att.drop(columns=[SURVEYCOL, 'MMS_party_acronym']).values
 
 assert (len(X) == len(Y))
 
@@ -113,7 +117,7 @@ follower_coord_att_values = clf.predict(ide_followers_cp.drop(columns=['entity']
 mps_coord_att_values = clf.predict(ide_mps.drop(columns=['entity']).values)
 
 columns = parties_coord_att.drop(
-    columns=["MMS_party_acronym", "CHES2019_party_acronym"]).columns
+    columns=["MMS_party_acronym", SURVEYCOL]).columns
 follower_coord_att = pd.DataFrame(
     data=follower_coord_att_values,
     columns=columns) \
@@ -134,7 +138,7 @@ mps_coord_att = mps_coord_att.merge(
     .dropna()
 
 # save results
-att_folder = set_output_folder_att(params, country, output)
+att_folder = set_output_folder_att(params, survey, country, output)
 save_att_embeddings(
     follower_coord_att,
     mps_coord_att,

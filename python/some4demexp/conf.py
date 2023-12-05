@@ -1,6 +1,6 @@
 VIZMAXDROP = 1
 
-CHESLIMS = {
+CHES2019LIMS = {
   'lrgen': [0, 10],
   'lrecon': [0, 10],
   'antielite_salience': [0, 10],
@@ -8,9 +8,29 @@ CHESLIMS = {
   'immigrate_policy': [0, 10],
   'galtan': [0, 10],
   'environment': [0, 10],
+  'enviro_salience': [0, 10],
+  'nationalism': [0, 10],
+  'sociallifestyle': [0, 10],
+  'people_vs_elite': [0, 10],
+  'corrupt_salience': [0, 10],
 }
 
-ATTDICT = {
+GPS2019LIMS = {
+  'V4_Scale': [0, 10],
+  'V6_Scale': [0, 10],
+  'V8_Scale': [0, 10],
+  'v9': [0, 10],
+  'v10': [0, 10],
+  'v12': [0, 10],
+  'v13': [0, 10],
+  'v14': [0, 10],
+  'v18': [0, 10],
+  'v19': [0, 10],
+  'v20': [0, 10],
+  'v21': [0, 10],
+}
+
+CHES2019ATTDICT = {
     'lrgen': 'CHES Left – Right',
     'eu_position': 'CHES EU Integration',
     'antielite_salience': 'CHES Anti-elite Salience',
@@ -18,6 +38,21 @@ ATTDICT = {
     'immigrate_policy': 'CHES Immigration Policy',
     'galtan': 'CHES GAL – TAN',
     'environment': 'CHES Environment – Economy'
+}
+
+GPS2019ATTDICT = {
+  'V4_Scale': 'GPS economic left-right',
+  'V6_Scale': 'GPS liberalism-conservatism',
+  'V8_Scale': 'GPS populist rhetoric',
+  'v9': 'GPS populist salience',
+  'v10': 'GPS immigration',
+  'v12': 'GPS environment',
+  'v13': 'GPS nationalism',
+  'v14': 'GPS women’s rights',
+  'v18': 'GPS the will of the people',
+  'v19': 'GPS people should decide',
+  'v20': 'GPS corrupt politicians',
+  'v21': 'GPS strongman rule',
 }
 
 LANGUAGES = {

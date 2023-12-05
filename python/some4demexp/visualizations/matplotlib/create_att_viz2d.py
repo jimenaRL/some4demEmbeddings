@@ -18,12 +18,14 @@ from some4demexp.bivariate_marginal import visualize_att
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
+ap.add_argument('--survey', type=str, required=True)
 ap.add_argument('--output', type=str, required=True)
 ap.add_argument('--vizconfig', type=str, required=True)
 ap.add_argument('--show',  action='store_true', required=False)
 args = ap.parse_args()
 config = args.config
 vizconfig = args.vizconfig
+survey = args.survey
 output = args.output
 country = args.country
 show = args.show
@@ -34,16 +36,17 @@ with open(vizconfig, "r", encoding='utf-8') as fh:
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(params, default_flow_style=False))
+# print(yaml.dump(params, default_flow_style=False))
 
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
 SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
-ATTDIMS = params['attitudinal_dimensions']
+ATTDIMS = params['attitudinal_dimensions'][survey]
+SURVEYCOL = f'{survey.upper()}_party_acronym'
 
 ide_folder = set_output_folder_emb(params, country, output)
-att_folder = set_output_folder_att(params, country, output)
+att_folder = set_output_folder_att(params, survey, country, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
 # use mapping to adapt palette to the party system survey
@@ -51,17 +54,17 @@ color_data = vizparams['palette'].items()
 palette = pd.DataFrame.from_dict(color_data) \
     .rename(columns={0: 'MMS_party_acronym', 1: 'color'}) \
     .merge(SQLITE.getPartiesMapping())
-_zip = zip(palette['CHES2019_party_acronym'], palette['color'])
+_zip = zip(palette[SURVEYCOL], palette['color'])
 palette = {z[0]: z[1] for z in _zip}
 
 # select parties to show
-mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
-_parties_to_show = mp_parties[~mp_parties['CHES2019_party_acronym'].isna()]
-parties_to_show = _parties_to_show['CHES2019_party_acronym'].unique().tolist()
+mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', survey])
+_parties_to_show = mp_parties[~mp_parties[SURVEYCOL].isna()]
+parties_to_show = _parties_to_show[SURVEYCOL].unique().tolist()
 
-parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes('CHES2019', ATTDIMS)
+parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
 
-rename_cols = {'CHES2019_party_acronym': 'party'}
+rename_cols = {SURVEYCOL: 'party'}
 att_targets.rename(columns=rename_cols, inplace=True)
 parties_coord_att.rename(columns=rename_cols, inplace=True)
 
@@ -73,13 +76,11 @@ for dimpair in combinations(ATTDIMS, 2):
     #  FOR DEBUGGING
     if dimpair_str not in [
         'lrgen_vs_antielite_salience',
-        'lrgen_vs_lrecon',
-        'galtan_vs_environment',
-        'eu_position_vs_immigrate_policy',
+        'V4_Scale_vs_V6_Scale'
     ]:
         continue
 
-    attvizparams = vizparams['attitudinal'][dimpair_str]
+    attvizparams = vizparams['attitudinal'][survey][dimpair_str]
 
     visualize_att(
         sources_coord_att=att_sources,
@@ -90,5 +91,6 @@ for dimpair in combinations(ATTDIMS, 2):
         path=os.path.join(att_folder, f"{dimpair_str}.png"),
         show=show,
         palette=palette,
+        survey=survey,
         **attvizparams
         )
