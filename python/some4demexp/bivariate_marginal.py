@@ -234,6 +234,8 @@ def visualize_att(
     **kwargs
 ):
 
+    nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
+
     plot_df = pd.concat([sources_coord_att, targets_coord_att]) \
         .reset_index() \
         .drop(columns="index")

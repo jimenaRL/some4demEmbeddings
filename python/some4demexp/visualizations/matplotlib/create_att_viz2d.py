@@ -1,5 +1,6 @@
 import os
 import yaml
+import pandas as pd
 from string import Template
 from argparse import ArgumentParser
 from itertools import combinations
@@ -45,12 +46,24 @@ ide_folder = set_output_folder_emb(params, country, output)
 att_folder = set_output_folder_att(params, country, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
-palette = vizparams['palette']
-parties_to_show = SQLITE.getValidParties(country)
+# use mapping to adapt palette to the party system survey
+color_data = vizparams['palette'].items()
+palette = pd.DataFrame.from_dict(color_data) \
+    .rename(columns={0: 'MMS_party_acronym', 1: 'color'}) \
+    .merge(SQLITE.getPartiesMapping())
+_zip = zip(palette['CHES2019_party_acronym'], palette['color'])
+palette = {z[0]: z[1] for z in _zip}
 
-parties_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(
-    country,
-    ATTDIMS)
+# select parties to show
+mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
+_parties_to_show = mp_parties[~mp_parties['CHES2019_party_acronym'].isna()]
+parties_to_show = _parties_to_show['CHES2019_party_acronym'].unique().tolist()
+
+parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes('CHES2019', ATTDIMS)
+
+rename_cols = {'CHES2019_party_acronym': 'party'}
+att_targets.rename(columns=rename_cols, inplace=True)
+parties_coord_att.rename(columns=rename_cols, inplace=True)
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):

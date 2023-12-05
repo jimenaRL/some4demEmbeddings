@@ -50,10 +50,9 @@ mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
 targets_parties = mp_parties[['mp_pseudo_id', 'MMS_party_acronym']] \
     .rename(columns={'MMS_party_acronym': 'party'})
 
-_parties_to_show = mp_parties[~mp_parties['CHES2019_party_acronym'].isna()]
-parties_to_show = _parties_to_show['MMS_party_acronym'] \
-    .unique() \
-    .tolist()
+# select parties to show
+parties_to_show = mp_parties[~mp_parties['CHES2019_party_acronym'].isna()]
+parties_to_show = _parties_to_show['MMS_party_acronym'].unique().tolist()
 
 # visualize ideological space
 for x, y in combinations(range(n_dims_to_viz), 2):

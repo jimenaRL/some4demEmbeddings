@@ -4,8 +4,9 @@ from argparse import ArgumentParser
 
 import numpy as np
 import pandas as pd
+from sklearn.linear_model import Ridge
 
-from linate import AttitudinalEmbedding
+# from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
     set_output_folder, \
@@ -35,138 +36,106 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
 SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
 ATTDIMS = params['attitudinal_dimensions']
 
-# Load target groups
+# Load mp groups
 data_folder = set_output_folder(params, country, output)
+
+# Load parties attitudinal coordinaets
+parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes('CHES2019', ATTDIMS)
 
 # Load data from ideological embedding
 ide_folder = set_output_folder_emb(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(ide_folder)
-targets_groups = SQLITE.getMpsValidParties()
+ide_followers, ide_mps = load_ide_embeddings(ide_folder)
+ide_followers_cp = ide_followers.copy()
+ide_mps_cp = ide_mps.copy()
+mps_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
 
-mssg = f"Find {len(targets_groups)} (out of {len(ide_targets)} in ideological "
-mssg += f"embedding) mps with valid party."
+
+# drop mps with parties withou mapping and add parties to ideological positions
+mps_parties = mps_parties.dropna()
+mssg = f"Found {len(mps_parties)} mps (out of {len(ide_mps)} in ideological "
+mssg += f"embedding) with valid party."
 print(mssg)
 
-# Estimate target groups positions in ideological space by averaging
-# targets' individual positions
-
-# add group information
-t0 = len(ide_targets)
-ide_targets_in_parties_with_valid_mapping = ide_targets.merge(
-        targets_groups,
+t0 = len(ide_mps)
+ide_mps_in_parties_with_valid_mapping = ide_mps.merge(
+        mps_parties,
         left_on="entity",
         right_on="mp_pseudo_id",
         how="inner"
     ) \
     .drop(columns="mp_pseudo_id")
-t1 = len(ide_targets_in_parties_with_valid_mapping)
+t1 = len(ide_mps_in_parties_with_valid_mapping)
 if t0 > t1:
     print(
-        f"Dropped {t0 - t1} targets with no group in mapping.")
+        f"Dropped {t0 - t1} mps with no party in mapping.")
 
-# Fit regression
-groups_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(
-    country, ATTDIMS)
-ide_sources_cp = ide_sources.copy()
 
-# make estimate
-estimated_groups_coord_ide = ide_targets_in_parties_with_valid_mapping \
-    .drop(columns=['entity']) \
-    .groupby('party') \
+# Fit ridge regression
+estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
+    .drop(columns=['entity', 'MMS_party_acronym']) \
+    .groupby('CHES2019_party_acronym') \
     .mean() \
     .reset_index()
 
-model_att = AttitudinalEmbedding(**params["attitudinal_model"])
-
-model_att.fit(
-    estimated_groups_coord_ide.rename(columns={'party': 'entity'}),
-    groups_coord_att.rename(columns={'party': 'entity'})
-)
-
-# Check affine transformation norms
-T_tilda_aff = model_att.T_tilda_aff_np_
-frobenius_norm = np.linalg.norm(T_tilda_aff, ord="fro")
-max_ = T_tilda_aff.max()
-min_ = T_tilda_aff.min()
-lsv = np.linalg.norm(T_tilda_aff, ord=2)
-ssv = np.linalg.norm(T_tilda_aff, ord=-2)
-print(f"Affine transformation T_tilda_aff: \n\n{T_tilda_aff}\n")
-print(f"T_tilda_aff max: {max_}")
-print(f"T_tilda_aff min: {min_}")
-print(f"T_tilda_aff largest singular value: {lsv}")
-print(f"T_tilda_aff smallest singular value: {ssv}")
-
-
-sources_coord_att_tilda_aff = model_att.transform(ide_sources_cp.copy())
-targets_coord_att_tilda_aff = model_att.transform(ide_targets.copy())
-
-
-################ RIDGE REGRESSION
-
-estimated_groups_coord_ide = estimated_groups_coord_ide.sort_values(by='party')
-groups_coord_att = groups_coord_att.sort_values(by='party')
+estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by='CHES2019_party_acronym')
+parties_coord_att = parties_coord_att.sort_values(by='CHES2019_party_acronym')
 
 ## HOT FIX !!!!
-valid_parties = [f"'{p}'" for p in estimated_groups_coord_ide.party.to_list()]
-groups_coord_att = groups_coord_att.query(f"party in ({','.join(valid_parties)})")
+# valid_parties = [f"'{p}'" for p in estimated_parties_coord_ide.party.to_list()]
+# parties_coord_att = parties_coord_att.query(f"party in ({','.join(valid_parties)})")
 ###########################
 
-assert (estimated_groups_coord_ide.party.values != groups_coord_att.party.values).sum() == 0
+assert (estimated_parties_coord_ide.CHES2019_party_acronym.values != parties_coord_att.CHES2019_party_acronym.values).sum() == 0
 
-X = estimated_groups_coord_ide.drop(columns=['party']).values
-Y = groups_coord_att.drop(columns=['party']).values
+X = estimated_parties_coord_ide.drop(columns=['CHES2019_party_acronym']).values
+Y = parties_coord_att.drop(columns=['CHES2019_party_acronym', 'MMS_party_acronym']).values
 
 assert (len(X) == len(Y))
 
-from sklearn.linear_model import Ridge
 clf = Ridge(alpha=1.0)
 clf.fit(X, Y)
 
 # Check affine transformation norms
-ridgr_reg_coeff = clf.coef_
+# ridgr_reg_coeff = clf.coef_
 
-frobenius_norm = np.linalg.norm(ridgr_reg_coeff, ord="fro")
-max_ = ridgr_reg_coeff.max()
-min_ = ridgr_reg_coeff.min()
-lsv = np.linalg.norm(ridgr_reg_coeff, ord=2)
-ssv = np.linalg.norm(ridgr_reg_coeff, ord=-2)
-print(f"Affine transformation ridgr_reg_coeff: \n\n{ridgr_reg_coeff}\n")
-print(f"ridgr_reg_coeff max: {max_}")
-print(f"ridgr_reg_coeff min: {min_}")
-print(f"ridgr_reg_coeff largest singular value: {lsv}")
-print(f"ridgr_reg_coeff smallest singular value: {ssv}")
+# frobenius_norm = np.linalg.norm(ridgr_reg_coeff, ord="fro")
+# max_ = ridgr_reg_coeff.max()
+# min_ = ridgr_reg_coeff.min()
+# lsv = np.linalg.norm(ridgr_reg_coeff, ord=2)
+# ssv = np.linalg.norm(ridgr_reg_coeff, ord=-2)
+# print(f"Affine transformation ridgr_reg_coeff: \n\n{ridgr_reg_coeff}\n")
+# print(f"ridgr_reg_coeff max: {max_}")
+# print(f"ridgr_reg_coeff min: {min_}")
+# print(f"ridgr_reg_coeff largest singular value: {lsv}")
+# print(f"ridgr_reg_coeff smallest singular value: {ssv}")
 
-sources_coord_att_values = clf.predict(ide_sources_cp.drop(columns=['entity']).values)
-targets_coord_att_values = clf.predict(ide_targets.drop(columns=['entity']).values)
+follower_coord_att_values = clf.predict(ide_followers_cp.drop(columns=['entity']).values)
+mps_coord_att_values = clf.predict(ide_mps.drop(columns=['entity']).values)
 
-columns = groups_coord_att.drop(columns="party").columns
-sources_coord_att = pd.DataFrame(
-    data=sources_coord_att_values,
+columns = parties_coord_att.drop(
+    columns=["MMS_party_acronym", "CHES2019_party_acronym"]).columns
+follower_coord_att = pd.DataFrame(
+    data=follower_coord_att_values,
     columns=columns) \
-    .assign(entity=ide_sources_cp.entity)
-targets_coord_att = pd.DataFrame(
-    data=targets_coord_att_values,
+    .assign(entity=ide_followers_cp.entity)
+mps_coord_att = pd.DataFrame(
+    data=mps_coord_att_values,
     columns=columns) \
-    .assign(entity=ide_targets.entity)
-
-
-#####################
-# back to tilda aff
-# sources_coord_att = sources_coord_att_tilda_aff
-# targets_coord_att = targets_coord_att_tilda_aff
+    .assign(entity=ide_mps.entity)
 
 # add group information
-targets_coord_att = targets_coord_att.merge(
-        targets_groups,
+mps_coord_att = mps_coord_att.merge(
+        mps_parties,
         left_on="entity",
         right_on="mp_pseudo_id",
         how="left"
     ) \
-    .drop(columns="mp_pseudo_id")
+    .drop(columns="mp_pseudo_id") \
+    .dropna()
 
 # save results
 att_folder = set_output_folder_att(params, country, output)
 save_att_embeddings(
-    sources_coord_att,
-    targets_coord_att,
+    follower_coord_att,
+    mps_coord_att,
     att_folder)

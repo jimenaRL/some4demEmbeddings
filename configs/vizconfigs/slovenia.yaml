@@ -10,33 +10,7 @@ attitudinal:
     - -2
     - 12
     nudges:
-      SAB:
-      - 0
-      - 0
-      DeSUS:
-      - 0
-      - 0
-      LMS:
-      - 0
-      - 0
-      Levica:
-      - 0
-      - 0
-      NSI:
-      - 0
-      - 0
-      SD:
-      - 0
-      - 0
-      SDS:
-      - 0
-      - 0
-      SMC:
-      - 0
-      - 0
-      SNS:
-      - 0
-      - 0
+      -
   antielite_salience_vs_eu_position: *id001
   antielite_salience_vs_galtan: *id001
   antielite_salience_vs_immigrate_policy: *id001
