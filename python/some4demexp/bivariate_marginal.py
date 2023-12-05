@@ -116,7 +116,7 @@ def visualize_ide(
     }
     sources_coord_ide = sources_coord_ide.rename(columns=colrename)
     targets_coord_ide = targets_coord_ide.rename(columns=colrename)
-    targets_parties = targets_parties.rename(columns=colrename)
+    nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
 
     plot_df = pd.concat([sources_coord_ide, targets_coord_ide]) \
         .reset_index() \
@@ -217,7 +217,6 @@ def visualize_ide(
     if show:
         plt.show()
 
-
 def visualize_att(
     sources_coord_att,
     targets_coord_att,
@@ -258,9 +257,6 @@ def visualize_att(
 
     # plot sources and targets embeddings
     g = sns.jointplot(**kwargs)
-
-    # get unique parties and build color dictionary
-    unique_parties = parties_to_show
 
     ax = g.ax_joint
 

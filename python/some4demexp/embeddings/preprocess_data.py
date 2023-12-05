@@ -24,7 +24,10 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 # print(yaml.dump(params, default_flow_style=False))
 
-SQLITE = SQLite(params['sqlite_db'])
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
+
+SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
 NB_MIN_FOLLOWERS = params['sources_min_followers']
 MIN_OUTDEGREE = params['sources_min_outdegree']
 
@@ -33,11 +36,10 @@ folder = set_output_folder(params, country, output)
 
 # # Retrive source/target bipartite graph
 valid_followers = SQLITE.retrieveFollowersMinIndegree(
-    country,
     min_indegree=NB_MIN_FOLLOWERS
 )
 
-res_graph = SQLITE.retrieveGraph('follower', country, valid_followers)
+res_graph = SQLITE.retrieveGraph('follower', valid_followers)
 
 # Build adjency matrix
 X, targets_pids, sources_pids, sources_map_pids = graphToAdjencyMatrix(

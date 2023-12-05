@@ -10,7 +10,7 @@ attitudinal:
     - -2
     - 12
     nudges:
-      Alenka Bratusek:
+      SAB:
       - 0
       - 0
       DeSUS:
@@ -72,7 +72,7 @@ ideological:
     - -1
     - 3
   nudges:
-    Alenka Bratusek:
+    SAB:
     - 0.2
     - -0.2
     DeSUS:
@@ -100,7 +100,7 @@ ideological:
     - 0
     - 0.2
 palette:
-  Alenka Bratusek: magenta
+  SAB: magenta
   DeSUS: cornflowerblue
   LMS: gold
   Levica: red

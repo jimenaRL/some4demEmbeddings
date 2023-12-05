@@ -35,9 +35,10 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-SQLITE = SQLite(params['sqlite_db'])
-
+SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
 ATTDIMS = params['attitudinal_dimensions']
 
 ide_folder = set_output_folder_emb(params, country, output)

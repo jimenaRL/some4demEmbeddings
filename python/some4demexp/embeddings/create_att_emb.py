@@ -29,7 +29,10 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 # print(yaml.dump(params, default_flow_style=False))
 
-SQLITE = SQLite(params['sqlite_db'])
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
+
+SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
 ATTDIMS = params['attitudinal_dimensions']
 
 # Load target groups
@@ -38,7 +41,7 @@ data_folder = set_output_folder(params, country, output)
 # Load data from ideological embedding
 ide_folder = set_output_folder_emb(params, country, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
-targets_groups = SQLITE.getMpsValidParties(country)
+targets_groups = SQLITE.getMpsValidParties()
 
 mssg = f"Find {len(targets_groups)} (out of {len(ide_targets)} in ideological "
 mssg += f"embedding) mps with valid party."
@@ -62,7 +65,7 @@ if t0 > t1:
         f"Dropped {t0 - t1} targets with no group in mapping.")
 
 # Fit regression
-groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(
+groups_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(
     country, ATTDIMS)
 ide_sources_cp = ide_sources.copy()
 
