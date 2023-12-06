@@ -85,7 +85,6 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     if sparce:
         return ntwrk_csr, rows_id, columns_id, original_columns_ids, unique_inverse_ids
 
-    print("done.")
     print(mssg)
     print(mssg1)
 
