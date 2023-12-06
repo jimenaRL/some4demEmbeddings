@@ -29,7 +29,10 @@ with open(config, "r", encoding='utf-8') as fh:
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
 
 # (1) load attitudinal embeddings and descriptions
 att_embeddings = dict()

@@ -43,7 +43,10 @@ with open(config, "r", encoding='utf-8') as fh:
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
@@ -74,12 +77,12 @@ for dimpair in combinations(ATTDIMS, 2):
 
     dimpair_str = '_vs_'.join(dimpair)
 
-    # #  FOR DEBUGGING
-    # if dimpair_str not in [
-    #     'lrgen_vs_antielite_salience',
-    #     'V4_Scale_vs_V6_Scale'
-    # ]:
-    #     continue
+    #  FOR DEBUGGING
+    if dimpair_str not in [
+        'lrgen_vs_antielite_salience',
+        'V4_Scale_vs_V6_Scale'
+    ]:
+        continue
 
     if dimpair_str in vizparams['attitudinal'][survey]:
         attvizparams = vizparams['attitudinal'][survey][dimpair_str]

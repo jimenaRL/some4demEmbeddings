@@ -27,7 +27,10 @@ with open(config, "r", encoding='utf-8') as fh:
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
 NB_MIN_FOLLOWERS = params['sources_min_followers']
 MIN_OUTDEGREE = params['sources_min_outdegree']
 

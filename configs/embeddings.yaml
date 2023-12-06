@@ -1,11 +1,30 @@
 attitudinal_dimensions:
-  - lrgen
-  - lrecon
-  - antielite_salience
-  - eu_position
-  - immigrate_policy
-  - galtan
-  - environment
+  gps2019:
+    - V4_Scale
+    - V6_Scale
+    - V8_Scale
+    - v9
+    - v10
+    - v12
+    - v13
+    - v14
+    - v18
+    - v19
+    - v20
+    - v21
+  ches2019:
+    - lrgen
+    - lrecon
+    - eu_position
+    - antielite_salience
+    - immigrate_policy
+    - galtan
+    - environment
+    - enviro_salience
+    - nationalism
+    - sociallifestyle
+    - people_vs_elite
+    - corrupt_salience
 issues:
     - ClimateChange
     - Conservative
@@ -25,23 +44,20 @@ issues:
     - Politicians
     - Populism
     - StartUp
-attitudinal_model:
-  N: 7
-  random_state: 666
 ideological_model:
   check_input: true
   engine: auto
   force_bipartite: true
   force_full_rank: false
   in_degree_threshold: 3
-  n_latent_dimensions: 6
   out_degree_threshold: null
   random_state: null
   standardize_mean: true
   standardize_std: false
 sources_min_followers: 25
 sources_min_outdegree: 3
-sqlite_db: /home/jimena/work/data/some4dem/some4dem.db
+params_db: /home/jimena/work/dev/some4demDB/config.yml
+sqlite_db: '/home/jimena/work/data/some4dem/dbs/{country}.db'
 validation:
-  leftright_sentiment_min_rate: 3
+  leftright_sentiment_min_rate: 1
   seed: 666

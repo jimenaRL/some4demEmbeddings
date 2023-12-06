@@ -8,12 +8,12 @@ declare -a Countries=(
     # netherlands
     # poland
     # romania
-    # slovenia
+    slovenia
     # spain
 )
 
 declare -a Surveys=(
-    ches2019
+    # ches2019
     gps2019
 )
 
@@ -24,7 +24,7 @@ vizfolder=vizconfigs
 for country in ${Countries[@]}; do
     echo "################# ${country} #################"
 
-    config="configs/determined/${country}.yaml"
+    config="configs/embeddings.yaml"
     vizconfig="configs/vizconfigs/${country}.yaml"
 
     # PREPROCESSING
@@ -58,14 +58,14 @@ for country in ${Countries[@]}; do
             --output=$outputs \
             # --show
 
-        # ANALYSIS
-        python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
-        python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --output=$outputs
+        # # ANALYSIS
+        # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
+        # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --output=$outputs
 
-        # VALIDATION
-        python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --output=$outputs  # --show
-        python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
-        python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --output=$outputs #  --show
+        # # VALIDATION
+        # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --output=$outputs  # --show
+        # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
+        # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --output=$outputs #  --show
 
     done
 

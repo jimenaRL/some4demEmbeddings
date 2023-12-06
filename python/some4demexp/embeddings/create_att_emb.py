@@ -35,7 +35,10 @@ with open(config, "r", encoding='utf-8') as fh:
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
