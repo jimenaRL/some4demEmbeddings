@@ -25,25 +25,6 @@ attitudinal_dimensions:
     - sociallifestyle
     - people_vs_elite
     - corrupt_salience
-issues:
-    - ClimateChange
-    - Conservative
-    - Corruption
-    - Elites
-    - Entrepreneur
-    - Environment
-    - Europe
-    - Immigration
-    - International
-    - Islam
-    - Left
-    - Right
-    - Liberal
-    - Patriot
-    - People
-    - Politicians
-    - Populism
-    - StartUp
 ideological_model:
   check_input: true
   engine: auto
@@ -59,5 +40,4 @@ sources_min_outdegree: 3
 params_db: /home/jimena/work/dev/some4demDB/config.yml
 sqlite_db: '/home/jimena/work/data/some4dem/dbs/{country}.db'
 validation:
-  leftright_sentiment_min_rate: 1
   seed: 666

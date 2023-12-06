@@ -7,13 +7,13 @@ declare -a Countries=(
     # italy
     # netherlands
     # poland
-    # romania
+    romania
     slovenia
     # spain
 )
 
 declare -a Surveys=(
-    # ches2019
+    ches2019
     gps2019
 )
 

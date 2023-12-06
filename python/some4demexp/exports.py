@@ -6,9 +6,7 @@ from argparse import ArgumentParser
 
 from some4demdb import SQLite
 from some4demexp.inout import \
-    set_output_folder_emb, \
     set_output_folder_att, \
-    load_ide_embeddings, \
     load_att_embeddings, \
     set_output_folder
 
@@ -82,8 +80,11 @@ export = export.merge(metadata, on='pseudo_id')
 assert len(export) == lo
 
 # (5) export
+
+FOLDER = set_output_folder(params, country)
+
 export_path = os.path.join(
-    # ATTFOLDER,
+    FOLDER,
     f'{country}_att_embeddings_with_annotations_{len(export)}')
 
 export.to_csv(
