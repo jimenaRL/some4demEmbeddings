@@ -5,3 +5,4 @@ scipy==1.11.1
 seaborn==0.11.2
 prince==0.7.1
 linate==0.4
+openpyxl

@@ -46,7 +46,7 @@ data_folder = set_output_folder(params, country, output)
 parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
 
 # Load data from ideological embedding
-ide_folder = set_output_folder_emb(params, country, output)
+ide_folder = set_output_folder_emb(params, country, survey, output)
 ide_followers, ide_mps = load_ide_embeddings(ide_folder)
 ide_followers_cp = ide_followers.copy()
 ide_mps_cp = ide_mps.copy()
@@ -72,8 +72,6 @@ if t0 > t1:
     print(
         f"Dropped {t0 - t1} mps with no party in mapping.")
 
-
-
 # Fit ridge regression
 estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
     .drop(columns=['entity', 'MMS_party_acronym']) \
@@ -83,11 +81,6 @@ estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
 
 estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by=SURVEYCOL)
 parties_coord_att = parties_coord_att.sort_values(by=SURVEYCOL)
-
-## HOT FIX !!!!
-# valid_parties = [f"'{p}'" for p in estimated_parties_coord_ide.party.to_list()]
-# parties_coord_att = parties_coord_att.query(f"party in ({','.join(valid_parties)})")
-###########################
 
 assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
 

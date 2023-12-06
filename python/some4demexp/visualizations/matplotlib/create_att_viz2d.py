@@ -7,12 +7,14 @@ from itertools import combinations
 
 from some4demdb import SQLite
 from some4demexp.inout import \
-    set_output_folder_emb, \
     set_output_folder_att, \
-    load_att_embeddings, \
-    set_output_folder
+    load_att_embeddings
 
 from some4demexp.bivariate_marginal import visualize_att
+
+from some4demexp.conf import \
+    CHES2019DEFAULTATTVIZ, \
+    GPS2019DEFAULTATTVIZ
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -45,7 +47,6 @@ SQLITE = SQLite(params['sqlite_db'], params_db['output']['tables'], country)
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
-ide_folder = set_output_folder_emb(params, country, output)
 att_folder = set_output_folder_att(params, survey, country, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
@@ -73,14 +74,17 @@ for dimpair in combinations(ATTDIMS, 2):
 
     dimpair_str = '_vs_'.join(dimpair)
 
-    #  FOR DEBUGGING
-    if dimpair_str not in [
-        'lrgen_vs_antielite_salience',
-        'V4_Scale_vs_V6_Scale'
-    ]:
-        continue
+    # #  FOR DEBUGGING
+    # if dimpair_str not in [
+    #     'lrgen_vs_antielite_salience',
+    #     'V4_Scale_vs_V6_Scale'
+    # ]:
+    #     continue
 
-    attvizparams = vizparams['attitudinal'][survey][dimpair_str]
+    if dimpair_str in vizparams['attitudinal'][survey]:
+        attvizparams = vizparams['attitudinal'][survey][dimpair_str]
+    else:
+        attvizparams = globals()[f"{survey.upper()}DEFAULTATTVIZ"]
 
     visualize_att(
         sources_coord_att=att_sources,

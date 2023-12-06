@@ -12,6 +12,8 @@ from some4demexp.conf import \
     GPS2019LIMS, \
     CHES2019ATTDICT, \
     GPS2019ATTDICT, \
+    CHES2019DEFAULTATTVIZ, \
+    GPS2019DEFAULTATTVIZ, \
     VIZMAXDROP
 
 plt.rc('text', usetex=True)

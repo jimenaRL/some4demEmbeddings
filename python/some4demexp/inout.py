@@ -134,18 +134,18 @@ def set_output_folder(params, country, output="outputs"):
     return output_folder
 
 
-def set_output_folder_emb(params, country, output="outputs"):
+def set_output_folder_emb(params, country, survey, output="outputs"):
     output_folder_emb = os.path.join(
         set_output_folder(params, country, output),
-        f"ideN_{params['ideological_model']['n_latent_dimensions']}")
+        f"ideN_{len(params['attitudinal_dimensions'][survey])-1}")
     os.makedirs(output_folder_emb, exist_ok=True)
     return output_folder_emb
 
 
 def set_output_folder_att(params, survey, country, output="outputs"):
     output_folder_att = os.path.join(
-        set_output_folder_emb(params, country, output),
-        f"attM_{params['attitudinal_model']['N']}",
+        set_output_folder_emb(params, country, survey, output),
+        f"attM_{len(params['attitudinal_dimensions'][survey])}",
         '_vs_'.join(params["attitudinal_dimensions"][survey]))
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att

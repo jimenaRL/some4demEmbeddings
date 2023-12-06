@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a StringArray=(
+declare -a Countries=(
     # belgium
     # france
     # germany
@@ -12,56 +12,65 @@ declare -a StringArray=(
     # spain
 )
 
+declare -a Surveys=(
+    ches2019
+    gps2019
+)
+
 outputs=outputs
 images=images
 vizfolder=vizconfigs
 
+for country in ${Countries[@]}; do
+    echo "################# ${country} #################"
 
-    for country in ${StringArray[@]}; do
+    config="configs/determined/${country}.yaml"
+    vizconfig="configs/vizconfigs/${country}.yaml"
 
-        echo "################# ${country} #################"
+    # PREPROCESSING
+    python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
 
-        configs=("configs/determined/${country}.yaml")
-        # configs=('configs/N2M2/lrgen_vs_antielite_salience.yaml')
-        # configs=('configs/N2M2/*.yaml')
 
-        for config in ${configs[@]}; do
+    for survey in ${Surveys[@]}; do
 
-            vizconfig="configs/vizconfigs/${country}.yaml"
+        # IDELOGICAL EMBEDDINGS CREATION
+        python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$outputs
 
-            # [0] EMBEDDINGS CREATION
-            # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
-            # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --output=$outputs
-            # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --output=$outputs  # FAILS
+        # # IDELOGICAL EMBEDDINGS VISUALIZATION
+        python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
+            --config=$config \
+            --country=$country \
+            --survey=$survey \
+            --vizconfig=$vizconfig \
+            --output=$outputs \
+            # --show
 
-            # # [1] ANALYSIS
-            # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
-            # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --output=$outputs
 
-            #  [2] VALIDATION
-            # python python/some4demexp/validation/label_followers.py --config=$config --country=$country --output=$outputs
-            # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --output=$outputs  # --show
-            # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
-            # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --output=$outputs #  --show
+        # ATTITUDINAL EMBEDDINGS CREATION
+        python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$outputs
 
-            # [3] EMBEDDINGS VISUALIZATION
-            # python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
-            #     --config=$config \
-            #     --country=$country \
-            #     --vizconfig=$vizconfig \
-            #     --output=$outputs \
-            #     --show
-            # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
-            #     --config=$config \
-            #     --country=$country \
-            #     --vizconfig=$vizconfig \
-            #     --output=$outputs \
-            #     # --show
+        # ATTITUDINAL EMBEDDINGS VISUALIZATION
+        python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
+            --config=$config \
+            --country=$country \
+            --survey=$survey \
+            --vizconfig=$vizconfig \
+            --output=$outputs \
+            # --show
 
-            # [4] EXPORTS
-            # python python/some4demexp/exports/export_att_descriptions.py --config=$config  --country=$country
+        # ANALYSIS
+        python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs
+        python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --output=$outputs
 
-        done
+        # VALIDATION
+        python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --output=$outputs  # --show
+        python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$outputs
+        python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --output=$outputs #  --show
 
     done
+
+    # EXPORTS
+    python python/some4demexp/exports.py --config=$config --country=$country
+
+done
 

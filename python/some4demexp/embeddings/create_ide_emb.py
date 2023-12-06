@@ -14,10 +14,12 @@ from some4demexp.inout import \
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
+ap.add_argument('--survey', type=str, required=True)
 ap.add_argument('--output', type=str, required=False, default='-1')
 args = ap.parse_args()
 config = args.config
 output = args.output
+survey = args.survey
 country = args.country
 
 with open(config, "r", encoding='utf-8') as fh:
@@ -28,7 +30,9 @@ data_folder = set_output_folder(params, country, output)
 X, targets_pids, sources_pids, sources_map_pids = load_experiment_data(data_folder)
 
 # Create and fit ideological embedding
-model = IdeologicalEmbedding(**params["ideological_model"])
+model = IdeologicalEmbedding(
+    n_latent_dimensions=len(params['attitudinal_dimensions'][survey])-1,
+    **params["ideological_model"])
 model.fit(X)
 
 targets_embeddings = model.ideological_embedding_target_latent_dimensions_ \
@@ -66,6 +70,6 @@ sources_embeddings = sources_map_pids
 assert sources_embeddings.duplicated().sum() == 0
 
 # Save sources/targets coordinates in ideological space and add pseudo ids
-emb_folder = set_output_folder_emb(params, country, output)
+emb_folder = set_output_folder_emb(params, country, survey, output)
 save_ide_embeddings(sources_embeddings, targets_embeddings, emb_folder)
 

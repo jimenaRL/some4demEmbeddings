@@ -1,5 +1,22 @@
 VIZMAXDROP = 1
 
+
+CHES2019DEFAULTATTVIZ = {
+  'cbar_rect': [0.15, 0.6, 0.02, 0.3],
+  'legend_loc': 'lower center',
+  'limits': [-2, 12],
+  'nudges': []
+}
+
+
+GPS2019DEFAULTATTVIZ = {
+  'cbar_rect': [0.15, 0.6, 0.02, 0.3],
+  'legend_loc': 'lower center',
+  'limits': [-2, 12],
+  'nudges': []
+}
+
+
 CHES2019LIMS = {
   'lrgen': [0, 10],
   'lrecon': [0, 10],
@@ -37,7 +54,12 @@ CHES2019ATTDICT = {
     'lrecon': 'CHES Economic Left – Right',
     'immigrate_policy': 'CHES Immigration Policy',
     'galtan': 'CHES GAL – TAN',
-    'environment': 'CHES Environment – Economy'
+    'environment': 'CHES Environment – Economy',
+    'enviro_salience': 'CHES enviro_salience',
+    'nationalism': 'CHES nationalism',
+    'sociallifestyle': 'CHES sociallifestyle',
+    'people_vs_elite': 'CHES people_vs_elite',
+    'corrupt_salience': 'CHES corrupt_salience',
 }
 
 GPS2019ATTDICT = {
@@ -83,7 +105,7 @@ LANGUAGES = {
     'Switzerland':{'languages':['it','fr','de'],'ches2019_country':'swi','marpor2020_countryname':'Switzerland'},
     'Turkey':{'languages':['tr'],'ches2019_country':'tur','marpor2020_countryname':'Turkey'},
     'UnitedKingdom':{'languages':['en'],'ches2019_country':'uk','marpor2020_countryname':'United Kingdom'},
-    'UnitedStates':{'languages':['en'],'marpor2020_countryname':'United States'},  
+    'UnitedStates':{'languages':['en'],'marpor2020_countryname':'United States'},
     # Own collection
     'AustriaOwn':{'languages':['de'],'ches2019_country':'aus','marpor2020_countryname':'Austria'},
     'BrazilOwn':{'languages':['pt'],'marporLA2020_countryname':'Brazil'},
