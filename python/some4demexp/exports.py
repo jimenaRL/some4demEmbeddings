@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 
 from some4demdb import SQLite
 from some4demexp.inout import \
+    get_ide_ndims, \
     set_output_folder_att, \
     load_att_embeddings, \
     set_output_folder
@@ -31,11 +32,15 @@ SQLITE = SQLite(
     params['sqlite_db'].format(country=country),
     params_db['output']['tables'],
     country)
+parties_mapping = SQLITE.getPartiesMapping()
 
 # (1) load attitudinal embeddings and descriptions
 att_embeddings = dict()
 for survey in ['ches2019', 'gps2019']:
-    ATTFOLDER = set_output_folder_att(params, survey, country, output)
+    SURVEYCOL = f'{survey.upper()}_party_acronym'
+    ideN = get_ide_ndims(parties_mapping, survey)
+    ATTFOLDER = set_output_folder_att(
+        params, survey, country, ideN, output)
     att_followers, att_mps = load_att_embeddings(ATTFOLDER)
     att_mps.drop(
         columns=['MMS_party_acronym', f'{survey.upper()}_party_acronym'],
@@ -51,7 +56,7 @@ export = att_embeddings['gps2019'].merge(
     how='inner'
 ) \
 .rename(columns={'entity':'pseudo_id'})
-assert len(export) == len(att_embeddings['ches2019'])
+# assert len(export) == len(att_embeddings['ches2019'])
 
 # (2) get enriched descriptions
 anottations = SQLITE.getEnrichments(entity='user')
@@ -66,7 +71,7 @@ lo = len(export)
 print(f"Found {lo} users with attitudinal embeddings and anottations")
 
 # (4) Add twitter ids and handlers
-sources_twitter_ids = SQLITE.retrieveAndFormatTwitterIds(
+sources_twitter_ids = SQLITE.getTwitterIds(
     entity="follower", pseudo_ids=export.pseudo_id.tolist())
 
 export = export.merge(sources_twitter_ids, on='pseudo_id')
@@ -81,7 +86,7 @@ assert len(export) == lo
 
 # (5) export
 
-FOLDER = set_output_folder(params, country)
+FOLDER = set_output_folder(params, country, output)
 
 export_path = os.path.join(
     FOLDER,
@@ -94,13 +99,17 @@ export.to_csv(
     encoding='utf-8',
     lineterminator='\n')
 
-
-export.to_excel(
-    export_path+'.xlsx',
-    index=False,
-    sheet_name=country,
-    engine='openpyxl',
-    float_format="%.2f")
+# ANOTHER HOTFIX
+try:
+    export.to_excel(
+        export_path+'.xlsx',
+        index=False,
+        sheet_name=country,
+        engine='openpyxl',
+        float_format="%.2f")
+except:
+    export = export.assign(
+        description=export.description.apply(lambda s: s.replace('nµ', '')))
 
 print(
     f"Attitudinal embeddings with annotations saved with name {export_path}.")

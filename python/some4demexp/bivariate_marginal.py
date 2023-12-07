@@ -188,7 +188,7 @@ def visualize_ide(
         text = ax.text(
             mean_group_estimated['x']+nudges[party][0],
             mean_group_estimated['y']+nudges[party][1],
-            party,
+            party.replace("&", ""),
             color='white',
             bbox=dict(
                 boxstyle="round",
@@ -282,7 +282,7 @@ def visualize_att(
     B = [lowlim_y, upperlim_y, upperlim_y, lowlim_y, lowlim_y]
     ax.plot(A, B, color='white', linestyle='-')
     ax.plot(A, B, color='black', linestyle='--')
-    txt = ax.text(2, 10.25, 'CHES survey bounds', fontsize=12)
+    txt = ax.text(2, 10.25, f'{survey.upper()} survey bounds', fontsize=12)
     txt.set_path_effects([PathEffects.withStroke(linewidth=2, foreground='w')])
 
     # plot colored by parties targets attitudinal embeddings
@@ -320,7 +320,7 @@ def visualize_att(
         text = ax.text(
             group_positions.iloc[0][dims['x']]+nudges[party][0],
             group_positions.iloc[0][dims['y']]+nudges[party][1],
-            party,
+            party.replace("&", ""),
             color='white',
             bbox=dict(
                 boxstyle="round",

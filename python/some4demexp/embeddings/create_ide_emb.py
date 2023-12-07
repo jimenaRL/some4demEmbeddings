@@ -3,8 +3,11 @@ from argparse import ArgumentParser
 
 import numpy as np
 import pandas as pd
+
 from linate import IdeologicalEmbedding
+from some4demdb import SQLite
 from some4demexp.inout import \
+    get_ide_ndims, \
     set_output_folder, \
     set_output_folder_emb, \
     load_experiment_data, \
@@ -24,14 +27,24 @@ country = args.country
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-# print(yaml.dump(params, default_flow_style=False))
 
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
+
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
+
+parties_mapping = SQLITE.getPartiesMapping()
+ideN = get_ide_ndims(parties_mapping, survey)
 data_folder = set_output_folder(params, country, output)
-X, targets_pids, sources_pids, sources_map_pids = load_experiment_data(data_folder)
+X, targets_pids, sources_pids, sources_map_pids = load_experiment_data(
+    data_folder)
 
 # Create and fit ideological embedding
 model = IdeologicalEmbedding(
-    n_latent_dimensions=len(params['attitudinal_dimensions'][survey])-1,
+    n_latent_dimensions=ideN,
     **params["ideological_model"])
 model.fit(X)
 
@@ -70,6 +83,7 @@ sources_embeddings = sources_map_pids
 assert sources_embeddings.duplicated().sum() == 0
 
 # Save sources/targets coordinates in ideological space and add pseudo ids
-emb_folder = set_output_folder_emb(params, country, survey, output)
+emb_folder = set_output_folder_emb(
+    params, country, survey, ideN, output)
 save_ide_embeddings(sources_embeddings, targets_embeddings, emb_folder)
 

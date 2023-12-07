@@ -1,15 +1,15 @@
 #!/bin/bash
 
 declare -a Countries=(
-    # belgium
+    # belgium  # OK
     # france
     # germany
-    # italy
-    # netherlands
-    # poland
-    romania
-    slovenia
-    # spain
+    # italy  # OK
+    # netherlands # OK
+    # poland # OK
+    # romania # OK
+    # slovenia # OK
+    # spain  # OK
 )
 
 declare -a Surveys=(
@@ -30,21 +30,19 @@ for country in ${Countries[@]}; do
     # PREPROCESSING
     python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$outputs
 
-
     for survey in ${Surveys[@]}; do
 
         # IDELOGICAL EMBEDDINGS CREATION
         python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$outputs
 
-        # # IDELOGICAL EMBEDDINGS VISUALIZATION
+        # IDELOGICAL EMBEDDINGS VISUALIZATION
         python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
             --config=$config \
             --country=$country \
             --survey=$survey \
             --vizconfig=$vizconfig \
             --output=$outputs \
-            # --show
-
+            --show
 
         # ATTITUDINAL EMBEDDINGS CREATION
         python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$outputs
@@ -56,7 +54,7 @@ for country in ${Countries[@]}; do
             --survey=$survey \
             --vizconfig=$vizconfig \
             --output=$outputs \
-            # --show
+            --show
 
         # # ANALYSIS
         # python python/some4demexp/stats.py --config=$config  --country=$country --output=$outputs

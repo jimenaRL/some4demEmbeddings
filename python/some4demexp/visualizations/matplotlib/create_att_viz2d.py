@@ -7,6 +7,7 @@ from itertools import combinations
 
 from some4demdb import SQLite
 from some4demexp.inout import \
+    get_ide_ndims, \
     set_output_folder_att, \
     load_att_embeddings
 
@@ -50,7 +51,11 @@ SQLITE = SQLite(
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
-att_folder = set_output_folder_att(params, survey, country, output)
+parties_mapping = SQLITE.getPartiesMapping()
+ideN = get_ide_ndims(parties_mapping, survey)
+
+att_folder = set_output_folder_att(
+    params, survey, country, ideN, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
 # use mapping to adapt palette to the party system survey
@@ -61,16 +66,18 @@ palette = pd.DataFrame.from_dict(color_data) \
 _zip = zip(palette[SURVEYCOL], palette['color'])
 palette = {z[0]: z[1] for z in _zip}
 
-# select parties to show
-mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', survey])
-_parties_to_show = mp_parties[~mp_parties[SURVEYCOL].isna()]
-parties_to_show = _parties_to_show[SURVEYCOL].unique().tolist()
-
-parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
+parties_coord_att = SQLITE.getPartiesAttitudes(survey, ATTDIMS)
 
 rename_cols = {SURVEYCOL: 'party'}
 att_targets.rename(columns=rename_cols, inplace=True)
 parties_coord_att.rename(columns=rename_cols, inplace=True)
+
+# When the matchong betwwen MMS and the survey isnot injective,
+# keep only one match
+parties_coord_att.drop_duplicates(subset=['party'], inplace=True)
+
+# select parties to show
+parties_to_show = parties_coord_att['party'].unique()
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):

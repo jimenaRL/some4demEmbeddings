@@ -5,16 +5,14 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 
 
-# def saveMpsMetadata(db, country, pids, path):
-#     table = f"mps_annotations_{country}"
-#     mps_pids = [f"'{pid}'" for pid in pids]
-#     columns = ['mp_pseudo_id', 'name']
-#     query = f"SELECT {','.join(columns)} FROM {table} "
-#     query += f"WHERE mp_pseudo_id IN ({','.join(mps_pids)}) "
-#     res = retrieveSqlite(db, query)
-#     pd.DataFrame(res, columns=columns).astype(str).to_csv(path, index=False)
-#     print(f"MPs meatadata saved at {path}.")
-
+def  get_ide_ndims(parties_mapping, survey):
+    surveycol = f'{survey.upper()}_party_acronym'
+    parties_to_show = parties_mapping \
+        .query(f"{surveycol}!=None")
+    n_latent_dimensions = parties_to_show[surveycol].notna().sum() - 1
+    print(
+        f"Ideological embedding dimension set to {n_latent_dimensions} when survey {survey}.")
+    return n_latent_dimensions
 
 def load_ide_embeddings(folder):
 
@@ -116,7 +114,7 @@ def load_pids(folder):
 
     return targets_pids, sources_pids
 
-def set_output_folder(params, country, output="outputs"):
+def set_output_folder(params, country, output):
 
     emb_folder = f"min_followers_{params['sources_min_followers']}"
     emb_folder += f"_min_outdegree_{params['sources_min_outdegree']}"
@@ -135,17 +133,17 @@ def set_output_folder(params, country, output="outputs"):
     return output_folder
 
 
-def set_output_folder_emb(params, country, survey, output="outputs"):
+def set_output_folder_emb(params, country, survey, n_latent_dimensions, output):
     output_folder_emb = os.path.join(
         set_output_folder(params, country, output),
-        f"ideN_{len(params['attitudinal_dimensions'][survey])-1}")
+        f"ideN_{n_latent_dimensions}")
     os.makedirs(output_folder_emb, exist_ok=True)
     return output_folder_emb
 
 
-def set_output_folder_att(params, survey, country, output="outputs"):
+def set_output_folder_att(params, survey, country, n_latent_dimensions, output):
     output_folder_att = os.path.join(
-        set_output_folder_emb(params, country, survey, output),
+        set_output_folder_emb(params, country, survey, n_latent_dimensions, output),
         f"attM_{len(params['attitudinal_dimensions'][survey])}",
         '_vs_'.join(params["attitudinal_dimensions"][survey]))
     os.makedirs(output_folder_att, exist_ok=True)

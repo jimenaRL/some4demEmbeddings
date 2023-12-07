@@ -1,62 +1,65 @@
 attitudinal:
-  antielite_salience_vs_environment: &id001
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      Konfederacia:
-      - 0
-      - 0
-      Kukiz:
-      - 0
-      - 0
-      Lewica Razem:
-      - 0
-      - 0
-      Nowo:
-      - 0
-      - 0
-      PO:
-      - 0
-      - 0
-      PSL:
-      - 0
-      - 0
-      PiS:
-      - 0
-      - 0
-      SLD:
-      - 0
-      - 0
-      Wiosnia:
-      - 0
-      - 0
-  antielite_salience_vs_eu_position: *id001
-  antielite_salience_vs_galtan: *id001
-  antielite_salience_vs_immigrate_policy: *id001
-  eu_position_vs_environment: *id001
-  eu_position_vs_galtan: *id001
-  eu_position_vs_immigrate_policy: *id001
-  galtan_vs_environment: *id001
-  immigrate_policy_vs_environment: *id001
-  immigrate_policy_vs_galtan: *id001
-  lrecon_vs_antielite_salience: *id001
-  lrecon_vs_environment: *id001
-  lrecon_vs_eu_position: *id001
-  lrecon_vs_galtan: *id001
-  lrecon_vs_immigrate_policy: *id001
-  lrgen_vs_antielite_salience: *id001
-  lrgen_vs_environment: *id001
-  lrgen_vs_eu_position: *id001
-  lrgen_vs_galtan: *id001
-  lrgen_vs_immigrate_policy: *id001
-  lrgen_vs_lrecon: *id001
+  gps2019:
+    -
+  ches2019:
+    antielite_salience_vs_environment: &id001
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
+      - 0.3
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        Konfederacja:
+        - 0
+        - 0
+        'K’15':
+        - 0
+        - 0
+        Razem:
+        - 0
+        - 0
+        '.N':
+        - 0
+        - 0
+        PO:
+        - 0
+        - 0
+        PSL:
+        - 0
+        - 0
+        PiS:
+        - 0
+        - 0
+        SLD:
+        - 0
+        - 0
+        Wiosna:
+        - 0
+        - 0
+    antielite_salience_vs_eu_position: *id001
+    antielite_salience_vs_galtan: *id001
+    antielite_salience_vs_immigrate_policy: *id001
+    eu_position_vs_environment: *id001
+    eu_position_vs_galtan: *id001
+    eu_position_vs_immigrate_policy: *id001
+    galtan_vs_environment: *id001
+    immigrate_policy_vs_environment: *id001
+    immigrate_policy_vs_galtan: *id001
+    lrecon_vs_antielite_salience: *id001
+    lrecon_vs_environment: *id001
+    lrecon_vs_eu_position: *id001
+    lrecon_vs_galtan: *id001
+    lrecon_vs_immigrate_policy: *id001
+    lrgen_vs_antielite_salience: *id001
+    lrgen_vs_environment: *id001
+    lrgen_vs_eu_position: *id001
+    lrgen_vs_galtan: *id001
+    lrgen_vs_immigrate_policy: *id001
+    lrgen_vs_lrecon: *id001
 ideological:
   cbar_rect:
   - 0.175
@@ -72,16 +75,16 @@ ideological:
     - -2.5
     - 2
   nudges:
-    Konfederacia:
+    Konfederacja:
     - 0.1
     - 0.1
-    Kukiz:
+    'K’15':
     - 0.1
     - 0.1
-    Lewica Razem:
+    Razem:
     - -0.2
     - -0.5
-    Nowo:
+    '.N':
     - 0.2
     - -0.2
     PO:
@@ -96,16 +99,16 @@ ideological:
     SLD:
     - -0.8
     - 0
-    Wiosnia:
+    Wiosna:
     - -1.1
     - -0.2
 palette:
-  Konfederacia: red
-  Kukiz: tab:green
-  Lewica Razem: magenta
-  Nowo: orangered
+  Konfederacja: red
+  'K’15': tab:green
+  Razem: magenta
+  '.N': orangered
   PO: tab:purple
   PSL: cornflowerblue
   PiS: tab:pink
   SLD: mediumvioletred
-  Wiosnia: gold
+  Wiosna: gold

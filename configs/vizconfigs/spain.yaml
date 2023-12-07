@@ -1,928 +1,931 @@
 attitudinal:
-  antielite_salience_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+  gps2019:
+    -
+  ches2019:
+    antielite_salience_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  antielite_salience_vs_eu_position:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    antielite_salience_vs_eu_position:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  antielite_salience_vs_galtan:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    antielite_salience_vs_galtan:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  antielite_salience_vs_immigrate_policy:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    antielite_salience_vs_immigrate_policy:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  eu_position_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    eu_position_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  eu_position_vs_galtan:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    eu_position_vs_galtan:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  eu_position_vs_immigrate_policy:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    eu_position_vs_immigrate_policy:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  galtan_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    galtan_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  immigrate_policy_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    immigrate_policy_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  immigrate_policy_vs_galtan:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    immigrate_policy_vs_galtan:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrecon_vs_antielite_salience:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrecon_vs_antielite_salience:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrecon_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrecon_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrecon_vs_eu_position:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrecon_vs_eu_position:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrecon_vs_galtan:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrecon_vs_galtan:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrecon_vs_immigrate_policy:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrecon_vs_immigrate_policy:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_antielite_salience:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_antielite_salience:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_environment:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_environment:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_eu_position:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_eu_position:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_galtan:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_galtan:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_immigrate_policy:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_immigrate_policy:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
-  lrgen_vs_lrecon:
-    cbar_rect:
-    - 0.15
-    - 0.6
-    - 0.02
-    - 0.3
-    legend_loc: lower center
-    limits:
-    - -2
-    - 12
-    nudges:
-      BNG:
-      - 0.2
-      - -0.5
-      CC:
-      - 0
-      - -0.8
-      Cs:
-      - 0
-      - -0.8
-      EHB:
-      - 0.2
-      - -0.2
-      ERC:
-      - 0.2
-      - -0.2
-      PNV:
-      - 0.25
-      - -0.4
-      PPP:
-      - 0.4
-      - 0
-      PSOE:
-      - 0.35
-      - 0
-      Pais:
-      - 0.25
-      - 0.1
-      Podemos:
-      - -1.2
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
+    lrgen_vs_lrecon:
+      cbar_rect:
+      - 0.15
+      - 0.6
+      - 0.02
       - 0.3
-      Vox:
-      - 0
-      - -0.7
+      legend_loc: lower center
+      limits:
+      - -2
+      - 12
+      nudges:
+        BNG:
+        - 0.2
+        - -0.5
+        CC:
+        - 0
+        - -0.8
+        Cs:
+        - 0
+        - -0.8
+        EH Bildu:
+        - 0.2
+        - -0.2
+        ERC:
+        - 0.2
+        - -0.2
+        PNV:
+        - 0.25
+        - -0.4
+        PP:
+        - 0.4
+        - 0
+        PSOE:
+        - 0.35
+        - 0
+        Más País-Equo:
+        - 0.25
+        - 0.1
+        Podemos:
+        - -1.2
+        - 0.3
+        Vox:
+        - 0
+        - -0.7
 ideological:
   cbar_rect:
   - 0.15
@@ -947,7 +950,7 @@ ideological:
     Cs:
     - 0
     - -0.8
-    EHB:
+    EH Bildu:
     - 0.2
     - -0.2
     ERC:
@@ -956,13 +959,13 @@ ideological:
     PNV:
     - 0.25
     - -0.4
-    PPP:
+    PP:
     - 0.4
     - 0
     PSOE:
     - 0.35
     - 0
-    Pais:
+    Más País-Equo:
     - 0.25
     - 0.1
     Podemos:
@@ -975,11 +978,12 @@ palette:
   BNG: tab:brown
   CC: purple
   Cs: orangered
-  EHB: mediumvioletred
+  EH Bildu: mediumvioletred
   ERC: gold
   PNV: tab:green
-  PPP: tab:blue
+  PP: tab:blue
   PSOE: red
-  Pais: tab:pink
+  Más País-Equo: tab:pink
   Podemos: tab:purple
   Vox: magenta
+  JxCat: black

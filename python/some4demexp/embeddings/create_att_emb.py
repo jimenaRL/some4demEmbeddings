@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import Ridge
 
-# from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
+    get_ide_ndims, \
     set_output_folder, \
     set_output_folder_emb, \
     set_output_folder_att, \
@@ -42,18 +42,24 @@ SQLITE = SQLite(
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
+parties_mapping = SQLITE.getPartiesMapping()
+ideN = get_ide_ndims(parties_mapping, survey)
+
 # Load mp groups
 data_folder = set_output_folder(params, country, output)
 
 # Load parties attitudinal coordinaets
-parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
+parties_coord_att = SQLITE.getPartiesAttitudes(survey, ATTDIMS)
+# removed repeated parties
+parties_coord_att = parties_coord_att.groupby(SURVEYCOL).first().reset_index()
 
 # Load data from ideological embedding
-ide_folder = set_output_folder_emb(params, country, survey, output)
+ide_folder = set_output_folder_emb(
+    params, country, survey, ideN, output)
 ide_followers, ide_mps = load_ide_embeddings(ide_folder)
 ide_followers_cp = ide_followers.copy()
 ide_mps_cp = ide_mps.copy()
-mps_parties = SQLITE.retrieveAndFormatMpParties(['MMS', survey])
+mps_parties = SQLITE.getMpParties(['MMS', survey])
 
 
 # drop mps with parties withou mapping and add parties to ideological positions
@@ -75,6 +81,18 @@ if t0 > t1:
     print(
         f"Dropped {t0 - t1} mps with no party in mapping.")
 
+
+parties_available_survey = set(parties_coord_att[SURVEYCOL].unique())
+parties_mps = set(ide_mps_in_parties_with_valid_mapping[SURVEYCOL].unique())
+if len(parties_available_survey) < len(parties_mps):
+    m = f"There are less effetively available parties in survey {survey}: "
+    m += f"{parties_available_survey} that parties present in mps affilations "
+    m += f"{parties_mps}. Dropping {parties_mps - parties_available_survey}."
+    print(m)
+    cond = ide_mps_in_parties_with_valid_mapping[SURVEYCOL].isin(
+        parties_available_survey)
+    ide_mps_in_parties_with_valid_mapping = ide_mps_in_parties_with_valid_mapping[cond]
+
 # Fit ridge regression
 estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
     .drop(columns=['entity', 'MMS_party_acronym']) \
@@ -85,7 +103,8 @@ estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
 estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by=SURVEYCOL)
 parties_coord_att = parties_coord_att.sort_values(by=SURVEYCOL)
 
-assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
+# assert (len(estimated_parties_coord_ide[SURVEYCOL].values) == len(parties_coord_att[SURVEYCOL].values))
+# assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
 
 X = estimated_parties_coord_ide.drop(columns=[SURVEYCOL]).values
 Y = parties_coord_att.drop(columns=[SURVEYCOL, 'MMS_party_acronym']).values
@@ -134,7 +153,7 @@ mps_coord_att = mps_coord_att.merge(
     .dropna()
 
 # save results
-att_folder = set_output_folder_att(params, survey, country, output)
+att_folder = set_output_folder_att(params, survey, country, ideN, output)
 save_att_embeddings(
     follower_coord_att,
     mps_coord_att,

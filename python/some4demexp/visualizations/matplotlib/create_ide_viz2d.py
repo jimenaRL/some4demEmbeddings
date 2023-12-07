@@ -5,6 +5,7 @@ from itertools import combinations
 
 from some4demdb import SQLite
 from some4demexp.inout import \
+    get_ide_ndims, \
     set_output_folder_emb, \
     load_ide_embeddings
 
@@ -28,11 +29,9 @@ show = args.show
 
 with open(vizconfig, "r", encoding='utf-8') as fh:
     vizparams = yaml.load(fh, Loader=yaml.SafeLoader)
-# print(yaml.dump(vizparams, default_flow_style=False))
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-# print(yaml.dump(params, default_flow_style=False))
 
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
@@ -42,15 +41,19 @@ SQLITE = SQLite(
     params_db['output']['tables'],
     country)
 
+parties_mapping = SQLITE.getPartiesMapping()
+ideN = get_ide_ndims(parties_mapping, survey)
+
 # Load ideological embeddings
-ide_folder = set_output_folder_emb(params, country, survey, output)
+ide_folder = set_output_folder_emb(
+    params, country, survey, ideN, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
 n_dims_to_viz = min(len(params['attitudinal_dimensions'][survey])-1, 3)
 
 palette = vizparams['palette']
 idevizparams = vizparams['ideological']
-mp_parties = SQLITE.retrieveAndFormatMpParties(['MMS', 'CHES2019'])
+mp_parties = SQLITE.getMpParties(['MMS', 'CHES2019'])
 targets_parties = mp_parties[['mp_pseudo_id', 'MMS_party_acronym']] \
     .rename(columns={'MMS_party_acronym': 'party'})
 
