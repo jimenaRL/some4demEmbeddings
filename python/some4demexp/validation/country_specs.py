@@ -25,7 +25,7 @@ countries = {
     'Switzerland':{'languages':['it','fr','de'],'ches2019_country':'swi','marpor2020_countryname':'Switzerland'},
     'Turkey':{'languages':['tr'],'ches2019_country':'tur','marpor2020_countryname':'Turkey'},
     'UnitedKingdom':{'languages':['en'],'ches2019_country':'uk','marpor2020_countryname':'United Kingdom'},
-    'UnitedStates':{'languages':['en'],'marpor2020_countryname':'United States'},  
+    'UnitedStates':{'languages':['en'],'marpor2020_countryname':'United States'},
     # Own collection
     'AustriaOwn':{'languages':['de'],'ches2019_country':'aus','marpor2020_countryname':'Austria'},
     'BrazilOwn':{'languages':['pt'],'marporLA2020_countryname':'Brazil'},

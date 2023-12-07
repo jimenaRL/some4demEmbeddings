@@ -5,8 +5,7 @@ from some4demdb import SQLite
 from some4demexp.graph import graphToAdjencyMatrix
 from some4demexp.inout import \
     set_output_folder, \
-    save_experiment_data, \
-    save_targets_groups
+    save_experiment_data
 
 
 
@@ -23,9 +22,15 @@ country = args.country
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(params, default_flow_style=False))
+# print(yaml.dump(params, default_flow_style=False))
 
-SQLITE = SQLite(params['sqlite_db'])
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
+
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
 NB_MIN_FOLLOWERS = params['sources_min_followers']
 MIN_OUTDEGREE = params['sources_min_outdegree']
 
@@ -33,23 +38,16 @@ MIN_OUTDEGREE = params['sources_min_outdegree']
 folder = set_output_folder(params, country, output)
 
 # # Retrive source/target bipartite graph
-users_metadata = SQLITE.retrieveAndFormatUsersNbFollowers(
-    country, drop_na=True)
+valid_followers = SQLITE.retrieveFollowersMinIndegree(
+    min_indegree=NB_MIN_FOLLOWERS
+)
 
-valid_followers = users_metadata \
-    .query(f"nb_followers >= {NB_MIN_FOLLOWERS}") \
-    .pseudo_id.unique().tolist()
-
-res_graph = SQLITE.retrieveGraph(country, valid_followers)
+res_graph = SQLITE.retrieveGraph('follower', valid_followers)
 
 # Build adjency matrix
-X, targets_pids, sources_pids = graphToAdjencyMatrix(
+X, targets_pids, sources_pids, sources_map_pids = graphToAdjencyMatrix(
     res_graph, MIN_OUTDEGREE, sparce=False)
 
 # Save social graph and target/source pseudo ids
-save_experiment_data(X, targets_pids, sources_pids, folder)
-
-# Retrieve and save targets groups
-targets_groups = SQLITE.retrieveAndFormatTargetGroups(country)
-
-save_targets_groups(targets_groups, folder)
+save_experiment_data(
+    X, targets_pids, sources_pids, sources_map_pids, folder)

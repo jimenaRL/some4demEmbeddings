@@ -18,7 +18,7 @@ from scipy.sparse import csr_matrix
 
 def load_ide_embeddings(folder):
 
-    print(f"Ideological embeddings lofsave_issues_descriptionsad from folder {folder}.")
+    print(f"Ideological embeddings loaded from folder {folder}.")
 
     ide_sources = pd.read_csv(os.path.join(folder, 'ide_sources.csv'))
     ide_targets = pd.read_csv(os.path.join(folder, 'ide_targets.csv'))
@@ -26,68 +26,68 @@ def load_ide_embeddings(folder):
     return ide_sources, ide_targets
 
 
-def save_ide_embeddings(model, sources_ids, targets_ids, folder):
+def save_ide_embeddings(sources_embeddings, targets_embeddings, folder):
 
-    model.ideological_embedding_source_latent_dimensions_ \
-        .reset_index()\
-        .drop(columns=["source_id"]) \
-        .assign(entity=sources_ids) \
-        .to_csv(
+    sources_embeddings.to_csv(
             os.path.join(folder, 'ide_sources.csv'),
             index=False)
 
-    model.ideological_embedding_target_latent_dimensions_ \
-        .reset_index()\
-        .drop(columns=["target_id"]) \
-        .assign(entity=targets_ids) \
-        .to_csv(
+    targets_embeddings.to_csv(
             os.path.join(folder, 'ide_targets.csv'),
             index=False)
 
-    print(f"Ideological embeddings saved at folder {folder}.")
+    mssg = f"Ideological embeddings ({len(targets_embeddings)} targets and "
+    mssg += f"{len(sources_embeddings)} sources) saved at folder {folder}."
+    print(mssg)
 
 
-def save_att_embeddings(att_source, att_targets, att_groups, folder):
+def save_att_embeddings(att_source, att_targets, folder):
 
     att_source.to_csv(
-        os.path.join(folder, 'att_source.csv'), index=False)
+        os.path.join(folder, 'att_sources.csv'), index=False)
     att_targets.to_csv(
         os.path.join(folder, 'att_targets.csv'), index=False)
-    att_groups.to_csv(
-        os.path.join(folder, 'att_groups.csv'), index=False)
 
-    print(f"Attitudinal embeddings saved at folder {folder}.")
+    mssg = f"Attitudinal embeddings ({len(att_targets)} targets and "
+    mssg += f"{len(att_source)} sources) saved at folder {folder}."
+    print(mssg)
 
 
 def load_att_embeddings(folder):
 
     print(f"Attitudinal embeddings load from folder {folder}.")
 
-    att_source = pd.read_csv(os.path.join(folder, 'att_source.csv'))
+    att_source = pd.read_csv(os.path.join(folder, 'att_sources.csv'))
     att_targets = pd.read_csv(os.path.join(folder, 'att_targets.csv'))
-    att_groups = pd.read_csv(os.path.join(folder, 'att_groups.csv'))
 
-    return att_source, att_targets, att_groups
-
-
-def load_targets_groups(folder):
-
-    return pd.read_csv(os.path.join(folder, 'targets_groups.csv'))
+    return att_source, att_targets
 
 
-def save_experiment_data(X, targets_pids, sources_pids, folder):
+def save_experiment_data(
+    X, targets_pids, sources_pids, sources_map_pids, folder):
 
+    # graph
     np.savez(os.path.join(folder, "graph.npz"), X=X)
+    # targets
     np.save(
         os.path.join(folder, "targets_pids.npy"),
         targets_pids,
         allow_pickle=True)
+    pd.DataFrame(data=targets_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "targets_pids.csv"), index=False)
+    # sources
     np.save(
         os.path.join(folder, "sources_pids.npy"),
         sources_pids,
         allow_pickle=True)
-
-    print(f"Social graph and pseudo ids saved at {folder}.")
+    pd.DataFrame(data=sources_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "sources_pids.csv"), index=False)
+    # sources map pids
+    np.save(
+        os.path.join(folder, "sources_map_pids.npy"),
+        sources_map_pids,
+        allow_pickle=True)
+    print(f"Social graph, pseudo ids and counts saved at {folder}.")
 
 
 def load_experiment_data(folder):
@@ -99,8 +99,11 @@ def load_experiment_data(folder):
     sources_pids = np.load(
         os.path.join(folder, "sources_pids.npy"),
         allow_pickle=True)
+    sources_map_pids = np.load(
+        os.path.join(folder, "sources_map_pids.npy"),
+        allow_pickle=True)
 
-    return X, targets_pids, sources_pids
+    return X, targets_pids, sources_pids, sources_map_pids
 
 def load_pids(folder):
 
@@ -132,35 +135,48 @@ def set_output_folder(params, country, output="outputs"):
     return output_folder
 
 
-def set_output_folder_emb(params, country, output="outputs"):
+def set_output_folder_emb(params, country, survey, output="outputs"):
     output_folder_emb = os.path.join(
         set_output_folder(params, country, output),
-        f"ideN_{params['ideological_model']['n_latent_dimensions']}")
+        f"ideN_{len(params['attitudinal_dimensions'][survey])-1}")
     os.makedirs(output_folder_emb, exist_ok=True)
     return output_folder_emb
 
 
-def set_output_folder_att(params, country, output="outputs"):
+def set_output_folder_att(params, survey, country, output="outputs"):
     output_folder_att = os.path.join(
-        set_output_folder_emb(params, country, output),
-        f"attM_{params['attitudinal_model']['N']}",
-        '_vs_'.join(params["attitudinal_dimensions"]))
+        set_output_folder_emb(params, country, survey, output),
+        f"attM_{len(params['attitudinal_dimensions'][survey])}",
+        '_vs_'.join(params["attitudinal_dimensions"][survey]))
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att
 
-
-def save_targets_groups(targets_groups, folder):
-    file = os.path.join(folder, "targets_groups.csv")
-    targets_groups.to_csv(file, index=False)
-    print(f"Target groups saved at {file}.")
-
-
-def save_issues_descriptions(folder, data, issue):
+def save_issues(folder, data, issue):
     filepath = os.path.join(folder, f'{issue}.csv')
     data.to_csv(filepath, index=False, encoding='utf8')
     print(f"Descriptions, issues and sentiments save at {filepath}.")
 
-def load_issues_descriptions(folder, issue):
+def load_issues(folder, issue):
     filepath = os.path.join(folder, f'{issue}.csv')
     print(f"Loading issues and sentiments from {filepath}.")
+    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
+
+def save_descriptions(folder, data):
+    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
+    data.to_csv(filepath, index=False, encoding='utf8')
+    print(f"Followers with descriptions save at {filepath}.")
+
+def load_descriptions(folder):
+    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
+    print(f"Loading followers with descriptions from {filepath}.")
+    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
+
+def save_issues_benckmarks(folder, benchmark):
+    filepath = os.path.join(folder, f'benckmarks.csv')
+    benchmark.to_csv(filepath, index=False)
+    print(f"Saving benckmarks at {filepath}.")
+
+def load_issues_benckmarks(folder):
+    filepath = os.path.join(folder, f'benckmarks.csv')
+    print(f"Loading benckmarks from {filepath}.")
     return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')

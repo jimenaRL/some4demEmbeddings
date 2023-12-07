@@ -2,13 +2,16 @@ import yaml
 from itertools import combinations
 from argparse import ArgumentParser
 
-from linate import AttitudinalEmbedding
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import Ridge
+
+# from linate import AttitudinalEmbedding
 from some4demdb import SQLite
 from some4demexp.inout import \
     set_output_folder, \
     set_output_folder_emb, \
     set_output_folder_att, \
-    load_targets_groups, \
     load_ide_embeddings, \
     save_att_embeddings
 
@@ -16,84 +19,123 @@ from some4demexp.inout import \
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
+ap.add_argument('--survey', type=str, required=True)
 ap.add_argument('--output', type=str, required=False, default='-1')
 args = ap.parse_args()
 config = args.config
 output = args.output
 country = args.country
+survey = args.survey
 
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-print(yaml.dump(params, default_flow_style=False))
+# print(yaml.dump(params, default_flow_style=False))
 
-SQLITE = SQLite(params['sqlite_db'])
-ATTDIMS = params['attitudinal_dimensions']
+with open(params['params_db'], "r", encoding='utf-8') as fh:
+    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
-# Load target groups
+SQLITE = SQLite(
+    params['sqlite_db'].format(country=country),
+    params_db['output']['tables'],
+    country)
+ATTDIMS = params['attitudinal_dimensions'][survey]
+SURVEYCOL = f'{survey.upper()}_party_acronym'
+
+# Load mp groups
 data_folder = set_output_folder(params, country, output)
-targets_groups = load_targets_groups(data_folder)
+
+# Load parties attitudinal coordinaets
+parties_coord_att = SQLITE.retrieveAndFormatPartiesAttitudes(survey, ATTDIMS)
 
 # Load data from ideological embedding
-ide_folder = set_output_folder_emb(params, country, output)
-ide_sources, ide_targets = load_ide_embeddings(ide_folder)
+ide_folder = set_output_folder_emb(params, country, survey, output)
+ide_followers, ide_mps = load_ide_embeddings(ide_folder)
+ide_followers_cp = ide_followers.copy()
+ide_mps_cp = ide_mps.copy()
+mps_parties = SQLITE.retrieveAndFormatMpParties(['MMS', survey])
 
 
-# Estimate target groups positions in ideological space by averaging
-# targets' individual positions
+# drop mps with parties withou mapping and add parties to ideological positions
+mps_parties = mps_parties.dropna()
+mssg = f"Found {len(mps_parties)} mps (out of {len(ide_mps)} in ideological "
+mssg += f"embedding) with valid party."
+print(mssg)
 
-# add group information
-t0 = len(ide_targets)
-ide_targets = ide_targets.merge(
-        targets_groups,
+t0 = len(ide_mps)
+ide_mps_in_parties_with_valid_mapping = ide_mps.merge(
+        mps_parties,
         left_on="entity",
         right_on="mp_pseudo_id",
         how="inner"
     ) \
     .drop(columns="mp_pseudo_id")
-t1 = len(ide_targets)
+t1 = len(ide_mps_in_parties_with_valid_mapping)
 if t0 > t1:
     print(
-        f"Dropped {t0 - t1} targets with no group in mapping.")
+        f"Dropped {t0 - t1} mps with no party in mapping.")
 
-
-# Fit regression
-groups_coord_att = SQLITE.retrieveAndFormatTargetGroupsAttitudes(country, ATTDIMS)
-ide_targets_cp = ide_targets.copy()
-ide_sources_cp = ide_sources.copy()
-
-# make estimate
-estimated_groups_coord_ide = ide_targets_cp \
-    .drop(columns=['entity']) \
-    .groupby('party') \
+# Fit ridge regression
+estimated_parties_coord_ide = ide_mps_in_parties_with_valid_mapping \
+    .drop(columns=['entity', 'MMS_party_acronym']) \
+    .groupby(SURVEYCOL) \
     .mean() \
     .reset_index()
 
-model_att = AttitudinalEmbedding(**params["attitudinal_model"])
+estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by=SURVEYCOL)
+parties_coord_att = parties_coord_att.sort_values(by=SURVEYCOL)
 
-model_att.fit(
-    estimated_groups_coord_ide.rename(columns={'party': 'entity'}),
-    groups_coord_att.rename(columns={'party': 'entity'})
-)
+assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
 
-sources_coord_att = model_att.transform(ide_sources_cp)
-targets_coord_att = model_att.transform(ide_targets_cp.drop("party", axis=1))
+X = estimated_parties_coord_ide.drop(columns=[SURVEYCOL]).values
+Y = parties_coord_att.drop(columns=[SURVEYCOL, 'MMS_party_acronym']).values
+
+assert (len(X) == len(Y))
+
+clf = Ridge(alpha=1.0)
+clf.fit(X, Y)
+
+# Check affine transformation norms
+# ridgr_reg_coeff = clf.coef_
+
+# frobenius_norm = np.linalg.norm(ridgr_reg_coeff, ord="fro")
+# max_ = ridgr_reg_coeff.max()
+# min_ = ridgr_reg_coeff.min()
+# lsv = np.linalg.norm(ridgr_reg_coeff, ord=2)
+# ssv = np.linalg.norm(ridgr_reg_coeff, ord=-2)
+# print(f"Affine transformation ridgr_reg_coeff: \n\n{ridgr_reg_coeff}\n")
+# print(f"ridgr_reg_coeff max: {max_}")
+# print(f"ridgr_reg_coeff min: {min_}")
+# print(f"ridgr_reg_coeff largest singular value: {lsv}")
+# print(f"ridgr_reg_coeff smallest singular value: {ssv}")
+
+follower_coord_att_values = clf.predict(ide_followers_cp.drop(columns=['entity']).values)
+mps_coord_att_values = clf.predict(ide_mps.drop(columns=['entity']).values)
+
+columns = parties_coord_att.drop(
+    columns=["MMS_party_acronym", SURVEYCOL]).columns
+follower_coord_att = pd.DataFrame(
+    data=follower_coord_att_values,
+    columns=columns) \
+    .assign(entity=ide_followers_cp.entity)
+mps_coord_att = pd.DataFrame(
+    data=mps_coord_att_values,
+    columns=columns) \
+    .assign(entity=ide_mps.entity)
 
 # add group information
-targets_coord_att = targets_coord_att.merge(
-        targets_groups,
+mps_coord_att = mps_coord_att.merge(
+        mps_parties,
         left_on="entity",
         right_on="mp_pseudo_id",
-        how="inner"
+        how="left"
     ) \
-    .drop(columns="mp_pseudo_id")
+    .drop(columns="mp_pseudo_id") \
+    .dropna()
 
 # save results
-att_folder = set_output_folder_att(params, country, output)
+att_folder = set_output_folder_att(params, survey, country, output)
 save_att_embeddings(
-        sources_coord_att,
-        targets_coord_att,
-        groups_coord_att,
-        att_folder)
-
-print(yaml.dump(params, default_flow_style=False))
+    follower_coord_att,
+    mps_coord_att,
+    att_folder)

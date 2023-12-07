@@ -31,9 +31,6 @@ attitudinal:
       SI:
       - 0
       - 0
-      SVP:
-      - 0
-      - 0
   antielite_salience_vs_eu_position: *id001
   antielite_salience_vs_galtan: *id001
   antielite_salience_vs_immigrate_policy: *id001
@@ -94,4 +91,3 @@ palette:
   M5S: gold
   PD: red
   SI: magenta
-  SVP: darkgreen

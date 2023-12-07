@@ -6,9 +6,15 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
-from adjustText import adjust_text
 
-from some4demexp.conf import CHESLIMS, ATTDICT
+from some4demexp.conf import \
+    CHES2019LIMS, \
+    GPS2019LIMS, \
+    CHES2019ATTDICT, \
+    GPS2019ATTDICT, \
+    CHES2019DEFAULTATTVIZ, \
+    GPS2019DEFAULTATTVIZ, \
+    VIZMAXDROP
 
 plt.rc('text', usetex=True)
 plt.rc('font', family='sans-serif', size=12)
@@ -58,12 +64,12 @@ def get_ordinal(n):
     else:
         return f"{n}th"
 
-def get_limits(df, dims, q0, q1):
+def get_limits(df, dims, lims, q0, q1):
 
-    x0 = min(CHESLIMS[dims['x']][0], df[dims['x']].quantile(q0))
-    x1 = max(CHESLIMS[dims['x']][1], df[dims['x']].quantile(q1))
-    y0 = min(CHESLIMS[dims['x']][0], df[dims['y']].quantile(q0))
-    y1 = max(CHESLIMS[dims['x']][1], df[dims['y']].quantile(q1))
+    x0 = min(lims[dims['x']][0], df[dims['x']].quantile(q0))
+    x1 = max(lims[dims['x']][1], df[dims['x']].quantile(q1))
+    y0 = min(lims[dims['x']][0], df[dims['y']].quantile(q0))
+    y1 = max(lims[dims['x']][1], df[dims['y']].quantile(q1))
 
     return x0, x1, y0, y1
 
@@ -81,6 +87,11 @@ def drop_extremes(df, dims, x0, x1, y0, y1):
     diff = l0 - len(dfd)
     prop = 100 * diff / l0
 
+    VIZMAXDROP = 1
+    if prop > VIZMAXDROP:
+        raise ValueError(
+            f"Droping a proportion of points ({prop}%) bigger than {VIZMAXDROP}.")
+
     m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
     m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
     m2 += f"\t[{x0:.2f}, {x1:.2f}] x [{y0:.2f}, {y1:.2f}]."
@@ -94,6 +105,7 @@ def visualize_ide(
     targets_parties,
     latent_dim_x,
     latent_dim_y,
+    parties_to_show,
     palette,
     nudges,
     limits,
@@ -111,25 +123,11 @@ def visualize_ide(
     }
     sources_coord_ide = sources_coord_ide.rename(columns=colrename)
     targets_coord_ide = targets_coord_ide.rename(columns=colrename)
-    targets_parties = targets_parties.rename(columns=colrename)
+    nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
 
     plot_df = pd.concat([sources_coord_ide, targets_coord_ide]) \
         .reset_index() \
         .drop(columns="index")
-
-    l0 = len(plot_df)
-    plot_df = plot_df.drop_duplicates()
-    l1 = len(plot_df)
-    if (l0 > l1):
-        print(f"Dropped {l1 -l0} repeated embeddings points.")
-
-    # # setting lims
-    # pad = 0.35
-    # dx = plot_df['x'].max()-plot_df['x'].min()
-    # dy = plot_df['y'].max()-plot_df['y'].min()
-    # xlims = (plot_df['x'].min()-pad*dx, plot_df['x'].max()+pad*dx)
-    # ylims = (plot_df['y'].min()-pad*dy, plot_df['y'].max()+pad*dy)
-    # setting lims
 
     xlims = limits['x']
     ylims = limits['y']
@@ -150,10 +148,6 @@ def visualize_ide(
     # plot sources and targets ideological embeddings
     g = sns.jointplot(**kwargs)
 
-    # get unique parties and build color dictionary
-    unique_parties = targets_parties.party.unique().tolist()
-    nunique_parties = len(set(unique_parties))
-
     targets_coord_ide = targets_coord_ide.merge(
             targets_parties,
             left_on="entity",
@@ -165,7 +159,7 @@ def visualize_ide(
     # plot colored by parties target embeddings
     ax = g.ax_joint
     texts = []
-    for party in unique_parties:
+    for party in parties_to_show:
 
         sample = targets_coord_ide[targets_coord_ide.party == party]
 
@@ -204,8 +198,6 @@ def visualize_ide(
             fontsize=9)
         texts.append(text)
 
-    # adjust_text(texts)
-
     xl = fr'{get_ordinal(latent_dim_x+1)} latent dimension '
     xl += fr'$\delta_{latent_dim_x+1}$'
     yl = fr'{get_ordinal(latent_dim_y+1)} latent dimension '
@@ -232,39 +224,37 @@ def visualize_ide(
     if show:
         plt.show()
 
-
 def visualize_att(
     sources_coord_att,
     targets_coord_att,
     parties_coord_att,
     dims,
+    parties_to_show,
     palette,
     nudges,
     limits,
+    survey,
     cbar_rect,
     legend_loc,
-    quantiles=(0, 1),
+    quantiles=None,
     path=None,
     show=False,
     **kwargs
 ):
 
+    nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
+
     plot_df = pd.concat([sources_coord_att, targets_coord_att]) \
         .reset_index() \
         .drop(columns="index")
 
-    l0 = len(plot_df)
-    plot_df = plot_df.drop_duplicates()
-    l1 = len(plot_df)
-    if (l0 > l1):
-        print(f"Dropped {l0 -l1} repeated embeddings points.")
+    lims = globals()[f"{survey.upper()}LIMS"]
+    ATTDICT = globals()[f"{survey.upper()}ATTDICT"]
 
-    # Set quantiles q0 and q1 in vizconfig
-    x0, x1, y0, y1 = get_limits(plot_df, dims, q0=quantiles[0], q1=quantiles[1])
-
-    plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
-
-    targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
+    if quantiles is not None:
+        x0, x1, y0, y1 = get_limits(plot_df, dims, lims, q0=quantiles[0], q1=quantiles[1])
+        plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
+        targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
 
     kwargs = {
         'x': dims['x'],
@@ -281,17 +271,13 @@ def visualize_att(
     # plot sources and targets embeddings
     g = sns.jointplot(**kwargs)
 
-    # get unique parties and build color dictionary
-    unique_parties = targets_coord_att.party.unique().tolist()
-    nunique_parties = targets_coord_att.party.nunique()
-
     ax = g.ax_joint
 
     # plot square showing CHES limits
-    lowlim_x = CHESLIMS[dims['x']][0]
-    upperlim_x = CHESLIMS[dims['x']][1]
-    lowlim_y = CHESLIMS[dims['y']][0]
-    upperlim_y = CHESLIMS[dims['y']][1]
+    lowlim_x = lims[dims['x']][0]
+    upperlim_x = lims[dims['x']][1]
+    lowlim_y = lims[dims['y']][0]
+    upperlim_y = lims[dims['y']][1]
     A = [lowlim_x, lowlim_x, upperlim_x, upperlim_x, lowlim_x]
     B = [lowlim_y, upperlim_y, upperlim_y, lowlim_y, lowlim_y]
     ax.plot(A, B, color='white', linestyle='-')
@@ -301,7 +287,7 @@ def visualize_att(
 
     # plot colored by parties targets attitudinal embeddings
     texts = []
-    for party in unique_parties:
+    for party in parties_to_show:
 
         # plot colored by parties target embeddings
         mps_coord_att = targets_coord_att[targets_coord_att.party == party]
@@ -343,8 +329,6 @@ def visualize_att(
                 alpha=1),
             fontsize=9)
         texts.append(text)
-
-    adjust_text(texts)
 
     xl = f"{ATTDICT[dims['x']]}"
     yl = f"{ATTDICT[dims['y']]}"

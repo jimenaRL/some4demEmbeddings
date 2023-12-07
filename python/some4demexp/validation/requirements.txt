@@ -1,5 +1,4 @@
 imblearn==0.0
-spacy==3.5.2
-textacy==0.10.1
+spacy==2.3.9
 transformers[torch]==4.18.0
-ipython
+statsmodels==0.13.5

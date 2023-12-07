@@ -2,26 +2,21 @@
 Scrip to assigne label to followers
 """
 import os
-import re
 import yaml
-import pandas as pd
-from itertools import combinations
 from argparse import ArgumentParser
 
-import torch
-from transformers import \
-    AutoTokenizer, \
-    AutoModelForSequenceClassification
+import pandas as pd
 
 from some4demdb import SQLite
+
 from some4demexp.inout import \
-    save_issues_descriptions, \
+    save_issues, \
+    load_att_embeddings, \
     set_output_folder, \
-    load_pids
+    set_output_folder_att
 
 from some4demexp.conf import \
-    ATTDIMISSUES, \
-    LANG
+LANGUAGES
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -33,160 +28,182 @@ config = args.config
 country = args.country
 output = args.output
 
-issues = 'python/some4demexp/validation/issues.yaml'
-with open(issues, "r", encoding='utf-8') as fh:
-    issues_dict = yaml.load(fh, Loader=yaml.SafeLoader)
-
-ISSUES = sum([d['issues'] for d in ATTDIMISSUES.values()], [])
-ISSUEDICT = {k: issues_dict[k][LANG[country]] for k in ISSUES}
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 print(yaml.dump(params, default_flow_style=False))
 
+FOLDER = set_output_folder(params, country, output)
+
+SEED = params['validation']['seed']
+LRMINSENT = params['validation']['leftright_sentiment_min_rate']
+
 SQLITE = SQLite(params['sqlite_db'])
 
-# (0) Get embeddings and descriptions
-folder = set_output_folder(params, country, output)
-targets_pids, sources_pids = load_pids(folder)
+ISSUES = [
+    'Left', 'Right',
+    # 'Elites', 'People', 'Politicians', 'StartUp', 'Entrepreneur',
+    # 'Immigration',
+    # 'Europe',
+    # 'Environment'
+]
+SENTIMENT_ISSUES = [
+    'Left', 'Right',
+    # 'Immigration',
+    # 'Europe'
+]
 
-entities = targets_pids + sources_pids
+def computeLeftRightLabel(data, languages, predicted_sentiment_min_rate, folder):
 
-data = SQLITE.retrieveAndFormatUsersDescriptions(country, entities) \
-    .rename(columns={'pseudo_id': 'entity'})
+    # filter by language
+    formated = ','.join([f"'{l}'" for l in languages])
+    data = data.query(f"predicted_language in [{formated}]")
 
-l0 = len(data)
-print(f"Found {l0} followers attitudinal embeddings.")
+    # Left-Right
+    ldata = data \
+        .query("Left == 1") \
+        .query("Left != Right") \
+        .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+        .assign(tag='Left (+)') \
+        .assign(label=0)
+    print(f"Found {len(ldata)} `Left-leaning` followers in att embedding")
 
-# (1) Find issues words in descriptions
-for issue, patterns in ISSUEDICT.items():
-    regex = re.compile(f"(?:[\s]|^){'|'.join(patterns)}()(?=[\s]|$)")
-    # for each row set 1 if issue is present in description
-    data[issue] = data.description \
-        .apply(lambda s: regex.search(s)) \
-        .isnull() \
-        .astype(int) \
-        .apply(lambda n: 1 - n)
+    rdata = data \
+        .query("Right == 1") \
+        .query("Left != Right") \
+        .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+        .assign(tag='Rigth (+)') \
+        .assign(label=1)
+    print(f"Found {len(rdata)} `Rigth-leaning` followers in att embedding.")
 
-l1 = len(data.query(' or '.join([f"{i} == 1" for i in ISSUES])))
-prop = 100 * l1 / l0
-print(f"Found {l1} ({prop:.2f}%) followers with patterns in descriptions.")
+    save_issues(
+        folder,
+        pd.concat([ldata, rdata]),
+        issue='Left-Right')
 
-for issue in ISSUES:
-    query = f"{issue} == 1"
-    print(f"{issue}: {len(data.query(query))}")
+def computeMigrantionLabel(data, lang, folder):
+
+    # # Migrantion
+    # tag = 'Immigration (+)'
+
+    # migration_plus = data \
+    #     .query("Immigration == 1") \
+    #     .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+    #     .assign(tag=tag) \
+    #     .assign(label=0)
+    # print(f"Found {len(migration_plus)} `{tag}` followers.")
+
+    # tag = 'Immigration (-)'
+    # migration_moins = data \
+    #     .query("Immigration == 1") \
+    #     .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+    #     .assign(tag=tag) \
+    #     .assign(label=0)
+    # print(f"Found {len(migration_moins)} `{tag}` followers.")
+
+    # # egalize sample
+    # j = min(len(migration_plus), len(migration_moins))
+    # migration_plus = migration_plus.sample(n=j)
+    # migration_moins = migration_moins.sample(n=j)
+
+    # print(f"Immigration (+)/(-) data downsampled to {j} samples of each categorie.")
+
+    # save_issues(
+    #     folder,
+    #     pd.concat([migration_moins, migration_moins]),
+    #     issue='Immigration')
+
+    return
+
+def computeEuropeLabel(data, lang, folder):
+    # tag = 'Europe (+)'
+    # euro_plus = data \
+    #     .query("Europe == 1") \
+    #     .query(f"predicted_sentiment >= {predicted_sentiment_min_rate}") \
+    #     .assign(tag=tag) \
+    #     .assign(label=0)
+    # print(f"Found {len(euro_plus)} `{tag}` followers.")
+
+    # tag = 'Europe (-)'
+    # euro_moins = data \
+    #     .query("Europe == 1") \
+    #     .query(f"predicted_sentiment < {predicted_sentiment_min_rate}") \
+    #     .assign(tag=tag) \
+    #     .assign(label=0)
+    # print(f"Found {len(euro_moins)} `{tag}` followers.")
+
+    # # egalize sample
+    # k = min(len(euro_plus), len(euro_moins))
+    # euro_plus = euro_plus.sample(n=k)
+    # euro_moins = euro_moins.sample(n=k)
+
+    # print(f"Europe (+)/(-) data downsampled to {k} samples of each categorie.")
+
+    # save_issues(
+    #     folder,
+    #     pd.concat([euro_plus, euro_moins]),
+    #     issue='Europe')
+
+    return
+
+def computeAntiEliteLabel(data, lang, folder):
+
+    # # Anti-elite
+
+    # q1 = ' or '.join([f"{i} == 1" for i in ["Elites", "People", "Politicians"]])
+    # q2 = ' and '.join([f"{i} == 0" for i in ["StartUp", "Entrepreneur"]])
+    # query = f'{q1} and {q2}'
+    # aedata = data \
+    #     .query(query) \
+    #     .assign(tag='Elites-People-Politicians') \
+    #     .assign(label=1)
+    # print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
+
+    # q1 = ' or '.join([f"{i} == 1" for i in ["StartUp", "Entrepreneur"]])
+    # q2 = ' and '.join([f"{i} == 0" for i in ["Elites", "People", "Politicians"]])
+    # query = f'{q1} and {q2}'
+    # odata = data \
+    #     .query(query) \
+    #     .assign(tag='StartUp-Entrepreneur') \
+    #     .assign(label=0)
+    # print(f"Found {len(odata)} `StartUp/Entrepreneur` followers.")
+
+    # m = min(len(odata), len(aedata))
+    # odata = odata.sample(n=m)
+    # aedata = aedata.sample(n=m)
+    # mssg = f"Elites-People-Politicians-StartUp-Entrepreneur data downsampled to"
+    # mssg += "{m} samples of each categorie."
+    # print(mssg)
+
+    # save_issues(
+    #     folder,
+    #     pd.concat([aedata, odata]),
+    #     issue='Elites-People-Politicians-StartUp-Entrepreneur')
+
+    return
 
 
-# (2) Compute sentiment analysis on descriptions with
-# https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment
-
-query = ' or '.join([f"{i} == 1" for i in ATTDIMISSUES['lrgen']['issues']])
-lrdata = data.query(query)
-
-print(f"Computing sentiments for {len(lrdata)} descriptions...")
-
-tokenizer = AutoTokenizer.from_pretrained(
-    "nlptown/bert-base-multilingual-uncased-sentiment")
-
-model = AutoModelForSequenceClassification.from_pretrained(
-    "nlptown/bert-base-multilingual-uncased-sentiment")
-
-inputs = tokenizer(
-    lrdata.description.tolist(),
-    return_tensors="pt",
-    padding=True)
-
-with torch.no_grad():
-    logits = model(**inputs).logits
-predicted_sentiment=logits.argmax(axis=1).numpy()
-
-lrdata = lrdata.assign(predicted_sentiment=predicted_sentiment)
-
-print("done.")
-
-data = data.merge(
-    lrdata[['entity', 'predicted_sentiment']], on='entity', how='left')
-
-data = data.assign(predicted_sentiment=data.predicted_sentiment.fillna(-1))
 
 
-# (3) Get labels for axis
 
-# CHES Left – Right
+# (0) Get enriched (language, sentiment and matchs) descriptions
 
-ldata = data \
-    .query("Left == 1") \
-    .query("Left != Right") \
-    .query("predicted_sentiment >= 3") \
-    .assign(tag='Left (+)') \
-    .assign(label=0)
-print(f"Found {len(ldata)} `Left-leaning` followers.")
+enriched_descriptions = SQLITE.getEnrichedDescriptions(country)
 
-rdata = data \
-    .query("Right == 1") \
-    .query("Left != Right") \
-    .query("predicted_sentiment >= 3") \
-    .assign(tag='Rigth (+)') \
-    .assign(label=1)
-print(f"Found {len(rdata)} `Rigth-leaning` followers.")
+att_folder = set_output_folder_att(params, country, output)
+att_sources, _ = load_att_embeddings(att_folder)
 
-n = min(len(ldata), len(rdata))
-ldata = ldata.sample(n=n)
-rdata = rdata.sample(n=n)
+# use only users that are sources in attitudinal embedding
+att_enriched_descriptions = enriched_descriptions.merge(
+    att_sources[['entity']],
+    left_on='pseudo_id',
+    right_on='entity',
+    how='inner'
+) \
+.drop(columns=['pseudo_id'])
 
-save_issues_descriptions(
-    folder,
-    pd.concat([ldata, rdata]),
-    issue='Left-Right')
-
-
-# # CHES Anti-elite Salience A
-
-# attdim = 'antielite_salience'
-
-# query =' or '.join([f"{i} == 1" for i in ATTDIMISSUES[attdim]['issues']])
-# aedata = data \
-#     .query(query) \
-#     .assign(tag='Elites-People-Politicians') \
-#     .assign(label=1)
-# print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
-
-# odata = data
-# for issue in ISSUES:
-#     odata = odata[odata[issue]==0]
-# odata = odata \
-#     .sample(n=len(aedata), random_state=666) \
-#     .assign(tag='Other') \
-#     .assign(label=0)
-
-# save_issues_descriptions(
-#     folder,
-#     pd.concat([aedata, odata]),
-#     issue='Elites-People-Politicians')
-
-# CHES Anti-elite Salience B
-
-attdim = 'antielite_salience'
-
-q1 = ' or '.join([f"{i} == 1" for i in ["Elites", "People", "Politicians"]])
-q2 = ' and '.join([f"{i} == 0" for i in ["StartUp", "Entrepreneur"]])
-query = f'{q1} and {q2}'
-aedata = data \
-    .query(query) \
-    .assign(tag='Elites-People-Politicians') \
-    .assign(label=1)
-print(f"Found {len(aedata)} `Anti-elite/establishement` followers.")
-
-q1 = ' or '.join([f"{i} == 1" for i in ["StartUp", "Entrepreneur"]])
-q2 = ' and '.join([f"{i} == 0" for i in ["Elites", "People", "Politicians"]])
-query = f'{q1} and {q2}'
-odata = data \
-    .query(query) \
-    .assign(tag='StartUp-Entrepreneur') \
-    .assign(label=0)
-print(f"Found {len(odata)} `StartUp/Entrepreneur` followers.")
-
-save_issues_descriptions(
-    folder,
-    pd.concat([aedata, odata]),
-    issue='Elites-People-Politicians-StartUp-Entrepreneur')
+computeLeftRightLabel(
+    data=att_enriched_descriptions,
+    languages=LANGUAGES[country]['languages'],
+    predicted_sentiment_min_rate=LRMINSENT,
+    folder=FOLDER)
