@@ -54,7 +54,7 @@ export = att_embeddings['gps2019'].merge(
 assert len(export) == len(att_embeddings['ches2019'])
 
 # (2) get enriched descriptions
-anottations = SQLITE.getAnnotations(entity='user')
+anottations = SQLITE.getEnrichments(entity='user')
 
 # (3) merge
 export = export.merge(
