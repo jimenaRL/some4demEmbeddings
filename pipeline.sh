@@ -1,15 +1,15 @@
 #!/bin/bash
 
 declare -a Countries=(
-    # belgium  # OK
+    # belgium
     # france
     # germany
-    # italy  # OK
-    # netherlands # OK
-    # poland # OK
-    # romania # OK
-    # slovenia # OK
-    # spain  # OK
+    # italy
+    # netherlandsK
+    # poland # OK but problem with viz gps d1 vs d3
+    # romania
+    # slovenia
+    # spain  # OK weird mismatch between gps and ches users embeddings ...
 )
 
 declare -a Surveys=(
@@ -35,7 +35,7 @@ for country in ${Countries[@]}; do
         # IDELOGICAL EMBEDDINGS CREATION
         python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$outputs
 
-        # IDELOGICAL EMBEDDINGS VISUALIZATION
+        # # IDELOGICAL EMBEDDINGS VISUALIZATION
         python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
             --config=$config \
             --country=$country \
@@ -47,7 +47,7 @@ for country in ${Countries[@]}; do
         # ATTITUDINAL EMBEDDINGS CREATION
         python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$outputs
 
-        # ATTITUDINAL EMBEDDINGS VISUALIZATION
+        # # ATTITUDINAL EMBEDDINGS VISUALIZATION
         python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
             --config=$config \
             --country=$country \

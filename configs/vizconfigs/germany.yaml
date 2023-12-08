@@ -25,7 +25,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -57,7 +57,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -89,7 +89,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -121,7 +121,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -153,7 +153,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -185,7 +185,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -217,7 +217,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -249,7 +249,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -281,7 +281,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -313,7 +313,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -345,7 +345,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -377,7 +377,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -409,7 +409,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -441,7 +441,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -473,7 +473,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -505,7 +505,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -537,7 +537,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -569,7 +569,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -601,7 +601,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -633,7 +633,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -665,7 +665,7 @@ attitudinal:
         FDP:
         - 0.3
         - 0
-        GRUNEN:
+        GRÜNE:
         - 0.4
         - -0.1
         LINKE:
@@ -701,7 +701,7 @@ ideological:
     FDP:
     - 0.3
     - 0
-    GRUNEN:
+    GRÜNE:
     - 0.4
     - -0.1
     LINKE:
@@ -715,6 +715,6 @@ palette:
   CDU: black
   CSU: tab:blue
   FDP: gold
-  GRUNEN: tab:green
+  GRÜNE: tab:green
   LINKE: mediumvioletred
   SPD: red
