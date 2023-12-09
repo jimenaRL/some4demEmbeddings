@@ -61,6 +61,8 @@ export = att_embeddings['gps2019'].merge(
 # (2) get enriched descriptions
 anottations = SQLITE.getEnrichments(entity='user')
 
+keywords_labels = SQLITE.getKeywordsLabels(entity='user')
+
 # (3) merge
 export = export.merge(
     anottations,
@@ -69,6 +71,14 @@ export = export.merge(
 )
 lo = len(export)
 print(f"Found {lo} users with attitudinal embeddings and anottations")
+
+export = export.merge(
+    keywords_labels,
+    on='pseudo_id',
+    how='inner'
+)
+lo = len(export)
+print(f"Found {lo} users with attitudinal embeddings and keywords labels")
 
 # (4) Add twitter ids and handlers
 sources_twitter_ids = SQLITE.getTwitterIds(
