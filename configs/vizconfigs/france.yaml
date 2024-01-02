@@ -19,13 +19,13 @@ attitudinal:
         EELV:
         - 0.5
         - -0.5
-        FI:
+        LFI:
         - 0.5
         - 0.5
         LR:
         - 0.5
         - 0.5
-        LREM:
+        RE:
         - 0.5
         - 0.5
         MoDem:
@@ -286,7 +286,7 @@ attitudinal:
       - 12
       nudges: *id001
       quantiles: *id002
-  ideological:
+ideological:
     cbar_rect:
     - 0.15
     - 0.3
@@ -307,13 +307,13 @@ attitudinal:
       EELV:
       - 0
       - -0.7
-      FI:
+      LFI:
       - 0
       - 0.5
       LR:
       - 0.3
       - 0
-      LREM:
+      RE:
       - 0
       - -0.7
       MoDem:
@@ -334,9 +334,9 @@ attitudinal:
 palette:
   DLF: gold
   EELV: tab:green
-  FI: tab:purple
+  LFI: tab:purple
   LR: tab:blue
-  LREM: tab:brown
+  RE: tab:brown
   MoDem: orangered
   PCF: red
   PS: tab:pink
