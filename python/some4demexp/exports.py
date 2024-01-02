@@ -68,11 +68,7 @@ enrichments = SQLITE.getEnrichments(entity='user')
 
 keywords_labels = SQLITE.getKeywordsLabels(entity='user')
 
-tmp = [SQLITE.getLLMLabels('user', issue) for issue in LLMISSUES]
-
-llm_labels = tmp[0]
-for i in range(1, len(tmp)):
-    llm_labels = llm_labels.merge(tmp[i], on='pseudo_id')
+llm_labels = SQLITE.getLLMLabels('user')
 
 # (3) merge attitudinal embeddings, enrichements and keywords annotations
 export = export.merge(

@@ -2,14 +2,14 @@
 
 declare -a Countries=(
     belgium
-    france
-    germany
-    italy
-    netherlands
-    poland # OK but problem with viz gps d1 vs d3
-    romania
-    slovenia
-    spain  # OK weird mismatch between gps and ches users embeddings ...
+    # france
+    # germany
+    # italy
+    # netherlands
+    # poland # OK but problem with viz gps d1 vs d3
+    # romania
+    # slovenia
+    # spain  # OK weird mismatch between gps and ches users embeddings ...
 )
 
 declare -a Surveys=(
@@ -30,29 +30,29 @@ for country in ${Countries[@]}; do
 
     # for survey in ${Surveys[@]}; do
 
-    #     # IDELOGICAL EMBEDDINGS CREATION
-    #     python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$output
+        # IDELOGICAL EMBEDDINGS CREATION
+        # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$output
 
-    #     # # IDELOGICAL EMBEDDINGS VISUALIZATION
-    #     python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
-    #         --config=$config \
-    #         --country=$country \
-    #         --survey=$survey \
-    #         --vizconfig=$vizconfig \
-    #         --output=$output \
-    #         --show
+        # # IDELOGICAL EMBEDDINGS VISUALIZATION
+        # python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --survey=$survey \
+        #     --vizconfig=$vizconfig \
+        #     --output=$output \
+        #     --show
 
-    #     # ATTITUDINAL EMBEDDINGS CREATION
-    #     python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
+        # ATTITUDINAL EMBEDDINGS CREATION
+        # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
-    #     # # ATTITUDINAL EMBEDDINGS VISUALIZATION
-    #     python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
-    #         --config=$config \
-    #         --country=$country \
-    #         --survey=$survey \
-    #         --vizconfig=$vizconfig \
-    #         --output=$output \
-    #         --show
+        # # ATTITUDINAL EMBEDDINGS VISUALIZATION
+        # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --survey=$survey \
+        #     --vizconfig=$vizconfig \
+        #     --output=$output \
+        #     --show
 
     #     # # ANALYSIS
     #     # python python/some4demexp/stats.py --config=$config  --country=$country --output=$output
