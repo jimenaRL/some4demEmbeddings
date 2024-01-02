@@ -16,7 +16,7 @@ from some4demexp.inout import \
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
-ap.add_argument('--output', type=str, required=False, default='outputs')
+ap.add_argument('--output', type=str, required=False)
 args = ap.parse_args()
 config = args.config
 output = args.output
@@ -26,19 +26,22 @@ with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 
 with open(params['params_db'], "r", encoding='utf-8') as fh:
-    params_db = yaml.load(fh, Loader=yaml.SafeLoader)
+    dbParams = yaml.load(fh, Loader=yaml.SafeLoader)
+
+LLMISSUES = dbParams['enrichments']['steps']['llm_annotations']['prompts']
 
 SQLITE = SQLite(
     params['sqlite_db'].format(country=country),
-    params_db['output']['tables'],
+    dbParams['output']['tables'],
     country)
-parties_mapping = SQLITE.getPartiesMapping()
+
+PARTIESMAPPING = SQLITE.getPartiesMapping()
 
 # (1) load attitudinal embeddings and descriptions
 att_embeddings = dict()
 for survey in ['ches2019', 'gps2019']:
     SURVEYCOL = f'{survey.upper()}_party_acronym'
-    ideN = get_ide_ndims(parties_mapping, survey)
+    ideN = get_ide_ndims(PARTIESMAPPING, survey)
     ATTFOLDER = set_output_folder_att(
         params, survey, country, ideN, output)
     att_followers, att_mps = load_att_embeddings(ATTFOLDER)
@@ -56,21 +59,29 @@ export = att_embeddings['gps2019'].merge(
     how='inner'
 ) \
 .rename(columns={'entity':'pseudo_id'})
-# assert len(export) == len(att_embeddings['ches2019'])
+mssg = f"Found {len(export)} users with "
+mssg += f"attitudinal embeddings for both surveys 'ches2019' and 'gps2019'."
+print(mssg)
 
-# (2) get enriched descriptions
-anottations = SQLITE.getEnrichments(entity='user')
+# (2) get enriched descriptions, keywords labels and llm annotations
+enrichments = SQLITE.getEnrichments(entity='user')
 
 keywords_labels = SQLITE.getKeywordsLabels(entity='user')
 
-# (3) merge
+tmp = [SQLITE.getLLMLabels('user', issue) for issue in LLMISSUES]
+
+llm_labels = tmp[0]
+for i in range(1, len(tmp)):
+    llm_labels = llm_labels.merge(tmp[i], on='pseudo_id')
+
+# (3) merge attitudinal embeddings, enrichements and keywords annotations
 export = export.merge(
-    anottations,
+    enrichments,
     on='pseudo_id',
     how='inner'
 )
 lo = len(export)
-print(f"Found {lo} users with attitudinal embeddings and anottations")
+print(f"Found {lo} users with attitudinal embeddings and enrichments")
 
 export = export.merge(
     keywords_labels,
@@ -79,6 +90,16 @@ export = export.merge(
 )
 lo = len(export)
 print(f"Found {lo} users with attitudinal embeddings and keywords labels")
+
+
+export = export.merge(
+    llm_labels,
+    on='pseudo_id',
+    how='inner'
+)
+lo = len(export)
+print(f"Found {lo} users with attitudinal embeddings and llm labels")
+
 
 # (4) Add twitter ids and handlers
 sources_twitter_ids = SQLITE.getTwitterIds(
@@ -93,6 +114,7 @@ metadata = SQLITE.getMetadata(
 
 export = export.merge(metadata, on='pseudo_id')
 assert len(export) == lo
+print(f"Twitter ids and handlers added.")
 
 # (5) export
 
