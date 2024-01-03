@@ -4,7 +4,10 @@ __pycache__
 *.npz
 *.tar
 exports/*
+previousExports/*
 *images
 .python-version
 csv/*
 dbs/*
+.ipynb_checkpoints/*
+*.ipynb
