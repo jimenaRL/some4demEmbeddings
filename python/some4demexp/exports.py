@@ -133,11 +133,17 @@ try:
         export_path+'.xlsx',
         index=False,
         sheet_name=country,
-        engine='openpyxl',
+        engine='xlsxwriter',
         float_format="%.2f")
 except:
     export = export.assign(
         description=export.description.apply(lambda s: s.replace('nµ', '')))
+    export.to_excel(
+        export_path+'.xlsx',
+        index=False,
+        sheet_name=country,
+        engine='xlsxwriter',
+        float_format="%.2f")
 
 print(
     f"Attitudinal embeddings with annotations saved with name {export_path}.")
