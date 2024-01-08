@@ -5,13 +5,12 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 
 
-def  get_ide_ndims(parties_mapping, survey):
+def get_ide_ndims(parties_mapping, survey):
     surveycol = f'{survey.upper()}_party_acronym'
-    parties_to_show = parties_mapping \
-        .query(f"{surveycol}!=None")
-    n_latent_dimensions = parties_to_show[surveycol].notna().sum() - 1
-    print(
-        f"Ideological embedding dimension set to {n_latent_dimensions} when survey {survey}.")
+    parties_to_show = parties_mapping[parties_mapping[surveycol].notna()]
+    n_latent_dimensions = parties_to_show[surveycol].nunique() - 1
+    m = f"Ideological embedding dim set to {n_latent_dimensions} "
+    m += f"for survey {survey}."
     return n_latent_dimensions
 
 def load_ide_embeddings(folder):
@@ -178,3 +177,31 @@ def load_issues_benckmarks(folder):
     filepath = os.path.join(folder, f'benckmarks.csv')
     print(f"Loading benckmarks from {filepath}.")
     return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
+
+def csvExport(df, path):
+
+    df.to_csv(
+        path+'.csv',
+        index=False,
+        sep=',',
+        encoding='utf-8',
+        lineterminator='\n')
+
+def excelExport(df, path, sheet_name):
+    # ANOTHER HOTFIX
+    try:
+        df.to_excel(
+            path+'.xlsx',
+            index=False,
+            sheet_name=sheet_name,
+            engine='xlsxwriter',
+            float_format="%.2f")
+    except:
+        df = df.assign(
+            description=df.description.apply(lambda s: s.replace('nµ', '')))
+        df.to_excel(
+            path+'.xlsx',
+            index=False,
+            sheet_name=sheet_name,
+            engine='xlsxwriter',
+            float_format="%.2f")
