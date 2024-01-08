@@ -66,8 +66,8 @@ ideological:
     - -2.5
     - 3.5
     y:
-    - -1
-    - 10
+    - -3
+    - 3
   nudges:
     FI:
     - 0
@@ -90,11 +90,12 @@ ideological:
 palette:
   FI: cornflowerblue
   FdI: navy
-  LN: tab:green
+  LSP: tab:green
   M5S: gold
   PD-IDP: red
-  SI: magenta
-  LSP: black
-  'A-IV': black
-  AVS: black
-  'Per le Autonomie': black
+  Misto/AVS: magenta
+  'A-IV': orange
+  AVS: cyan
+  'Per le Autonomie': yellow
+  NM-MAIE: brown
+
