@@ -48,8 +48,9 @@ ideN = get_ide_ndims(parties_mapping, survey)
 # Load mp groups
 data_folder = set_output_folder(params, country, output)
 
-# Load parties attitudinal coordinaets
+# Load parties attitudinal coordinates
 parties_coord_att = SQLITE.getPartiesAttitudes(survey, ATTDIMS)
+
 # removed repeated parties
 parties_coord_att = parties_coord_att.groupby(SURVEYCOL).first().reset_index()
 
