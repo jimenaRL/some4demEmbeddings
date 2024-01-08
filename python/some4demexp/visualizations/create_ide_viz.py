@@ -10,6 +10,7 @@ from some4demexp.inout import \
     load_ide_embeddings
 
 from some4demexp.bivariate_marginal import visualize_ide
+from some4demexp.distributions import distributions
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -49,19 +50,27 @@ ide_folder = set_output_folder_emb(
     params, country, survey, ideN, output)
 ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
+# show by dim distributions
+distributions(
+    ide_sources,
+    ide_targets,
+    country,
+    survey,
+    show)
+
+# visualize ideological space
 n_dims_to_viz = min(len(params['attitudinal_dimensions'][survey])-1, 3)
 
 palette = vizparams['palette']
 idevizparams = vizparams['ideological']
-mp_parties = SQLITE.getMpParties(['MMS', 'CHES2019'])
+mp_parties = SQLITE.getMpParties(['MMS', survey])
 targets_parties = mp_parties[['mp_pseudo_id', 'MMS_party_acronym']] \
     .rename(columns={'MMS_party_acronym': 'party'})
 
 # select parties to show
-_parties_to_show = mp_parties[~mp_parties['CHES2019_party_acronym'].isna()]
+_parties_to_show = mp_parties[~mp_parties[f'{survey.upper()}_party_acronym'].isna()]
 parties_to_show = _parties_to_show['MMS_party_acronym'].unique().tolist()
 
-# visualize ideological space
 for x, y in combinations(range(n_dims_to_viz), 2):
     visualize_ide(
         sources_coord_ide=ide_sources,

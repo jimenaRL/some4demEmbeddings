@@ -12,6 +12,7 @@ from some4demexp.inout import \
     load_att_embeddings
 
 from some4demexp.bivariate_marginal import visualize_att
+from some4demexp.distributions import distributions
 
 from some4demexp.conf import \
     CHES2019DEFAULTATTVIZ, \
@@ -58,6 +59,16 @@ att_folder = set_output_folder_att(
     params, survey, country, ideN, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
 
+# (0) show by dim distributions
+distributions(
+    att_sources,
+    att_targets.drop(columns=['MMS_party_acronym', SURVEYCOL]),
+    country,
+    survey,
+    show)
+
+# (1) show 2d figures
+
 # use mapping to adapt palette to the party system survey
 color_data = vizparams['palette'].items()
 palette = pd.DataFrame.from_dict(color_data) \
@@ -84,10 +95,21 @@ for dimpair in combinations(ATTDIMS, 2):
 
     dimpair_str = '_vs_'.join(dimpair)
 
+    print(dimpair_str)
     #  FOR DEBUGGING
     if dimpair_str not in [
+        # FOR TESTING
+        # 'lrgen_vs_antielite_salience',
+        # 'V4_Scale_vs_V6_Scale',
+        # FOR MIRO VIZ
         'lrgen_vs_antielite_salience',
-        'V4_Scale_vs_V6_Scale'
+        'lrgen_vs_lrecon',
+        'galtan_vs_environment',
+        'eu_position_vs_immigrate_policy',
+        'V6_Scale_vs_v14',
+        'V4_Scale_vs_V6_Scale',
+        'v12_vs_v13',
+        'v10_vs_v20',
     ]:
         continue
 
