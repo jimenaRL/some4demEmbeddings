@@ -292,14 +292,14 @@ ideological:
     - 0.3
     - 0.05
     - 0.5
-    legend_loc: upper right
+    legend_loc: lower right
     limits:
       x:
-      - -3.5
-      - 3.5
+      - -4
+      - 4
       y:
-      - -3.5
-      - 3.5
+      - -4
+      - 4
     nudges:
       DLF:
       - -0.4
@@ -341,3 +341,4 @@ palette:
   PCF: red
   PS: tab:pink
   RN: magenta
+  UDI: cyan
