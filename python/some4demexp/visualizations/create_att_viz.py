@@ -94,8 +94,6 @@ parties_to_show = parties_coord_att['party'].unique()
 for dimpair in combinations(ATTDIMS, 2):
 
     dimpair_str = '_vs_'.join(dimpair)
-
-    print(dimpair_str)
     #  FOR DEBUGGING
     if dimpair_str not in [
         # FOR TESTING

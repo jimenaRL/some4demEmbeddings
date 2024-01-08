@@ -8,43 +8,11 @@ CHES2019DEFAULTATTVIZ = {
   'nudges': []
 }
 
-
 GPS2019DEFAULTATTVIZ = {
   'cbar_rect': [0.15, 0.6, 0.02, 0.3],
   'legend_loc': 'lower center',
   'limits': [-2, 12],
   'nudges': []
-}
-
-
-CHES2019LIMS = {
-  'lrgen': [0, 10],
-  'lrecon': [0, 10],
-  'antielite_salience': [0, 10],
-  'eu_position': [0, 7],
-  'immigrate_policy': [0, 10],
-  'galtan': [0, 10],
-  'environment': [0, 10],
-  'enviro_salience': [0, 10],
-  'nationalism': [0, 10],
-  'sociallifestyle': [0, 10],
-  'people_vs_elite': [0, 10],
-  'corrupt_salience': [0, 10],
-}
-
-GPS2019LIMS = {
-  'V4_Scale': [0, 10],
-  'V6_Scale': [0, 10],
-  'V8_Scale': [0, 10],
-  'v9': [0, 10],
-  'v10': [0, 10],
-  'v12': [0, 10],
-  'v13': [0, 10],
-  'v14': [0, 10],
-  'v18': [0, 10],
-  'v19': [0, 10],
-  'v20': [0, 10],
-  'v21': [0, 10],
 }
 
 CHES2019ATTDICT = {

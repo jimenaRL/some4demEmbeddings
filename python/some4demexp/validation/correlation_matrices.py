@@ -20,9 +20,7 @@ from some4demexp.inout import \
     load_ide_embeddings
 
 from some4demexp.conf import \
-    CHES2019LIMS, \
     CHES2019ATTDICT, \
-    GPS2019LIMS, \
     GPS2019ATTDICT
 
 from some4demexp.correlation_coefficient import smallSamplesSpearmanr

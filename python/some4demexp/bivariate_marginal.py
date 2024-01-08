@@ -8,8 +8,6 @@ from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
 
 from some4demexp.conf import \
-    CHES2019LIMS, \
-    GPS2019LIMS, \
     CHES2019ATTDICT, \
     GPS2019ATTDICT, \
     CHES2019DEFAULTATTVIZ, \
@@ -53,6 +51,10 @@ legend_followers = Line2D(
 )
 custom_legend = [legend_mps, legend_parties, legend_followers]
 
+X0 = 0
+X1 = 10
+Y0 = 0
+Y1 = 10
 
 def get_ordinal(n):
     if n < 0 or not isinstance(n, int):
@@ -64,13 +66,11 @@ def get_ordinal(n):
     else:
         return f"{n}th"
 
-def get_limits(df, dims, lims, q0, q1):
-
-    x0 = min(lims[dims['x']][0], df[dims['x']].quantile(q0))
-    x1 = max(lims[dims['x']][1], df[dims['x']].quantile(q1))
-    y0 = min(lims[dims['x']][0], df[dims['y']].quantile(q0))
-    y1 = max(lims[dims['x']][1], df[dims['y']].quantile(q1))
-
+def get_limits(df, dims, q0, q1):
+    x0 = min(X0, df[dims['x']].quantile(q0))
+    x1 = max(X1, df[dims['x']].quantile(q1))
+    y0 = min(Y0, df[dims['y']].quantile(q0))
+    y1 = max(Y1, df[dims['y']].quantile(q1))
     return x0, x1, y0, y1
 
 def drop_extremes(df, dims, x0, x1, y0, y1):
@@ -242,17 +242,16 @@ def visualize_att(
     **kwargs
 ):
 
+    ATTDICT = globals()[f"{survey.upper()}ATTDICT"]
+
     nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
 
     plot_df = pd.concat([sources_coord_att, targets_coord_att]) \
         .reset_index() \
         .drop(columns="index")
 
-    lims = globals()[f"{survey.upper()}LIMS"]
-    ATTDICT = globals()[f"{survey.upper()}ATTDICT"]
-
     if quantiles is not None:
-        x0, x1, y0, y1 = get_limits(plot_df, dims, lims, q0=quantiles[0], q1=quantiles[1])
+        x0, x1, y0, y1 = get_limits(plot_df, dims, q0=quantiles[0], q1=quantiles[1])
         plot_df = drop_extremes(plot_df, dims, x0, x1, y0, y1)
         targets_coord_att = drop_extremes(targets_coord_att, dims, x0, x1, y0, y1)
 
@@ -274,10 +273,11 @@ def visualize_att(
     ax = g.ax_joint
 
     # plot square showing CHES limits
-    lowlim_x = lims[dims['x']][0]
-    upperlim_x = lims[dims['x']][1]
-    lowlim_y = lims[dims['y']][0]
-    upperlim_y = lims[dims['y']][1]
+
+    lowlim_x = 0
+    upperlim_x = 10
+    lowlim_y = 0
+    upperlim_y = 10
     A = [lowlim_x, lowlim_x, upperlim_x, upperlim_x, lowlim_x]
     B = [lowlim_y, upperlim_y, upperlim_y, lowlim_y, lowlim_y]
     ax.plot(A, B, color='white', linestyle='-')
