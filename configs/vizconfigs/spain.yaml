@@ -936,10 +936,10 @@ ideological:
   limits:
     x:
     - -4
-    - 2
+    - 4
     y:
     - -4
-    - 2
+    - 4
   nudges:
     BNG:
     - 0.2
@@ -978,12 +978,12 @@ palette:
   BNG: tab:brown
   CC: purple
   Cs: orangered
-  EH Bildu: mediumvioletred
+  'EH Bildu': mediumvioletred
   ERC: gold
   PNV: tab:green
   PP: tab:blue
   PSOE: red
-  Más País-Equo: tab:pink
+  'Más País-Equo': tab:pink
   Podemos: tab:purple
   Vox: magenta
   JxCat: black
