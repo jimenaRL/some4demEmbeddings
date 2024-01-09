@@ -9,8 +9,9 @@ from some4demexp.inout import \
     get_ide_ndims, \
     set_output_folder_att, \
     load_att_embeddings, \
-    set_output_folder
-
+    set_output_folder, \
+    csvExport, \
+    excelExport
 
 # (0) parse arguments and set paths
 ap = ArgumentParser()
@@ -37,6 +38,8 @@ SQLITE = SQLite(
 
 PARTIESMAPPING = SQLITE.getPartiesMapping()
 
+FOLDER = set_output_folder(params, country, output)
+
 # (1) load attitudinal embeddings and descriptions
 att_embeddings = dict()
 for survey in ['ches2019', 'gps2019']:
@@ -48,7 +51,9 @@ for survey in ['ches2019', 'gps2019']:
     att_mps.drop(
         columns=['MMS_party_acronym', f'{survey.upper()}_party_acronym'],
         inplace=True)
+
     att_embeddings[survey] = pd.concat([att_followers, att_mps])
+
     mssg = f"Found {len(att_embeddings[survey])} users with "
     mssg += f"attitudinal embeddings in survey {survey}"
     print(mssg)
@@ -62,6 +67,7 @@ export = att_embeddings['gps2019'].merge(
 mssg = f"Found {len(export)} users with "
 mssg += f"attitudinal embeddings for both surveys 'ches2019' and 'gps2019'."
 print(mssg)
+
 
 # (2) get enriched descriptions, keywords labels and llm annotations
 enrichments = SQLITE.getEnrichments(entity='user')
@@ -114,36 +120,55 @@ print(f"Twitter ids and handlers added.")
 
 # (5) export
 
-FOLDER = set_output_folder(params, country, output)
-
-export_path = os.path.join(
+EXPORTPATH = os.path.join(
     FOLDER,
     f'{country}_att_embeddings_with_annotations_{len(export)}')
 
-export.to_csv(
-    export_path+'.csv',
-    index=False,
-    sep=',',
-    encoding='utf-8',
-    lineterminator='\n')
-
-# ANOTHER HOTFIX
-try:
-    export.to_excel(
-        export_path+'.xlsx',
-        index=False,
-        sheet_name=country,
-        engine='xlsxwriter',
-        float_format="%.2f")
-except:
-    export = export.assign(
-        description=export.description.apply(lambda s: s.replace('nµ', '')))
-    export.to_excel(
-        export_path+'.xlsx',
-        index=False,
-        sheet_name=country,
-        engine='xlsxwriter',
-        float_format="%.2f")
+csvExport(export, EXPORTPATH)
+excelExport(export, EXPORTPATH, country)
 
 print(
-    f"Attitudinal embeddings with annotations saved with name {export_path}.")
+    f"Attitudinal embeddings with annotations saved with name {EXPORTPATH}.")
+
+
+# (6) LLM labels and enrichments
+
+key = 'pseudo_id'
+labels = [
+    l[2:] for l in list(set(SQLITE.TABLES['llm_labels']['columns']) - {key})]
+
+def get_data(label):
+    ta = f'user_llm_labels_{country}'
+    tb = f'user_llm_{label}_labels_{country}'
+    tc = f'user_enriched_metadata_{country}'
+
+    cola = f'C_{label}'
+    colb = f'llm_answer_{label}'
+    colc1 = 'description'
+    colc2 = 'english_translation'
+
+    query = f"""
+        SELECT {ta}.{key}, {ta}.{cola}, {tb}.{colb}, {tc}.{colc1}, {tc}.{colc2}
+        FROM {ta}
+        INNER JOIN {tb} ON {ta}.{key} = {tb}.{key}
+        INNER JOIN {tc} ON {ta}.{key} = {tc}.{key}
+        """
+    res = SQLITE.retrieve(query)
+
+    return pd.DataFrame(res, columns=[key, cola, colb, colc1, colc2])
+
+LLMEXPORTPATH = os.path.join(
+    FOLDER,
+    f'{country}_zephyr-7B-Beta_{len(get_data(labels[0]))}.xlsx')
+
+# create a excel writer object
+with pd.ExcelWriter(LLMEXPORTPATH) as writer:
+
+    for label in labels:
+        df = get_data(label)
+        df.to_excel(
+            writer,
+            index=False,
+            sheet_name=label,
+            engine='xlsxwriter',
+            float_format="%.2f")
