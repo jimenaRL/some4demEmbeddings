@@ -169,10 +169,12 @@ ide_targets = ide_targets.merge(
 # (1) Compute correlation matrix IDE vs CHES for parties
 
 parties_coord_att = SQLITE.getPartiesAttitudes(survey, ATTDIMS) \
-    .drop(columns='MMS_party_acronym')
+    .drop(columns='MMS_party_acronym') \
+    .drop_duplicates()
 
+parties_with_atts = parties_coord_att[SURVEYCOL].unique().tolist()
 
-estimated_groups_coord_ide = ide_targets \
+estimated_groups_coord_ide = ide_targets[ide_targets[SURVEYCOL].isin(parties_with_atts)] \
     .drop(columns=['entity', 'MMS_party_acronym']) \
     .groupby(SURVEYCOL) \
     .mean() \
@@ -185,7 +187,7 @@ compute_correlation_matrices(
     SMALL_SAMPLES_METHODS)
 
 
-# # (2) Compute correlation matrix IDE vs CHES for parties
+# # (2) Compute correlation matrix IDE vs CHES for sources
 
 # data =  ide_sources.merge(att_sources,  on='entity',  how='inner')
 # compute_correlation_matrices(
