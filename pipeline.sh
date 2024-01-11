@@ -1,15 +1,15 @@
 #!/bin/bash
 
 declare -a Countries=(
-    belgium
+    # belgium
     # france
     # germany
     # italy
     # netherlands
-    # poland # OK but problem with viz gps d1 vs d3
+    # poland
     # romania
     # slovenia
-    # spain  # OK weird mismatch between gps and ches users embeddings ...
+    # spain
 )
 
 declare -a Surveys=(
@@ -18,23 +18,25 @@ declare -a Surveys=(
 )
 
 output=exports
+deliverable=deliverableD21
 config="configs/embeddings.yaml"
 
 for country in ${Countries[@]}; do
+
     echo "################# ${country} #################"
 
     vizconfig="configs/vizconfigs/${country}.yaml"
 
-    # PREPROCESSING
+    # # # # PREPROCESSING
     # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
 
-    # for survey in ${Surveys[@]}; do
+    for survey in ${Surveys[@]}; do
 
-        # IDELOGICAL EMBEDDINGS CREATION
+        # # IDELOGICAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$output
 
         # # IDELOGICAL EMBEDDINGS VISUALIZATION
-        # python python/some4demexp/visualizations/matplotlib/create_ide_viz2d.py \
+        # python python/some4demexp/visualizations/create_ide_viz.py \
         #     --config=$config \
         #     --country=$country \
         #     --survey=$survey \
@@ -42,11 +44,11 @@ for country in ${Countries[@]}; do
         #     --output=$output \
         #     --show
 
-        # ATTITUDINAL EMBEDDINGS CREATION
+        # # ATTITUDINAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
-        # # ATTITUDINAL EMBEDDINGS VISUALIZATION
-        # python python/some4demexp/visualizations/matplotlib/create_att_viz2d.py \
+        # ATTITUDINAL EMBEDDINGS VISUALIZATION
+        # python python/some4demexp/visualizations/create_att_viz.py \
         #     --config=$config \
         #     --country=$country \
         #     --survey=$survey \
@@ -54,19 +56,19 @@ for country in ${Countries[@]}; do
         #     --output=$output \
         #     --show
 
-    #     # # ANALYSIS
-    #     # python python/some4demexp/stats.py --config=$config  --country=$country --output=$output
-    #     # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --output=$output
+        # # ANALYSIS
+        # python python/some4demexp/stats.py --config=$config  --country=$country --survey=$survey --output=$output
+        # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --survey=$survey --output=$output
 
-    #     # # VALIDATION
-    #     # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --output=$output  # --show
-    #     # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --output=$output
-    #     # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --output=$output #  --show
+        # VALIDATION
+        # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --survey=$survey --output=$output  # --show
+        # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --survey=$survey --output=$output
+        # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output #  --show
 
-    # done
+    done
 
     # EXPORTS
-    python python/some4demexp/exports.py --config=$config --country=$country --output=$output
+    # python python/some4demexp/exports.py --config=$config --country=$country --output=$output
 
 done
 
