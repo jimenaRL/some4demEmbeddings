@@ -24,13 +24,17 @@ from some4demexp.conf import \
     LOGISTICREGRESSIONS, \
     ATTDICT
 
+# Font & Latex definitions
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
 fs = 32
-dpi = 150
-
+# dpi = 150
 plt.rc('text', usetex=True)
 plt.rc('font', family='sans-serif', size=fs)
-
-
+KWARGS = {
+    'bins':  np.linspace(0, 10, 11),
+    'range': [0, 10]
+}
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -49,7 +53,6 @@ show = args.show
 
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
-# print(yaml.dump(params, default_flow_style=False))
 
 with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
@@ -62,12 +65,6 @@ SQLITE = SQLite(
 parties_mapping = SQLITE.getPartiesMapping()
 ideN = get_ide_ndims(parties_mapping, survey)
 
-ATTDIMS = params['attitudinal_dimensions']
-
-
-ATTDIMISSUES = {
-    'lrgen': ['Left', 'Right']
-}
 
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
@@ -108,11 +105,6 @@ baselineData = att_sources.merge(
 estrategy_data = {
     'A': keywords_data,
     'C': llm_data
-}
-
-KWARGS = {
-    'bins':  np.linspace(0, 10, 11),
-    'range': [0, 10]
 }
 
 COLOR = ['red', 'green']

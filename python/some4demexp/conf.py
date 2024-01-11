@@ -99,48 +99,48 @@ LOGISTICREGRESSIONS = [
         'group1': 'left',
         'group2': 'right',
     },
-    {
-        'ches2019': ['eu_position'],
-        'gps2019': [],
-        'group1': 'eurosceptic',
-        'group2': 'pro_european',
-    },
-    {
-        'ches2019': ['antielite_salience', 'people_vs_elite', 'corrupt_salience'],
-        'gps2019': ['V8_Scale', 'v9', 'v18', 'v19', 'v20', 'v21'],
-        'group1': 'populist',
-        'group2': 'elite',
-    },
-    {
-        'ches2019': ['sociallifestyle', 'galtan'],
-        'gps2019': ['V6_Scale', 'v14'],
-        'group1': 'liberal',
-        'group2': 'conservative',
-    },
-    {
-        'ches2019': ['immigrate_policy',],
-        'gps2019': ['v10'],
-        'group1': 'liberal_immigration',
-        'group2': 'restrictive_immigration',
-    },
-    {
-        'ches2019': ['environment', 'enviro_salience'],
-        'gps2019': ['v12'],
-        'group1': 'pro_environment',
-        'group2': 'economic_focus',
-    },
-    {
-        'ches2019': ['environment', 'enviro_salience'],
-        'gps2019': ['v12'],
-        'group1': 'pro_environment',
-        'group2': 'climate_denialist',
-    },
-    {
-        'ches2019': ['nationalism'],
-        'gps2019': ['v13'],
-        'group1': 'cosmopolitan',
-        'group2': 'nationalist',
-    }
+    # {
+    #     'ches2019': ['eu_position'],
+    #     'gps2019': [],
+    #     'group1': 'eurosceptic',
+    #     'group2': 'pro_european',
+    # },
+    # {
+    #     'ches2019': ['antielite_salience', 'people_vs_elite', 'corrupt_salience'],
+    #     'gps2019': ['V8_Scale', 'v9', 'v18', 'v19', 'v20', 'v21'],
+    #     'group1': 'populist',
+    #     'group2': 'elite',
+    # },
+    # {
+    #     'ches2019': ['sociallifestyle', 'galtan'],
+    #     'gps2019': ['V6_Scale', 'v14'],
+    #     'group1': 'liberal',
+    #     'group2': 'conservative',
+    # },
+    # {
+    #     'ches2019': ['immigrate_policy',],
+    #     'gps2019': ['v10'],
+    #     'group1': 'liberal_immigration',
+    #     'group2': 'restrictive_immigration',
+    # },
+    # {
+    #     'ches2019': ['environment', 'enviro_salience'],
+    #     'gps2019': ['v12'],
+    #     'group1': 'pro_environment',
+    #     'group2': 'economic_focus',
+    # },
+    # {
+    #     'ches2019': ['environment', 'enviro_salience'],
+    #     'gps2019': ['v12'],
+    #     'group1': 'pro_environment',
+    #     'group2': 'climate_denialist',
+    # },
+    # {
+    #     'ches2019': ['nationalism'],
+    #     'gps2019': ['v13'],
+    #     'group1': 'cosmopolitan',
+    #     'group2': 'nationalist',
+    # }
 ]
 
 LANGUAGES = {

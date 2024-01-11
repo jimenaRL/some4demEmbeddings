@@ -2,7 +2,7 @@
 
 declare -a Countries=(
     # belgium
-    # france
+    france
     # germany
     # italy
     # netherlands
@@ -14,7 +14,7 @@ declare -a Countries=(
 
 declare -a Surveys=(
     ches2019
-    gps2019
+    # gps2019
 )
 
 output=exports
@@ -57,13 +57,11 @@ for country in ${Countries[@]}; do
         #     --show
 
         # # ANALYSIS
-        # python python/some4demexp/stats.py --config=$config  --country=$country --survey=$survey --output=$output
         # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --survey=$survey --output=$output
 
         # VALIDATION
         # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --survey=$survey --output=$output  # --show
-        # python python/some4demexp/validation/benchmark.py --config=$config --country=$country --survey=$survey --output=$output
-        # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output #  --show
+        python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output --show
 
     done
 
