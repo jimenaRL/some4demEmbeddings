@@ -62,11 +62,10 @@ ide_followers_cp = ide_followers.copy()
 ide_mps_cp = ide_mps.copy()
 mps_parties = SQLITE.getMpParties(['MMS', survey])
 
-
 # drop mps with parties withou mapping and add parties to ideological positions
 mps_parties = mps_parties.dropna()
 mssg = f"Found {len(mps_parties)} mps (out of {len(ide_mps)} in ideological "
-mssg += f"embedding) with valid party."
+mssg += f"embedding) associated to parties with mapping."
 print(mssg)
 
 t0 = len(ide_mps)
@@ -80,8 +79,7 @@ ide_mps_in_parties_with_valid_mapping = ide_mps.merge(
 t1 = len(ide_mps_in_parties_with_valid_mapping)
 if t0 > t1:
     print(
-        f"Dropped {t0 - t1} mps with no party in mapping.")
-
+        f"Dropped {t0 - t1} mps with no party in mapping, left {t1}.")
 
 parties_available_survey = set(parties_coord_att[SURVEYCOL].unique())
 parties_mps = set(ide_mps_in_parties_with_valid_mapping[SURVEYCOL].unique())
