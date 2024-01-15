@@ -11,3 +11,4 @@ csv/*
 dbs/*
 .ipynb_checkpoints/*
 *.ipynb
+MedialexDatasprint/*
