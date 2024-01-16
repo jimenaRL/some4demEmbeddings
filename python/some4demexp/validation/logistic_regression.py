@@ -17,13 +17,10 @@ import matplotlib.ticker as mtick
 import matplotlib.patheffects as PathEffects
 import seaborn as sn
 
-from sklearn.metrics import \
-    accuracy_score, \
-    precision_score, \
-    recall_score, \
-    f1_score
-
 from some4demdb import SQLite
+
+from corg import \
+    BenchmarkDimension
 
 from some4demexp.inout import \
     set_output_folder,  \
@@ -66,6 +63,7 @@ SQLITE = SQLite(
 parties_mapping = SQLITE.getPartiesMapping()
 ideN = get_ide_ndims(parties_mapping, survey)
 
+SEED = 666
 
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
@@ -114,7 +112,6 @@ estrategy_data = {
     'C': llm_data
 }
 
-COLOR = ['red', 'blue']
 
 for estrategy in estrategy_data.keys():
 
@@ -139,6 +136,13 @@ for estrategy in estrategy_data.keys():
             2: estrategy_data[estrategy].query(f"{egroups[2]}=='1'")
         }
 
+        if len(data[1]) == 0:
+            print(f"{country}: there is no users labeled {egroups[1]} in data.")
+            continue
+        if len(data[2]) == 0:
+            print(f"{country}: there is no users labeled {egroups[2]} in data.")
+            continue
+
         for attdim in lrdata[survey]:
 
             label1 = egroups[1]
@@ -150,14 +154,6 @@ for estrategy in estrategy_data.keys():
             l1 = len(attdata1)
             l2 = len(attdata2)
 
-            # to do cross validation
-            if l1 > l2:
-                attdata1 = attdata1.sample(n=l2, weights=None, random_state=666)
-                print(f"{label1} data uniformly sample from {l1} to {l2}.")
-            if l2 > l1:
-                attdata2 = attdata2.sample(n=l1, weights=None, random_state=666)
-                print(f"{label1} data uniformly sample from {l2} to {l1}.")
-
             X = np.hstack([
                 attdata1.values,
                 attdata2.values
@@ -166,30 +162,54 @@ for estrategy in estrategy_data.keys():
             y = np.hstack([
                 np.zeros_like(attdata1.values),
                 np.ones_like(attdata2.values)
-            ]).reshape(-1, 1)
+            ]).ravel()
 
-            # benchmark = load_issues_benckmarks(att_folder) \
-            #     .query(f"dimension == '{attdim}'")
-
-            # precision = benchmark.precision_train_.to_list()[0]
-            # recall = benchmark.recall_train_.to_list()[0]
-            # f1 = benchmark.f1_score_train_.to_list()[0]
-
-            clf = LogisticRegression(C=1e5)
+            clf = LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
             clf.fit(X,  y)
 
-            f = expit(X * clf.coef_ + clf.intercept_).ravel()
+            # evaluation
+            mb = BenchmarkDimension(
+                compute_train_error=True,
+                undersample_data=False,
+                random_state=SEED
+            )
 
-            above_threshold = f > 0.5
-            X_threshold = X[:,  0][above_threshold][0]
+            # egalize sample
+            SEED = 666
+            n = min(len(attdata1), len(attdata2))
+            _data = pd.concat([
+                data[1][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=0),
+                data[2][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=1)
+            ])
+            Xb = _data[['entity', attdim]]
+            Y = _data[['entity', 'label']]
+            mssg = f"Fitting regresion on {2 * n} samples for  "
+            mssg += f"attitudinal dimension {attdim}... "
+            print(mssg)
+            mb.fit(Xb, Y)
+
+            precision = mb.precision_train_
+            recall = mb.recall_train_
+            f1 = mb.f1_score_train_
+
+            # plot
+            Xplot = np.sort(X.flatten())
+            f = expit(Xplot * clf.coef_[0][0] + clf.intercept_[0]).ravel()
+
+            if clf.intercept_[0] < 0:
+                above_threshold = f > 0.5
+            else:
+                above_threshold = f < 0.5
+
+            X_threshold = Xplot[above_threshold][0]
 
             custom_legend=[
                 #densities
                 Line2D([0], [0], color='white', lw=1, alpha=1, label='Users:'),
                 Line2D([0], [0], color='blue', marker='o', mew=0, lw=0, alpha=0.5,
-                    label=f'Labeled {label1}'),
+                    label=f'Labeled {label1} ({l1})'),
                 Line2D([0], [0], color='red', marker='o', mew=0, lw=0, alpha=0.5,
-                    label=f'Labeled {label2}'),
+                    label=f'Labeled {label2} ({l2})'),
                 #densities
                 Line2D([0], [0], color='white', lw=1, alpha=1, label='\nDensities:'),
                 Line2D([0], [0], color='blue', alpha=1, label=f'Labeled {label1}'),
@@ -213,11 +233,11 @@ for estrategy in estrategy_data.keys():
             ax.plot(X[y==1], np.ones(X[y==1].size),  'o', color='red',  alpha=0.02, ms=5, mew=1)
 
             # logistic
-            # ax.plot(X.flatten(), f, color='k')
+            ax.plot(Xplot, f, color='k')
             ax.axvline(X_threshold, linestyle=':', color='k')
             ax.axhline(0.5, linestyle=':', color='k')
-            ax.text(-3.6, 0.47, r'$0.5$', color='gray', fontsize=10)
-            ax.text(X_threshold-0.9, -0.28, r'$%.2f$' % (X_threshold), color='gray', fontsize=10)
+            ax.text(-2.3, 0.42, r'$0.5$', color='gray', fontsize=10)
+            ax.text(X_threshold+0.25, -0.18, r'$%.2f$' % (X_threshold), color='gray', fontsize=10)
 
             # positives & negatives
             ax.text(X_threshold+0.2, 1.1, 'True pos.', color='r', fontsize=9)
@@ -228,21 +248,34 @@ for estrategy in estrategy_data.keys():
             # axis
             ax.set_xlim((-2.5, 15))
             ax.set_ylim((-0.2, 1.2))
-            s = ATTDICT[survey][attdim]
-            ax.set_xlabel(f"$d_{{{s}}}$" , fontsize=13)
+            s = ATTDICT[survey][attdim].replace(' ', '-')
+            ax.set_xlabel(f"$\delta_{{{s}}}$", fontsize=13)
             ax.set_ylabel('')
             ax.legend(handles=custom_legend, loc='center left', fontsize=8.7, bbox_to_anchor=(1, 0.5))
             ax.set_xticks([0, 2.5, 5, 7.5, 10])
             ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-            # ax.set_title(f'{country.capitalize()}: precision=%.3f,  recall=%.3f,  F1=%.3f ' % (precision, recall, f1))
-
+            title = f
+            fig.suptitle(
+                t=f'{country.capitalize()}: precision=%.3f,  recall=%.3f,  F1=%.3f ' % (precision, recall, f1),
+                x=0.5,
+                y=0.94
+            )
             plt.tight_layout()
 
-            # #saving
-            # figname = f'{country}_{issue}_{attdim}.png'
-            # path = os.path.join(att_folder, figname)
-            # plt.savefig(path, dpi=300)
-            # print(f"Figure saved at {path}.")
+            #saving
+            figname = f'lr_{country}_{estrategy}_strategy_{attdim}_'
+            figname += f'{egroups[1]}_vs_{egroups[2]}'
+            # TO ERASE LATER
+            os.makedirs(os.path.join(att_folder, 'logistic_regression', 'png'), exist_ok=True)
+            os.makedirs(os.path.join(att_folder, 'logistic_regression', 'pdf'), exist_ok=True)
+            #################################
+            path_png = os.path.join(att_folder, 'logistic_regression', 'png', figname+'.png')
+            plt.savefig(path_png, dpi=300)
+            # plt.savefig(path_pdf, dpi=300)
+            # path_pdf = os.path.join(att_folder, 'logistic_regression', 'pdf', figname+'.pdf')
+            print(f"Figure saved at file with name {figname}")
 
             if show:
                 plt.show()
+
+            plt.close()
