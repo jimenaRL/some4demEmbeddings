@@ -8,8 +8,7 @@ from matplotlib.lines import Line2D
 import matplotlib.patheffects as PathEffects
 
 from some4demexp.conf import \
-    CHES2019ATTDICT, \
-    GPS2019ATTDICT, \
+    ATTDICT, \
     CHES2019DEFAULTATTVIZ, \
     GPS2019DEFAULTATTVIZ, \
     VIZMAXDROP
@@ -224,12 +223,15 @@ def visualize_ide(
     if show:
         plt.show()
 
+
+
+
 def visualize_att(
     sources_coord_att,
     targets_coord_att,
     parties_coord_att,
+    target_groups,
     dims,
-    parties_to_show,
     palette,
     nudges,
     limits,
@@ -242,7 +244,9 @@ def visualize_att(
     **kwargs
 ):
 
-    ATTDICT = globals()[f"{survey.upper()}ATTDICT"]
+    SURVEYCOL = f'{survey.upper()}_party_acronym'
+
+    parties_to_show = target_groups[SURVEYCOL].unique()
 
     nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
 
@@ -287,10 +291,16 @@ def visualize_att(
 
     # plot colored by parties targets attitudinal embeddings
     texts = []
+
+    targets_coord_att_with_party = targets_coord_att.merge(
+        target_groups[[SURVEYCOL, 'mp_pseudo_id']],
+        left_on='entity',
+        right_on='mp_pseudo_id')
     for party in parties_to_show:
 
         # plot colored by parties target embeddings
-        mps_coord_att = targets_coord_att[targets_coord_att.party == party]
+        mps_coord_att = targets_coord_att_with_party[
+            targets_coord_att_with_party[SURVEYCOL] == party]
 
         ax.scatter(
             mps_coord_att[dims['x']],
@@ -330,8 +340,8 @@ def visualize_att(
             fontsize=9)
         texts.append(text)
 
-    xl = f"{ATTDICT[dims['x']]}"
-    yl = f"{ATTDICT[dims['y']]}"
+    xl = f"{ATTDICT[survey][dims['x']]}"
+    yl = f"{ATTDICT[survey][dims['y']]}"
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 

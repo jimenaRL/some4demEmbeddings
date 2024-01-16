@@ -52,8 +52,11 @@ SQLITE = SQLite(
 ATTDIMS = params['attitudinal_dimensions'][survey]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
+mps_parties = SQLITE.getMpParties(['MMS', survey], dropna=True)
+
 parties_mapping = SQLITE.getPartiesMapping()
 ideN = get_ide_ndims(parties_mapping, survey)
+
 
 att_folder = set_output_folder_att(
     params, survey, country, ideN, output)
@@ -62,7 +65,7 @@ att_sources, att_targets = load_att_embeddings(att_folder)
 # (0) show by dim distributions
 distributions(
     att_sources,
-    att_targets.drop(columns=['MMS_party_acronym', SURVEYCOL]),
+    att_targets,
     country,
     survey,
     show)
@@ -86,9 +89,6 @@ parties_coord_att.rename(columns=rename_cols, inplace=True)
 # When the matchong betwwen MMS and the survey isnot injective,
 # keep only one match
 parties_coord_att.drop_duplicates(subset=['party'], inplace=True)
-
-# select parties to show
-parties_to_show = parties_coord_att['party'].unique()
 
 # visualize attitudinal espaces
 for dimpair in combinations(ATTDIMS, 2):
@@ -116,12 +116,14 @@ for dimpair in combinations(ATTDIMS, 2):
     else:
         attvizparams = globals()[f"{survey.upper()}DEFAULTATTVIZ"]
 
+
+
     visualize_att(
         sources_coord_att=att_sources,
         targets_coord_att=att_targets,
         parties_coord_att=parties_coord_att,
+        target_groups=mps_parties,
         dims=dict(zip(['x', 'y'], dimpair)),
-        parties_to_show=parties_to_show,
         path=os.path.join(att_folder, f"{dimpair_str}.png"),
         show=show,
         palette=palette,

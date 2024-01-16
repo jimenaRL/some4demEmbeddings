@@ -60,17 +60,18 @@ ide_folder = set_output_folder_emb(
 ide_followers, ide_mps = load_ide_embeddings(ide_folder)
 ide_followers_cp = ide_followers.copy()
 ide_mps_cp = ide_mps.copy()
-mps_parties = SQLITE.getMpParties(['MMS', survey])
+mps_parties = SQLITE.getMpParties(['MMS', survey], dropna=False)
 
 # drop mps with parties withou mapping and add parties to ideological positions
-mps_parties = mps_parties.dropna()
-mssg = f"Found {len(mps_parties)} mps (out of {len(ide_mps)} in ideological "
-mssg += f"embedding) associated to parties with mapping."
+mps_with_mapping = mps_parties[~mps_parties[SURVEYCOL].isna()]
+mps_without_mapping = mps_parties[mps_parties[SURVEYCOL].isna()]
+mssg = f"Found {len(mps_with_mapping)} "
+mssg += f"associated to parties with mapping in {survey}."
 print(mssg)
 
 t0 = len(ide_mps)
 ide_mps_in_parties_with_valid_mapping = ide_mps.merge(
-        mps_parties,
+        mps_with_mapping,
         left_on="entity",
         right_on="mp_pseudo_id",
         how="inner"
@@ -78,8 +79,9 @@ ide_mps_in_parties_with_valid_mapping = ide_mps.merge(
     .drop(columns="mp_pseudo_id")
 t1 = len(ide_mps_in_parties_with_valid_mapping)
 if t0 > t1:
-    print(
-        f"Dropped {t0 - t1} mps with no party in mapping, left {t1}.")
+    mm = f"Dropped {t0 - t1} mps out of {t0} in ideological embedding "
+    mm += f"with no party in mapping, left {t1}."
+    print(mm)
 
 parties_available_survey = set(parties_coord_att[SURVEYCOL].unique())
 parties_mps = set(ide_mps_in_parties_with_valid_mapping[SURVEYCOL].unique())
@@ -140,16 +142,6 @@ mps_coord_att = pd.DataFrame(
     data=mps_coord_att_values,
     columns=columns) \
     .assign(entity=ide_mps.entity)
-
-# add group information
-mps_coord_att = mps_coord_att.merge(
-        mps_parties,
-        left_on="entity",
-        right_on="mp_pseudo_id",
-        how="left"
-    ) \
-    .drop(columns="mp_pseudo_id") \
-    .dropna()
 
 # save results
 att_folder = set_output_folder_att(params, survey, country, ideN, output)
