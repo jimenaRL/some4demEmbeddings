@@ -48,9 +48,6 @@ for survey in ['ches2019', 'gps2019']:
     ATTFOLDER = set_output_folder_att(
         params, survey, country, ideN, output)
     att_followers, att_mps = load_att_embeddings(ATTFOLDER)
-    att_mps.drop(
-        columns=['MMS_party_acronym', f'{survey.upper()}_party_acronym'],
-        inplace=True)
 
     att_embeddings[survey] = pd.concat([att_followers, att_mps])
 
