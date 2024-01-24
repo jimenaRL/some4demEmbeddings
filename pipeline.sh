@@ -48,7 +48,7 @@ for country in ${Countries[@]}; do
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
         # ATTITUDINAL EMBEDDINGS VISUALIZATION
-        python python/some4demexp/visualizations/mercredi.py \
+        python python/some4demexp/visualizations/mercredi_aprem_inputs4pol.py \
             --config=$config \
             --country=$country \
             --survey=$survey \

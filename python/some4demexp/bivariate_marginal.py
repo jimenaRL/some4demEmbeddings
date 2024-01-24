@@ -360,29 +360,29 @@ def visualize_att(
         color='purple',
     )
 
-    paletteMedias = {
-        'PQR - Sport - Météo': '#d59e40',
-        'Divers': '#cec6c4',
-        'Droite - Extrême Droite': '#4535a7',
-        'Gauche - Extrême Gauche': '#f0483e',
-        'Economique - Tech - Gaming': '#00b3f4',
-        'Féminine - Santé - TV': '#c75a93',
-        'Extrême Droite - Réinformation': '#6f3c2e'
-    }
-    for party in parties_to_show:
+    # paletteMedias = {
+    #     'PQR - Sport - Météo': '#d59e40',
+    #     'Divers': '#cec6c4',
+    #     'Droite - Extrême Droite': '#4535a7',
+    #     'Gauche - Extrême Gauche': '#f0483e',
+    #     'Economique - Tech - Gaming': '#00b3f4',
+    #     'Féminine - Santé - TV': '#c75a93',
+    #     'Extrême Droite - Réinformation': '#6f3c2e'
+    # }
+    # for party in parties_to_show:
 
-        # plot colored by parties target embeddings
-        mps_coord_att = targets_coord_att_with_party[targets_coord_att_with_party[SURVEYCOL] == party]
+    #     # plot colored by parties target embeddings
+    #     mps_coord_att = targets_coord_att_with_party[targets_coord_att_with_party[SURVEYCOL] == party]
 
-        ax.scatter(
-            mps_coord_att[dims['x']],
-            mps_coord_att[dims['y']],
-            marker='D',
-            s=20,
-            alpha=0.8   ,
-            color=paletteMedias[party],
-            label=party
-        )
+    #     ax.scatter(
+    #         mps_coord_att[dims['x']],
+    #         mps_coord_att[dims['y']],
+    #         marker='D',
+    #         s=20,
+    #         alpha=0.8   ,
+    #         color=paletteMedias[party],
+    #         label=party
+    #     )
 
 
     for party in ['PCF', 'PS', 'EELV', 'LR', 'RN', 'MoDem', 'LREM', 'FI', 'DLF']:
