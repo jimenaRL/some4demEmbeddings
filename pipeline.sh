@@ -48,20 +48,20 @@ for country in ${Countries[@]}; do
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
         # ATTITUDINAL EMBEDDINGS VISUALIZATION
-        # python python/some4demexp/visualizations/create_att_viz.py \
-        #     --config=$config \
-        #     --country=$country \
-        #     --survey=$survey \
-        #     --vizconfig=$vizconfig \
-        #     --output=$output \
-        #     --show
+        python python/some4demexp/visualizations/create_att_viz.py \
+            --config=$config \
+            --country=$country \
+            --survey=$survey \
+            --vizconfig=$vizconfig \
+            --output=$output
+            # --show
 
         # # ANALYSIS
         # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --survey=$survey --output=$output
 
         # VALIDATION
         # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --survey=$survey --output=$output  # --show
-        python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output --show
+        # python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output --show
 
     done
 

@@ -22,7 +22,8 @@ dpi = 150
 legend_mps = Line2D(
     [0],
     [0],
-    label='MPs',
+    # label='MPs',
+    label='Event users',
     marker='+',
     markersize=5,
     linewidth=0,
@@ -94,7 +95,7 @@ def drop_extremes(df, dims, x0, x1, y0, y1):
     m2 = f"Dropped {diff} embeddings ({prop:.2f}%) "
     m2 += f"with atitudinal dimension {list(dims.values())} out of ranges\n"
     m2 += f"\t[{x0:.2f}, {x1:.2f}] x [{y0:.2f}, {y1:.2f}]."
-    print(m2)
+    # print(m2)
 
     return dfd
 
@@ -238,6 +239,7 @@ def visualize_att(
     survey,
     cbar_rect,
     legend_loc,
+    title,
     quantiles=None,
     path=None,
     show=False,
@@ -292,25 +294,81 @@ def visualize_att(
     # plot colored by parties targets attitudinal embeddings
     texts = []
 
-    targets_coord_att_with_party = targets_coord_att.merge(
-        target_groups[[SURVEYCOL, 'mp_pseudo_id']],
-        left_on='entity',
-        right_on='mp_pseudo_id')
-    for party in parties_to_show:
+    # targets_coord_att_with_party = targets_coord_att.merge(
+    #     target_groups[[SURVEYCOL, 'mp_pseudo_id']],
+    #     left_on='entity',
+    #     right_on='mp_pseudo_id')
 
-        # plot colored by parties target embeddings
-        mps_coord_att = targets_coord_att_with_party[
-            targets_coord_att_with_party[SURVEYCOL] == party]
+    mps_coord_att = targets_coord_att
 
+    mediaNoms = [
+        '20Minutes.fr',
+        'Bfmtv.com',
+        'Lemonde.fr',
+        'Liberation.fr',
+        'Mediapart.fr',
+        'Lesechos.fr',
+        'Valeursactuelles.com',
+        'Latribune.fr'
+    ]
+    for mediaNom in mediaNoms:
+        media = mps_coord_att.loc[mediaNom]
         ax.scatter(
-            mps_coord_att[dims['x']],
-            mps_coord_att[dims['y']],
+            media[dims['x']],
+            media[dims['y']],
             marker='+',
             s=20,
             alpha=0.5,
-            color=palette[party],
-            label=party
+            color='black',
+            label=title
         )
+        text = ax.text(
+            media[dims['x']] + 0.1,
+            media[dims['y']] + 0.1,
+            mediaNom,
+            color='white',
+            bbox=dict(
+                boxstyle="round",
+                ec='black',
+                fc='purple',
+                alpha=0.7),
+            fontsize=7.5)
+
+    ax.scatter(
+        mps_coord_att[dims['x']],
+        mps_coord_att[dims['y']],
+        marker='+',
+        s=20,
+        alpha=0.5,
+        color='purple', # palette[party],
+        label=title
+    )
+
+    ax.plot(
+        mps_coord_att[dims['x']].mean(),
+        mps_coord_att[dims['y']].mean(),
+        marker='x',
+        markeredgecolor='purple',
+        markeredgewidth=5.0,
+        markersize=15,
+        color='purple',
+    )
+
+    for party in parties_to_show:
+
+        # plot colored by parties target embeddings
+        # mps_coord_att = targets_coord_att_with_party[
+        #     targets_coord_att_with_party[SURVEYCOL] == party]
+
+        # ax.scatter(
+        #     mps_coord_att[dims['x']],
+        #     mps_coord_att[dims['y']],
+        #     marker='+',
+        #     s=20,
+        #     alpha=0.5,
+        #     color='black', # palette[party],
+        #     label=title
+        # )
 
         # plot parties attitudinal coordinates
         group_positions = parties_coord_att[parties_coord_att.party == party]
@@ -359,6 +417,8 @@ def visualize_att(
     ax.set_xlim(limits)
     ax.set_ylim(limits)
 
+    ax.set_title(title)
+
     cbar_ax = g.fig.add_axes(cbar_rect)
     cbar = plt.colorbar(cax=cbar_ax)
 
@@ -368,5 +428,5 @@ def visualize_att(
 
     if show:
         plt.show()
-    else:
-        plt.close('all')
+
+    plt.close('all')
