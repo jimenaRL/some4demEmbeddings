@@ -299,40 +299,46 @@ def visualize_att(
     #     left_on='entity',
     #     right_on='mp_pseudo_id')
 
+    targets_coord_att_with_party = targets_coord_att.merge(
+        target_groups[[SURVEYCOL, 'entity']],
+        left_on='media_label',
+        right_on='entity')
+
     mps_coord_att = targets_coord_att
 
-    mediaNoms = [
-        '20Minutes.fr',
-        'Bfmtv.com',
-        'Lemonde.fr',
-        'Liberation.fr',
-        'Mediapart.fr',
-        'Lesechos.fr',
-        'Valeursactuelles.com',
-        'Latribune.fr'
-    ]
-    for mediaNom in mediaNoms:
-        media = mps_coord_att.loc[mediaNom]
-        ax.scatter(
-            media[dims['x']],
-            media[dims['y']],
-            marker='+',
-            s=20,
-            alpha=0.5,
-            color='black',
-            label=title
-        )
-        text = ax.text(
-            media[dims['x']] + 0.1,
-            media[dims['y']] + 0.1,
-            mediaNom,
-            color='white',
-            bbox=dict(
-                boxstyle="round",
-                ec='black',
-                fc='purple',
-                alpha=0.7),
-            fontsize=7.5)
+    # mediaNoms = [
+    #     '20Minutes.fr',
+    #     'Bfmtv.com',
+    #     'Lemonde.fr',
+    #     'Liberation.fr',
+    #     'Mediapart.fr',
+    #     'Lesechos.fr',
+    #     'Valeursactuelles.com',
+    #     'Latribune.fr'
+    # ]
+
+    # for mediaNom in mediaNoms:
+    #     media = mps_coord_att.loc[mediaNom]
+    #     ax.scatter(
+    #         media[dims['x']],
+    #         media[dims['y']],
+    #         marker='+',
+    #         s=20,
+    #         alpha=0.5,
+    #         color='black',
+    #         label=title
+    #     )
+    #     text = ax.text(
+    #         media[dims['x']] + 0.1,
+    #         media[dims['y']] + 0.1,
+    #         mediaNom,
+    #         color='white',
+    #         bbox=dict(
+    #             boxstyle="round",
+    #             ec='black',
+    #             fc='purple',
+    #             alpha=0.7),
+    #         fontsize=7.5)
 
     ax.scatter(
         mps_coord_att[dims['x']],
@@ -354,21 +360,32 @@ def visualize_att(
         color='purple',
     )
 
+    paletteMedias = {
+        'PQR - Sport - Météo': '#d59e40',
+        'Divers': '#cec6c4',
+        'Droite - Extrême Droite': '#4535a7',
+        'Gauche - Extrême Gauche': '#f0483e',
+        'Economique - Tech - Gaming': '#00b3f4',
+        'Féminine - Santé - TV': '#c75a93',
+        'Extrême Droite - Réinformation': '#6f3c2e'
+    }
     for party in parties_to_show:
 
         # plot colored by parties target embeddings
-        # mps_coord_att = targets_coord_att_with_party[
-        #     targets_coord_att_with_party[SURVEYCOL] == party]
+        mps_coord_att = targets_coord_att_with_party[targets_coord_att_with_party[SURVEYCOL] == party]
 
-        # ax.scatter(
-        #     mps_coord_att[dims['x']],
-        #     mps_coord_att[dims['y']],
-        #     marker='+',
-        #     s=20,
-        #     alpha=0.5,
-        #     color='black', # palette[party],
-        #     label=title
-        # )
+        ax.scatter(
+            mps_coord_att[dims['x']],
+            mps_coord_att[dims['y']],
+            marker='D',
+            s=20,
+            alpha=0.8   ,
+            color=paletteMedias[party],
+            label=party
+        )
+
+
+    for party in ['PCF', 'PS', 'EELV', 'LR', 'RN', 'MoDem', 'LREM', 'FI', 'DLF']:
 
         # plot parties attitudinal coordinates
         group_positions = parties_coord_att[parties_coord_att.party == party]
@@ -386,8 +403,8 @@ def visualize_att(
         )
 
         text = ax.text(
-            group_positions.iloc[0][dims['x']]+nudges[party][0],
-            group_positions.iloc[0][dims['y']]+nudges[party][1],
+            group_positions.iloc[0][dims['x']], #+nudges[party][0],
+            group_positions.iloc[0][dims['y']], #+nudges[party][1],
             party.replace("&", ""),
             color='white',
             bbox=dict(
@@ -403,12 +420,13 @@ def visualize_att(
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 
-    ax.legend(
-        handles=custom_legend,
-        loc=legend_loc,
-        fontsize=fs-2,
-        framealpha=0.98
-    )
+    # ax.legend(
+    #     handles=custom_legend,
+    #     loc=legend_loc,
+    #     fontsize=fs-2,
+    #     framealpha=0.98
+    # )
+    ax.legend()
 
     ax.tick_params(axis='x', labelsize=fs)
     ax.tick_params(axis='x', labelsize=fs)
