@@ -252,7 +252,10 @@ def visualize_att(
 
     nudges = {p: nudges[p] if p in nudges else [0, 0] for p in parties_to_show}
 
-    plot_df = pd.concat([sources_coord_att, targets_coord_att]) \
+
+    plot_df = pd.concat([
+        sources_coord_att.assign(type='base').sample(frac=1, random_state=666),
+        ]) \
         .reset_index() \
         .drop(columns="index")
 
@@ -294,15 +297,16 @@ def visualize_att(
     # plot colored by parties targets attitudinal embeddings
     texts = []
 
-    # targets_coord_att_with_party = targets_coord_att.merge(
-    #     target_groups[[SURVEYCOL, 'mp_pseudo_id']],
-    #     left_on='entity',
-    #     right_on='mp_pseudo_id')
 
     targets_coord_att_with_party = targets_coord_att.merge(
-        target_groups[[SURVEYCOL, 'entity']],
-        left_on='media_label',
-        right_on='entity')
+        target_groups[[SURVEYCOL, 'mp_pseudo_id']],
+        left_on='entity',
+        right_on='mp_pseudo_id')
+
+    # targets_coord_att_with_party = targets_coord_att.merge(
+    #     target_groups[[SURVEYCOL, 'entity']],
+    #     left_on='media_label',
+    #     right_on='entity')
 
     mps_coord_att = targets_coord_att
 
@@ -340,25 +344,25 @@ def visualize_att(
     #             alpha=0.7),
     #         fontsize=7.5)
 
-    ax.scatter(
-        mps_coord_att[dims['x']],
-        mps_coord_att[dims['y']],
-        marker='+',
-        s=20,
-        alpha=0.5,
-        color='purple', # palette[party],
-        label=title
-    )
+    # ax.scatter(
+    #     mps_coord_att[dims['x']],
+    #     mps_coord_att[dims['y']],
+    #     marker='1',
+    #     s=20,
+    #     alpha=0.25,
+    #     color='purple', # palette[party],
+    #     label=title
+    # )
 
-    ax.plot(
-        mps_coord_att[dims['x']].mean(),
-        mps_coord_att[dims['y']].mean(),
-        marker='x',
-        markeredgecolor='purple',
-        markeredgewidth=5.0,
-        markersize=15,
-        color='purple',
-    )
+    # ax.plot(
+    #     mps_coord_att[dims['x']].mean(),
+    #     mps_coord_att[dims['y']].mean(),
+    #     marker='x',
+    #     markeredgecolor='purple',
+    #     markeredgewidth=5.0,
+    #     markersize=15,
+    #     color='purple',
+    # )
 
     # paletteMedias = {
     #     'PQR - Sport - Météo': '#d59e40',
@@ -369,21 +373,16 @@ def visualize_att(
     #     'Féminine - Santé - TV': '#c75a93',
     #     'Extrême Droite - Réinformation': '#6f3c2e'
     # }
-    # for party in parties_to_show:
 
-    #     # plot colored by parties target embeddings
-    #     mps_coord_att = targets_coord_att_with_party[targets_coord_att_with_party[SURVEYCOL] == party]
-
-    #     ax.scatter(
-    #         mps_coord_att[dims['x']],
-    #         mps_coord_att[dims['y']],
-    #         marker='D',
-    #         s=20,
-    #         alpha=0.8   ,
-    #         color=paletteMedias[party],
-    #         label=party
-    #     )
-
+    ax.scatter(
+        mps_coord_att[dims['x']],
+        mps_coord_att[dims['y']],
+        marker='1',
+        s=20,
+        alpha=0.8,
+        color='green',
+        label=title
+    )
 
     for party in ['PCF', 'PS', 'EELV', 'LR', 'RN', 'MoDem', 'LREM', 'FI', 'DLF']:
 
@@ -420,13 +419,12 @@ def visualize_att(
     ax.set_xlabel(xl, fontsize=fs)
     ax.set_ylabel(yl, fontsize=fs)
 
-    # ax.legend(
-    #     handles=custom_legend,
-    #     loc=legend_loc,
-    #     fontsize=fs-2,
-    #     framealpha=0.98
-    # )
-    ax.legend()
+    ax.legend(
+        handles=custom_legend,
+        loc=legend_loc,
+        fontsize=fs-2,
+        framealpha=0.98
+    )
 
     ax.tick_params(axis='x', labelsize=fs)
     ax.tick_params(axis='x', labelsize=fs)
@@ -437,8 +435,8 @@ def visualize_att(
 
     ax.set_title(title)
 
-    cbar_ax = g.fig.add_axes(cbar_rect)
-    cbar = plt.colorbar(cax=cbar_ax)
+    # cbar_ax = g.fig.add_axes(cbar_rect)
+    # cbar = plt.colorbar(cax=cbar_ax)
 
     if path:
         plt.savefig(path, dpi=dpi)
