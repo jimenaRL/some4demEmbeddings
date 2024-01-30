@@ -1,12 +1,19 @@
 import os
 import yaml
+import json
 import itertools
+from tqdm import tqdm
+from argparse import ArgumentParser
+
 import numpy as np
 import pandas as pd
-from argparse import ArgumentParser
 
 from sklearn.linear_model import LogisticRegression
 from scipy.special import expit
+from sklearn.metrics import \
+    precision_score, \
+    recall_score, \
+    f1_score
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -15,7 +22,9 @@ from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import proj3d
 import matplotlib.ticker as mtick
 import matplotlib.patheffects as PathEffects
-import seaborn as sn
+
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from some4demdb import SQLite
 
@@ -40,6 +49,7 @@ ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
 ap.add_argument('--survey', type=str, required=True)
 ap.add_argument('--output', type=str, required=True)
+ap.add_argument('--plot',  action='store_true', required=False)
 ap.add_argument('--show',  action='store_true', required=False)
 
 args = ap.parse_args()
@@ -47,6 +57,7 @@ config = args.config
 country = args.country
 survey = args.survey
 output = args.output
+plot = args.plot
 show = args.show
 
 with open(config, "r", encoding='utf-8') as fh:
@@ -71,6 +82,7 @@ folder = set_output_folder(params, country, output)
 att_folder = set_output_folder_att(params, survey, country, ideN, output)
 att_sources, _ = load_att_embeddings(att_folder)
 
+lrfolder = os.path.join(att_folder, 'logistic_regression')
 
 #########################################
 # Preliminary functions and definitions #
@@ -89,7 +101,7 @@ plt.rc('font', family='sans-serif', size=fs)
 # Loading data #
 ################
 
-# get A estrategy labels
+# get A strategy labels
 keywords_labels = SQLITE.getKeywordsLabels(entity='user')
 keywords_data = keywords_labels.merge(
     att_sources,
@@ -98,7 +110,7 @@ keywords_data = keywords_labels.merge(
     how='inner') \
     .drop(columns=['pseudo_id'])
 
-# get C estrategy labels
+# get C strategy labels
 llm_labels = SQLITE.getLLMLabels('user')
 llm_data = llm_labels.merge(
     att_sources,
@@ -107,92 +119,118 @@ llm_data = llm_labels.merge(
     how='inner') \
     .drop(columns=['pseudo_id'])
 
-estrategy_data = {
+strategy_data = {
     'A': keywords_data,
     'C': llm_data
 }
 
 
-for estrategy in estrategy_data.keys():
+records = []
 
-    for lrdata in LOGISTICREGRESSIONS:
+for strategy, lrdata in tqdm(
+    itertools.product(strategy_data.keys(), LOGISTICREGRESSIONS)):
 
-        egroups = {
-            1:  f"{estrategy}_{lrdata['group1']}",
-            2:  f"{estrategy}_{lrdata['group2']}",
-        }
+    egroups = {
+        1:  f"{strategy}_{lrdata['group1']}",
+        2:  f"{strategy}_{lrdata['group2']}",
+    }
 
-        # check that label is prsent for estrategi
-        # for instance there is no 'climate denialist' for the A estrategy
-        if not egroups[1] in estrategy_data[estrategy]:
-            print(f"{egroups[1]} is missing from {estrategy} estrategy data.")
-            continue
-        if not egroups[2] in estrategy_data[estrategy]:
-            print(f"{egroups[2]} is missing from {estrategy} estrategy data.")
-            continue
+    # check that label is prsent for estrategi
+    # for instance there is no 'climate denialist' for the A strategy
+    if not egroups[1] in strategy_data[strategy]:
+        print(f"{egroups[1]} is missing from {strategy} strategy data.")
+        continue
+    if not egroups[2] in strategy_data[strategy]:
+        print(f"{egroups[2]} is missing from {strategy} strategy data.")
+        continue
 
-        data = {
-            1: estrategy_data[estrategy].query(f"{egroups[1]}=='1'"),
-            2: estrategy_data[estrategy].query(f"{egroups[2]}=='1'")
-        }
+    data = {
+        1: strategy_data[strategy].query(f"{egroups[1]}=='1'"),
+        2: strategy_data[strategy].query(f"{egroups[2]}=='1'")
+    }
 
-        if len(data[1]) == 0:
-            print(f"{country}: there is no users labeled {egroups[1]} in data.")
-            continue
-        if len(data[2]) == 0:
-            print(f"{country}: there is no users labeled {egroups[2]} in data.")
-            continue
+    if len(data[1]) == 0:
+        print(f"{country}: there is no users labeled {egroups[1]} in data.")
+        continue
+    if len(data[2]) == 0:
+        print(f"{country}: there is no users labeled {egroups[2]} in data.")
+        continue
 
-        for attdim in lrdata[survey]:
+    for attdim in lrdata[survey]:
 
-            label1 = egroups[1]
-            label2 = egroups[2]
+        label1 = egroups[1]
+        label2 = egroups[2]
 
-            attdata1 = data[1][attdim]
-            attdata2 = data[2][attdim]
+        attdata1 = data[1][attdim]
+        attdata2 = data[2][attdim]
 
-            l1 = len(attdata1)
-            l2 = len(attdata2)
+        l1 = len(attdata1)
+        l2 = len(attdata2)
 
-            X = np.hstack([
-                attdata1.values,
-                attdata2.values
-            ]).reshape(-1, 1)
+        X = np.hstack([
+            attdata1.values,
+            attdata2.values
+        ]).reshape(-1, 1)
 
-            y = np.hstack([
-                np.zeros_like(attdata1.values),
-                np.ones_like(attdata2.values)
-            ]).ravel()
+        y = np.hstack([
+            np.zeros_like(attdata1.values),
+            np.ones_like(attdata2.values)
+        ]).ravel()
 
-            clf = LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
-            clf.fit(X,  y)
 
-            # evaluation
-            mb = BenchmarkDimension(
-                compute_train_error=True,
-                undersample_data=False,
-                random_state=SEED
-            )
+        # egalize sample
+        SEED = 666
+        n = min(len(attdata1), len(attdata2))
+        _data = pd.concat([
+            data[1][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=0),
+            data[2][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=1)
+        ])
+        X = _data[attdim].values.reshape(-1, 1)
+        y = _data['label'].values.ravel()
 
-            # egalize sample
-            SEED = 666
-            n = min(len(attdata1), len(attdata2))
-            _data = pd.concat([
-                data[1][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=0),
-                data[2][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=1)
-            ])
-            Xb = _data[['entity', attdim]]
-            Y = _data[['entity', 'label']]
-            mssg = f"Fitting regresion on {2 * n} samples for  "
-            mssg += f"attitudinal dimension {attdim}... "
-            print(mssg)
-            mb.fit(Xb, Y)
+        clf = LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
+        clf.fit(X,  y)
 
-            precision = mb.precision_train_
-            recall = mb.recall_train_
-            f1 = mb.f1_score_train_
+        # evaluation
+        Y_pred = clf.predict(X)
 
-            # plot
+        precision = precision_score(y, Y_pred)
+        recall = recall_score(y, Y_pred)
+        f1 = f1_score(y, Y_pred)
+
+        record = {
+            "strategy": strategy,
+            "label1": label1,
+            "label2": label2,
+            "nb_samples_label1": l1,
+            "nb_samples_label2": l2,
+            "attitudinal_dimension": attdim,
+            "attitudinal_dimension_name": ATTDICT[survey][attdim],
+            "survey": survey,
+            "precision": precision,
+            "recall": recall,
+            "f1":  f1,
+            "country": country
+            }
+
+        su = strategy.upper()
+        os.makedirs(os.path.join(lrfolder, 'json'), exist_ok=True)
+        result_path = os.path.join(
+            lrfolder, 'json', f"strategy{su}_{attdim}_{label1}_{label2}.json")
+        result_path_exp = os.path.join(
+            f"exports/deliverableD21/validations/{country}",
+            f"strategy{su}_{attdim}_{label1}_{label2}.json")
+        with open(result_path, 'w') as file:
+            json.dump(record, file)
+        with open(result_path_exp, 'w') as file:
+            json.dump(record, file)
+
+        # add results data
+        # print(record)
+        records.append(record)
+
+        # plot
+        if plot:
             Xplot = np.sort(X.flatten())
             f = expit(Xplot * clf.coef_[0][0] + clf.intercept_[0]).ravel()
 
@@ -225,11 +263,11 @@ for estrategy in estrategy_data.keys():
             ax = fig.add_subplot(1,  1,  1)
 
             # left/blue
-            sn.kdeplot(data=attdata1.to_frame(), x=attdim, color='blue', ax=ax, common_norm=False)
+            sns.kdeplot(data=attdata1.to_frame(), x=attdim, color='blue', ax=ax, common_norm=False)
             ax.plot(X[y==0], np.zeros(X[y==0].size), 'o', color='blue', alpha=0.02, ms=5, mew=1)
 
             # right/red
-            sn.kdeplot(data=attdata2.to_frame(), x=attdim, color='red', ax=ax, common_norm=False)
+            sns.kdeplot(data=attdata2.to_frame(), x=attdim, color='red', ax=ax, common_norm=False)
             ax.plot(X[y==1], np.ones(X[y==1].size),  'o', color='red',  alpha=0.02, ms=5, mew=1)
 
             # logistic
@@ -263,19 +301,80 @@ for estrategy in estrategy_data.keys():
             plt.tight_layout()
 
             #saving
-            figname = f'lr_{country}_{estrategy}_strategy_{attdim}_'
+            figname = f'lr_{country}_{strategy}_strategy_{attdim}_'
             figname += f'{egroups[1]}_vs_{egroups[2]}'
-            # TO ERASE LATER
-            os.makedirs(os.path.join(att_folder, 'logistic_regression', 'png'), exist_ok=True)
-            os.makedirs(os.path.join(att_folder, 'logistic_regression', 'pdf'), exist_ok=True)
-            #################################
-            path_png = os.path.join(att_folder, 'logistic_regression', 'png', figname+'.png')
+            path_png = os.path.join(lrfolder, 'png', figname+'.png')
             plt.savefig(path_png, dpi=300)
-            # plt.savefig(path_pdf, dpi=300)
-            # path_pdf = os.path.join(att_folder, 'logistic_regression', 'pdf', figname+'.pdf')
-            print(f"Figure saved at file with name {figname}")
+            path_pdf = os.path.join(att_folder, 'logistic_regression', 'pdf', figname+'.pdf')
+            plt.savefig(path_pdf, dpi=300)
+
+            path_pdf_exp = os.path.join(
+                f"exports/deliverableD21/validations/{country}",
+                f"strategy{su}_{attdim}_{label1}_{label2}.pdf")
+            plt.savefig(path_pdf_exp, dpi=300)
 
             if show:
                 plt.show()
 
             plt.close()
+
+print(f"Figures saved at {lrfolder}")
+
+records = pd.DataFrame(records).sort_values(by='f1', ascending=False)
+
+
+kind = records['attitudinal_dimension_name']
+kind += ": "
+kind += records['label1'].apply(lambda s: s[2:])
+kind += " vs "
+kind += records['label2'].apply(lambda s: s[2:])
+kind += " "
+kind += records['strategy']
+records = records.assign(kind=kind)
+
+kind_stats = records['attitudinal_dimension_name']
+kind_stats += ": "
+kind_stats += records['label1'].apply(lambda s: s[2:])
+kind_stats += " ("
+kind_stats += records['nb_samples_label1'].astype(str)
+kind_stats += ") vs "
+kind_stats += records['label2'].apply(lambda s: s[2:])
+kind_stats += " ("
+kind_stats += records['nb_samples_label2'].astype(str)
+kind_stats += ") "
+kind_stats += records['strategy']
+records = records.assign(kind_stats=kind_stats)
+print(records)
+
+
+filename = f"{country}_{survey}_logistic_regression_balanced_class_weight_f1_score"
+dfpath = os.path.join(lrfolder, filename+'.csv')
+records.to_csv(dfpath, index=False)
+print(f"Logistic regression results (image and csv) saved at {lrfolder}")
+
+
+sns.set_theme(style="whitegrid")
+
+# Initialize the matplotlib figure
+f, ax = plt.subplots(figsize=(16, 14))
+
+# Plot the total crashes
+sns.set_color_codes(palette="deep")
+sns.barplot(x="f1", y="kind", data=records, label="f1", color="r")
+
+# Add a legend and informative axis label
+plt.xticks(np.arange(0, 1.1, .1, dtype=float))
+ax.legend(ncol=2, loc="lower right", frameon=True, fontsize=15)
+ax.set(xlim=(0, 1), ylabel="")
+ax.set_xlabel(f"{country.upper()} - {survey.upper()} - LR (balanced class weight) f1 score ", fontsize=16)
+ax.set_ylabel('')
+ax.tick_params(axis="y", labelsize=16)
+
+sns.despine(left=True, bottom=True)
+plt.tight_layout()
+
+figpath = os.path.join(lrfolder, filename+'.png')
+plt.savefig(figpath, dpi=300)
+
+if show:
+    plt.show()

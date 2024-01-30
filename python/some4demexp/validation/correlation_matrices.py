@@ -20,8 +20,7 @@ from some4demexp.inout import \
     load_ide_embeddings
 
 from some4demexp.conf import \
-    CHES2019ATTDICT, \
-    GPS2019ATTDICT
+    ATTDICT
 
 from some4demexp.correlation_coefficient import smallSamplesSpearmanr
 
@@ -57,8 +56,7 @@ ideN = get_ide_ndims(parties_mapping, survey)
 IDEDIMS = range(ideN)
 
 IDEDIMSNAMES = [fr'$\delta_{j+1}$' for j in IDEDIMS]
-ATTDICT = locals()[f"{survey.upper()}ATTDICT"]
-ATTDIMSNAMES = [ATTDICT[i] for i in ATTDIMS]
+ATTDIMSNAMES = [ATTDICT[survey][i] for i in ATTDIMS]
 SURVEYCOL = f'{survey.upper()}_party_acronym'
 
 cmap_s = sns.diverging_palette(145, 300, s=60, as_cmap=True)
@@ -80,10 +78,16 @@ def compute_correlation_matrices(
 
     for method, correlation_fn, cmap in methods:
 
+        print(f"----------------- {method} -----------------")
+        print(f"----------------- {info} -----------------")
+
         fig = plt.figure(figsize=(16, 8))
         ax = fig.add_subplot(1,  1,  1)
 
+        # init r-values matrices
         correlations = np.empty((len(ATTDIMS), ideN), float)
+        # init p-values matrices
+        pvalues = np.empty((len(ATTDIMS), ideN), float)
         annotations = np.empty((len(ATTDIMS), ideN), object)
 
         for i, attdim in enumerate(ATTDIMS):
@@ -93,6 +97,7 @@ def compute_correlation_matrices(
                     att_data[attdim]
                 )
                 correlations[i, j] = statistic
+                pvalues[i, j] = pvalue
                 if pvalue <= pvalue_display_th:
                     annotations[i, j] = f'{statistic:.2f} (p={pvalue:.3f})'
                 else:
@@ -108,6 +113,28 @@ def compute_correlation_matrices(
             columns='Ideological'
         )
 
+        pvalues = pd.DataFrame(
+            pvalues,
+            index=ATTDIMSNAMES,
+            columns=IDEDIMSNAMES
+        ) \
+        .rename_axis(
+            index="Attitudinal",
+            columns='Ideological'
+        )
+
+        rfigpath = os.path.join(
+            att_folder,
+            f"party_corr_{method}_{country}_{survey}_r.csv")
+        correlations.to_csv(rfigpath, index=True)
+        print(f"Correlation matrix (r-values) saved at {rfigpath}.")
+
+        pfigpath = os.path.join(
+            att_folder,
+            f"party_corr_{method}_{country}_{survey}_p.csv")
+        pvalues.to_csv(pfigpath, index=True)
+        print(f"Correlation matrix (p-values) saved at {pfigpath}.")
+
         annotations = pd.DataFrame(
             annotations,
             index=ATTDIMSNAMES,
@@ -119,25 +146,23 @@ def compute_correlation_matrices(
             columns='Ideological'
         )
 
-        print(f"----------------- {method} -----------------")
-        print(f"----------------- {info} -----------------")
         print(annotations)
 
-        sns.heatmap(correlations, ax=ax, annot=annotations, fmt="", cmap=cmap)
-        ax.set(xlabel="", ylabel="")
-        ax.xaxis.tick_top()
-        _title = f"{method} Coeficient Correlation Matrix \n"
-        _title += f"{country.capitalize()} N={ideN}  M={len(ATTDIMS)}\n"
-        _title += info
-        _title += f"\np-values less than {pvalue_display_th} displayed"
-        plt.title(_title)
-        plt.tight_layout()
+        # sns.heatmap(correlations, ax=ax, annot=annotations, fmt="", cmap=cmap)
+        # ax.set(xlabel="", ylabel="")
+        # ax.xaxis.tick_top()
+        # _title = f"{method} Coeficient Correlation Matrix \n"
+        # _title += f"{country.capitalize()} N={ideN}  M={len(ATTDIMS)}\n"
+        # _title += info
+        # _title += f"\np-values less than {pvalue_display_th} displayed"
+        # plt.title(_title)
+        # plt.tight_layout()
 
-        figpath = os.path.join(
-            att_folder,
-            f"{info}_{method}_ide_vs_att_dims_correlation_matrix.png")
-        plt.savefig(figpath)
-        print(f"Correlation Matrix figure saved at {figpath}.")
+        # figpath = os.path.join(
+        #     att_folder,
+        #     f"{info}_{method}_ide_vs_att_dims_correlation_matrix.png")
+        # plt.savefig(figpath)
+        # print(f"Correlation Matrix figure saved at {figpath}.")
 
     if show:
         plt.show()
@@ -152,7 +177,6 @@ ide_sources, ide_targets = load_ide_embeddings(ide_folder)
 
 att_folder = set_output_folder_att(params, survey, country, ideN, output)
 att_sources, att_targets = load_att_embeddings(att_folder)
-
 
 targets_parties = SQLITE.getMpParties(['MMS', survey])
 
