@@ -1,23 +1,23 @@
 #!/bin/bash
 
 declare -a Countries=(
-    # belgium
+    belgium
     france
-    # germany
-    # italy
-    # netherlands
-    # poland
-    # romania
-    # slovenia
-    # spain
+    germany
+    italy
+    netherlands
+    poland
+    romania
+    slovenia
+    spain
 )
 
 declare -a Surveys=(
     ches2019
-    # gps2019
+    gps2019
 )
 
-output=exports
+output=exports/byCountry
 deliverable=deliverableD21
 config="configs/embeddings.yaml"
 
@@ -27,10 +27,12 @@ for country in ${Countries[@]}; do
 
     vizconfig="configs/vizconfigs/${country}.yaml"
 
-    # # # # PREPROCESSING
+    # PREPROCESSING
     # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
 
     for survey in ${Surveys[@]}; do
+
+        echo ">>>>>>>>>>>>> ${survey}"
 
         # # IDELOGICAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$output
@@ -61,12 +63,14 @@ for country in ${Countries[@]}; do
 
         # VALIDATION
         # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --survey=$survey --output=$output  # --show
-        python python/some4demexp/validation/logistic_regression.py --config=$config --country=$country --survey=$survey --output=$output --show
+        # python python/some4demexp/validation/logistic_regression.py \
+        #     --config=$config --country=$country --survey=$survey --output=$output --plot # --show
 
     done
 
     # EXPORTS
     # python python/some4demexp/exports.py --config=$config --country=$country --output=$output
+    # python exports_deliverableD21.py --config=$config --country=$country --output=$output
 
 done
 

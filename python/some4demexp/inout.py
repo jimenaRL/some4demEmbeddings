@@ -60,59 +60,6 @@ def load_att_embeddings(folder):
     return att_source, att_targets
 
 
-def save_experiment_data(
-    X, targets_pids, sources_pids, sources_map_pids, folder):
-
-    # graph
-    np.savez(os.path.join(folder, "graph.npz"), X=X)
-    # targets
-    np.save(
-        os.path.join(folder, "targets_pids.npy"),
-        targets_pids,
-        allow_pickle=True)
-    pd.DataFrame(data=targets_pids,columns=['entity']) \
-        .to_csv(os.path.join(folder, "targets_pids.csv"), index=False)
-    # sources
-    np.save(
-        os.path.join(folder, "sources_pids.npy"),
-        sources_pids,
-        allow_pickle=True)
-    pd.DataFrame(data=sources_pids,columns=['entity']) \
-        .to_csv(os.path.join(folder, "sources_pids.csv"), index=False)
-    # sources map pids
-    np.save(
-        os.path.join(folder, "sources_map_pids.npy"),
-        sources_map_pids,
-        allow_pickle=True)
-    print(f"Social graph, pseudo ids and counts saved at {folder}.")
-
-
-def load_experiment_data(folder):
-
-    X = np.load(os.path.join(folder, "graph.npz"))['X']
-    targets_pids = np.load(
-        os.path.join(folder, "targets_pids.npy"),
-        allow_pickle=True)
-    sources_pids = np.load(
-        os.path.join(folder, "sources_pids.npy"),
-        allow_pickle=True)
-    sources_map_pids = np.load(
-        os.path.join(folder, "sources_map_pids.npy"),
-        allow_pickle=True)
-
-    return X, targets_pids, sources_pids, sources_map_pids
-
-def load_pids(folder):
-
-    targets_pids = np.load(
-        os.path.join(folder, "targets_pids.npy"),
-        allow_pickle=True).tolist()
-    sources_pids = np.load(
-        os.path.join(folder, "sources_pids.npy"),
-        allow_pickle=True).tolist()
-
-    return targets_pids, sources_pids
-
 def set_output_folder(params, country, output):
 
     emb_folder = f"min_followers_{params['sources_min_followers']}"
@@ -148,36 +95,6 @@ def set_output_folder_att(params, survey, country, n_latent_dimensions, output):
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att
 
-def save_issues(folder, data, issue):
-    filepath = os.path.join(folder, f'{issue}.csv')
-    data.to_csv(filepath, index=False, encoding='utf8')
-    print(f"Descriptions, issues and sentiments save at {filepath}.")
-
-def load_issues(folder, issue):
-    filepath = os.path.join(folder, f'{issue}.csv')
-    print(f"Loading issues and sentiments from {filepath}.")
-    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
-
-def save_descriptions(folder, data):
-    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
-    data.to_csv(filepath, index=False, encoding='utf8')
-    print(f"Followers with descriptions save at {filepath}.")
-
-def load_descriptions(folder):
-    filepath = os.path.join(folder, f'followers_with_descriptions.csv')
-    print(f"Loading followers with descriptions from {filepath}.")
-    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
-
-def save_issues_benckmarks(folder, benchmark):
-    filepath = os.path.join(folder, f'benckmarks.csv')
-    benchmark.to_csv(filepath, index=False)
-    print(f"Saving benckmarks at {filepath}.")
-
-def load_issues_benckmarks(folder):
-    filepath = os.path.join(folder, f'benckmarks.csv')
-    print(f"Loading benckmarks from {filepath}.")
-    return pd.read_csv(filepath, encoding='utf8', lineterminator='\n')
-
 def csvExport(df, path):
 
     df.to_csv(
@@ -188,7 +105,7 @@ def csvExport(df, path):
         lineterminator='\n')
 
 def excelExport(df, path, sheet_name):
-    # ANOTHER HOTFIX
+    # HOTFIX
     try:
         df.to_excel(
             path+'.xlsx',
