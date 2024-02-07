@@ -1,8 +1,12 @@
 import os
 import yaml
+from glob import glob
 import pandas as pd
 from string import Template
 from argparse import ArgumentParser
+
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 from some4demdb import SQLite
 from some4demexp.inout import \
@@ -14,6 +18,7 @@ from some4demexp.inout import \
     set_output_folder, \
     csvExport, \
     excelExport
+
 
 # (0) parse arguments and set paths
 ap = ArgumentParser()
@@ -236,65 +241,63 @@ SOURCESTIDS = SQLITE.getTwitterIds(entity="follower", pseudo_ids=None)
 
 # (6) logistic regressions all countries heat map
 
-# from glob import glob
-# import matplotlib.pyplot as plt
-# import seaborn as sns
 
-# paths = glob("exports/byCountry/*/min_followers_25_min_outdegree_3/*/*/*/logistic_regression/*_logistic_regression_cross_validate_f1_score.csv")
+paths = glob("exports/byCountry/*/min_followers_25_min_outdegree_3/*/*/*/logistic_regression/*_logistic_regression_cross_validate_f1_score.csv")
 
-# df = pd.concat([pd.read_csv(path) for path in paths])
+df = pd.concat([pd.read_csv(path) for path in paths])
 
 
-# def kind(row):
-#     k = row['attitudinal_dimension_name']
-#     k += ": "
-#     k += row['label1'][2:]
-#     k += " vs "
-#     k += row['label2'][2:]
-#     k += " "
-#     k += row['strategy']
-#     return k.upper()
+def kind(row):
+    k = row['attitudinal_dimension_name']
+    k += ": "
+    k += row['label1'][2:]
+    k += " vs "
+    k += row['label2'][2:]
+    k += " "
+    k += row['strategy']
+    return k.upper()
 
-# df = df.assign(kind=df.apply(lambda r:  kind(r), axis=1))
+df = df.assign(kind=df.apply(lambda r:  kind(r), axis=1))
 
-# for survey in ['ches2019', 'gps2019']:
+for survey in ['ches2019', 'gps2019']:
 
-#     dfp = df[df.survey==survey][["kind", "country", "f1"]]
-#     dfp = dfp.pivot(index="kind", columns="country", values="f1")
+    dfp = df[df.survey==survey][["kind", "country", "f1"]]
+    dfp = dfp.pivot(index="kind", columns="country", values="f1")
 
-#     df_annot = df.assign(
-#         annot=df.apply(
-#             lambda r: f"{r.train_f1_mean:.2f} ± {r.test_f1_std:.2f}", axis=1))
-#     df_annot = df_annot[df_annot.survey==survey][["kind", "country", "annot"]]
-#     df_annot = df_annot.pivot(index="kind", columns="country", values="annot")
+    df_annot = df.assign(
+        annot=df.apply(
+            lambda r: f"{r.train_f1_mean:.2f} ± {r.test_f1_std:.2f}", axis=1))
+    df_annot = df_annot[df_annot.survey==survey][["kind", "country", "annot"]]
+    df_annot = df_annot.pivot(index="kind", columns="country", values="annot")
 
-#     for k in dfp.index:
-#         print(k.upper())
+    print("\n\n")
+    for k in dfp.index:
+        print(k.upper())
+    print("\n\n")
 
-#     # Draw a heatmap with the numeric values in each cell
-#     f, ax = plt.subplots(figsize=(12, 12))
+    # Draw a heatmap with the numeric values in each cell
+    f, ax = plt.subplots(figsize=(12, 12))
 
-#     print(dfp)
 
-#     hm = sns.heatmap(
-#         dfp,
-#         annot=df_annot,
-#         linewidths=0,
-#         ax=ax,
-#         cbar=False,
-#         vmin=0.65,
-#         vmax=1,
-#         cmap='flare')
+    hm = sns.heatmap(
+        dfp,
+        annot=df_annot,
+        linewidths=0,
+        ax=ax,
+        cbar=False,
+        vmin=0.65,
+        vmax=1,
+        cmap='flare')
 
-#     hm.set(xticklabels=[])
-#     hm.set(xlabel=None)
-#     hm.set(xticklabels=[])
-#     hm.set(ylabel=None)
-#     hm.set(yticklabels=[])
+    hm.set(xticklabels=[])
+    hm.set(xlabel=None)
+    hm.set(xticklabels=[])
+    hm.set(ylabel=None)
+    hm.set(yticklabels=[])
 
-#     ax.set(xlabel="", ylabel="")
-#     ax.tick_params(bottom=False)
-#     ax.tick_params(left=False)
+    ax.set(xlabel="", ylabel="")
+    ax.tick_params(bottom=False)
+    ax.tick_params(left=False)
 
-#     plt.show()
+    plt.show()
 
