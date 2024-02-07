@@ -71,6 +71,9 @@ targets_parties = mp_parties[['mp_pseudo_id', 'MMS_party_acronym']] \
 _parties_to_show = mp_parties[~mp_parties[f'{survey.upper()}_party_acronym'].isna()]
 parties_to_show = _parties_to_show['MMS_party_acronym'].unique().tolist()
 
+d21_folder = os.path.join(f"exports/deliverableD21/ideological/{country}")
+output_folders = [ide_folder, d21_folder]
+
 for x, y in combinations(range(n_dims_to_viz), 2):
     visualize_ide(
         sources_coord_ide=ide_sources,
@@ -79,7 +82,7 @@ for x, y in combinations(range(n_dims_to_viz), 2):
         parties_to_show=parties_to_show,
         latent_dim_x=x,
         latent_dim_y=y,
-        output_folder=ide_folder,
+        output_folders=output_folders,
         show=show,
         palette=palette,
         **idevizparams

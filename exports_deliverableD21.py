@@ -48,11 +48,11 @@ TARGETSTIDS = SQLITE.getTwitterIds(entity="mp", pseudo_ids=None)
 SOURCESTIDS = SQLITE.getTwitterIds(entity="follower", pseudo_ids=None)
 
 
-ideN = get_ide_ndims(PARTIESMAPPING, survey)
-ATTFOLDER = set_output_folder_att(params, survey, country, ideN, output)
-LRFOLDER = os.path.join(ATTFOLDER, 'logistic_regression')
-
 # # (1a) load and export ideological embeddings
+
+# ideN = get_ide_ndims(PARTIESMAPPING, survey)
+# ATTFOLDER = set_output_folder_att(params, survey, country, ideN, output)
+# LRFOLDER = os.path.join(ATTFOLDER, 'logistic_regression')
 
 # for survey in ['ches2019']:
 
@@ -240,44 +240,51 @@ LRFOLDER = os.path.join(ATTFOLDER, 'logistic_regression')
 # import matplotlib.pyplot as plt
 # import seaborn as sns
 
-# paths = glob("exports/byCountry/*/min_followers_25_min_outdegree_3/*/*/*/logistic_regression/*_logistic_regression_balanced_class_weight_f1_score.csv")
+# paths = glob("exports/byCountry/*/min_followers_25_min_outdegree_3/*/*/*/logistic_regression/*_logistic_regression_cross_validate_f1_score.csv")
 
 # df = pd.concat([pd.read_csv(path) for path in paths])
 
-# dd = {
-#     'belgium': 'BE',
-#     'france': 'FR',
-#     'germany': 'GE',
-#     'italy': 'IT',
-#     'netherlands': 'NE',
-#     'poland': 'PO',
-#     'romania': 'RO',
-#     'slovenia': 'SL',
-#     'spain': 'SP'
-# }
 
-# df = df.assign(kind=df.kind.apply(lambda c: c.upper()))
+# def kind(row):
+#     k = row['attitudinal_dimension_name']
+#     k += ": "
+#     k += row['label1'][2:]
+#     k += " vs "
+#     k += row['label2'][2:]
+#     k += " "
+#     k += row['strategy']
+#     return k.upper()
 
-# for survey in ['gps2019']:
+# df = df.assign(kind=df.apply(lambda r:  kind(r), axis=1))
+
+# for survey in ['ches2019', 'gps2019']:
 
 #     dfp = df[df.survey==survey][["kind", "country", "f1"]]
 #     dfp = dfp.pivot(index="kind", columns="country", values="f1")
 
+#     df_annot = df.assign(
+#         annot=df.apply(
+#             lambda r: f"{r.train_f1_mean:.2f} ± {r.test_f1_std:.2f}", axis=1))
+#     df_annot = df_annot[df_annot.survey==survey][["kind", "country", "annot"]]
+#     df_annot = df_annot.pivot(index="kind", columns="country", values="annot")
+
 #     for k in dfp.index:
 #         print(k.upper())
-#     print(len(dfp))
+
 #     # Draw a heatmap with the numeric values in each cell
 #     f, ax = plt.subplots(figsize=(12, 12))
 
+#     print(dfp)
+
 #     hm = sns.heatmap(
 #         dfp,
-#         annot=True,
+#         annot=df_annot,
 #         linewidths=0,
 #         ax=ax,
 #         cbar=False,
-#         vmin=0.5,
+#         vmin=0.65,
 #         vmax=1,
-#         cmap='viridis')
+#         cmap='flare')
 
 #     hm.set(xticklabels=[])
 #     hm.set(xlabel=None)

@@ -117,6 +117,12 @@ for dimpair in combinations(ATTDIMS, 2):
         attvizparams = globals()[f"{survey.upper()}DEFAULTATTVIZ"]
 
 
+    d21_folder = os.path.join(f"exports/deliverableD21/attitudinal/{country}")
+    os.makedirs(d21_folder, exist_ok=True)
+    paths = [
+        os.path.join(att_folder, f"{dimpair_str}.png"),
+        os.path.join(d21_folder, f"{dimpair_str}.png"),
+    ]
 
     visualize_att(
         sources_coord_att=att_sources,
@@ -124,7 +130,7 @@ for dimpair in combinations(ATTDIMS, 2):
         parties_coord_att=parties_coord_att,
         target_groups=mps_parties,
         dims=dict(zip(['x', 'y'], dimpair)),
-        path=os.path.join(att_folder, f"{dimpair_str}.png"),
+        paths=paths,
         show=show,
         palette=palette,
         survey=survey,

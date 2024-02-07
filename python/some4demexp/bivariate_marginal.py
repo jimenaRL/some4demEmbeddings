@@ -111,7 +111,7 @@ def visualize_ide(
     cbar_rect,
     legend_loc,
     gridsize=100,
-    output_folder=None,
+    output_folders=None,
     show=False
 ):
 
@@ -214,11 +214,12 @@ def visualize_ide(
     cbar_ax = g.fig.add_axes(cbar_rect)
     cbar = plt.colorbar(cax=cbar_ax)
 
-    if output_folder:
-        figname = f"latent_dims_{latent_dim_x}_vs_{latent_dim_y}.png"
-        path = os.path.join(output_folder, figname)
-        plt.savefig(path, dpi=dpi)
-        print(f"Figure saved at {path}.")
+    if output_folders:
+        for output_folder in output_folders:
+            figname = f"latent_dims_{latent_dim_x}_vs_{latent_dim_y}.png"
+            path = os.path.join(output_folder, figname)
+            plt.savefig(path, dpi=dpi)
+            print(f"Figure saved at {path}.")
 
     if show:
         plt.show()
@@ -239,7 +240,7 @@ def visualize_att(
     cbar_rect,
     legend_loc,
     quantiles=None,
-    path=None,
+    paths=None,
     show=False,
     **kwargs
 ):
@@ -362,9 +363,10 @@ def visualize_att(
     cbar_ax = g.fig.add_axes(cbar_rect)
     cbar = plt.colorbar(cax=cbar_ax)
 
-    if path:
-        plt.savefig(path, dpi=dpi)
-        print(f"Figure saved at {path}.")
+    if paths:
+        for path in paths:
+            plt.savefig(path, dpi=dpi)
+            print(f"Figure saved at {path}.")
 
     if show:
         plt.show()
