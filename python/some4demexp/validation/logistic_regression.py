@@ -8,12 +8,11 @@ from argparse import ArgumentParser
 import numpy as np
 import pandas as pd
 
-from sklearn.linear_model import LogisticRegression
 from scipy.special import expit
-from sklearn.metrics import \
-    precision_score, \
-    recall_score, \
-    f1_score
+from sklearn.linear_model import LogisticRegression
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.pipeline import make_pipeline
+from sklearn.model_selection import cross_validate
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -35,13 +34,21 @@ from some4demexp.inout import \
     set_output_folder,  \
     set_output_folder_att,  \
     load_att_embeddings,  \
-    load_issues, \
     get_ide_ndims
-    # load_issues_benckmarks
 
 from some4demexp.conf import \
     LOGISTICREGRESSIONS, \
     ATTDICT
+
+# Font & Latex definitions
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+# mpl.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
+fs = 12
+# dpi = 150
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans-serif', size=fs)
+
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -60,6 +67,7 @@ output = args.output
 plot = args.plot
 show = args.show
 
+
 with open(config, "r", encoding='utf-8') as fh:
     params = yaml.load(fh, Loader=yaml.SafeLoader)
 
@@ -74,7 +82,7 @@ SQLITE = SQLite(
 parties_mapping = SQLITE.getPartiesMapping()
 ideN = get_ide_ndims(parties_mapping, survey)
 
-SEED = 666
+SEED = 187
 
 # (0) Get embeddings and descriptions
 folder = set_output_folder(params, country, output)
@@ -83,19 +91,6 @@ att_folder = set_output_folder_att(params, survey, country, ideN, output)
 att_sources, _ = load_att_embeddings(att_folder)
 
 lrfolder = os.path.join(att_folder, 'logistic_regression')
-
-#########################################
-# Preliminary functions and definitions #
-#########################################
-
-# Font & Latex definitions
-mpl.rcParams['mathtext.fontset'] = 'cm'
-mpl.rcParams['mathtext.rm'] = 'serif'
-# mpl.rcParams['text.latex.preamble']=[r"\usepackage{amsmath}"]
-fs = 12
-# dpi = 150
-plt.rc('text', usetex=True)
-plt.rc('font', family='sans-serif', size=fs)
 
 ################
 # Loading data #
@@ -130,12 +125,18 @@ records = []
 for strategy, lrdata in tqdm(
     itertools.product(strategy_data.keys(), LOGISTICREGRESSIONS)):
 
+    #  FOR DEBUGGING
+    # if not (lrdata['group1'] == 'right' and lrdata['group2'] == 'left'):
+    # if not (lrdata['group1'] == 'liberal' and lrdata['group2'] == 'conservative'):
+    # if not (lrdata['group1'] == 'eurosceptic' and lrdata['group2'] == 'pro_european'):
+    #     continue
+
     egroups = {
         1:  f"{strategy}_{lrdata['group1']}",
         2:  f"{strategy}_{lrdata['group2']}",
     }
 
-    # check that label is prsent for estrategi
+    # check that label is present for estrategy
     # for instance there is no 'climate denialist' for the A strategy
     if not egroups[1] in strategy_data[strategy]:
         print(f"{egroups[1]} is missing from {strategy} strategy data.")
@@ -177,26 +178,28 @@ for strategy, lrdata in tqdm(
             np.ones_like(attdata2.values)
         ]).ravel()
 
+        # egalize samples
+        model = make_pipeline(
+            RandomUnderSampler(random_state=SEED),
+            LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
+        )
 
-        # egalize sample
-        SEED = 666
-        n = min(len(attdata1), len(attdata2))
-        _data = pd.concat([
-            data[1][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=0),
-            data[2][[attdim, 'entity']].sample(n=n, random_state=SEED).assign(label=1)
-        ])
-        X = _data[attdim].values.reshape(-1, 1)
-        y = _data['label'].values.ravel()
+        nb_splits = 10
+        if not len(X) > nb_splits:
+            print(f"Too low sample number ({len(X)}), ignoring {lrdata}.")
+            continue
 
-        clf = LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
-        clf.fit(X,  y)
+        cv_results = cross_validate(
+            model, X, y, cv=nb_splits, scoring=('precision', 'recall', 'f1'),
+            return_train_score=True, return_estimator=True, n_jobs=-1)
 
-        # evaluation
-        Y_pred = clf.predict(X)
+        clf_models = [pipe[-1] for pipe in cv_results['estimator']]
+        clf_intercept = np.mean([clf.intercept_ for clf in clf_models])
+        clf_coef = np.mean([clf.coef_ for clf in clf_models])
 
-        precision = precision_score(y, Y_pred)
-        recall = recall_score(y, Y_pred)
-        f1 = f1_score(y, Y_pred)
+        precision = cv_results['train_precision'].mean()
+        recall = cv_results['train_recall'].mean()
+        f1 = cv_results['train_f1'].mean()
 
         record = {
             "strategy": strategy,
@@ -208,8 +211,20 @@ for strategy, lrdata in tqdm(
             "attitudinal_dimension_name": ATTDICT[survey][attdim],
             "survey": survey,
             "precision": precision,
-            "recall": recall,
+            "recall":recall,
             "f1":  f1,
+            "train_precision_mean": cv_results['train_precision'].mean(),
+            "train_recall_mean": cv_results['train_recall'].mean(),
+            "train_f1_mean":  cv_results['train_f1'].mean(),
+            "train_precision_std": cv_results['train_precision'].std(),
+            "train_recall_std": cv_results['train_recall'].std(),
+            "train_f1_std":  cv_results['train_f1'].std(),
+            "test_precision_mean": cv_results['test_precision'].mean(),
+            "test_recall_mean": cv_results['test_recall'].mean(),
+            "test_f1_mean":  cv_results['test_f1'].mean(),
+            "test_precision_std": cv_results['test_precision'].std(),
+            "test_recall_std": cv_results['test_recall'].std(),
+            "test_f1_std":  cv_results['test_f1'].std(),
             "country": country
             }
 
@@ -232,9 +247,9 @@ for strategy, lrdata in tqdm(
         # plot
         if plot:
             Xplot = np.sort(X.flatten())
-            f = expit(Xplot * clf.coef_[0][0] + clf.intercept_[0]).ravel()
+            f = expit(Xplot * clf_coef + clf_intercept).ravel()
 
-            if clf.intercept_[0] < 0:
+            if clf_intercept < 0:
                 above_threshold = f > 0.5
             else:
                 above_threshold = f < 0.5
@@ -322,59 +337,10 @@ print(f"Figures saved at {lrfolder}")
 
 records = pd.DataFrame(records).sort_values(by='f1', ascending=False)
 
-
-kind = records['attitudinal_dimension_name']
-kind += ": "
-kind += records['label1'].apply(lambda s: s[2:])
-kind += " vs "
-kind += records['label2'].apply(lambda s: s[2:])
-kind += " "
-kind += records['strategy']
-records = records.assign(kind=kind)
-
-kind_stats = records['attitudinal_dimension_name']
-kind_stats += ": "
-kind_stats += records['label1'].apply(lambda s: s[2:])
-kind_stats += " ("
-kind_stats += records['nb_samples_label1'].astype(str)
-kind_stats += ") vs "
-kind_stats += records['label2'].apply(lambda s: s[2:])
-kind_stats += " ("
-kind_stats += records['nb_samples_label2'].astype(str)
-kind_stats += ") "
-kind_stats += records['strategy']
-records = records.assign(kind_stats=kind_stats)
-print(records)
-
-
-filename = f"{country}_{survey}_logistic_regression_balanced_class_weight_f1_score"
+filename = f"{country}_{survey}_logistic_regression_cross_validate_f1_score"
 dfpath = os.path.join(lrfolder, filename+'.csv')
 records.to_csv(dfpath, index=False)
 print(f"Logistic regression results (image and csv) saved at {lrfolder}")
-
-
-sns.set_theme(style="whitegrid")
-
-# Initialize the matplotlib figure
-f, ax = plt.subplots(figsize=(16, 14))
-
-# Plot the total crashes
-sns.set_color_codes(palette="deep")
-sns.barplot(x="f1", y="kind", data=records, label="f1", color="r")
-
-# Add a legend and informative axis label
-plt.xticks(np.arange(0, 1.1, .1, dtype=float))
-ax.legend(ncol=2, loc="lower right", frameon=True, fontsize=15)
-ax.set(xlim=(0, 1), ylabel="")
-ax.set_xlabel(f"{country.upper()} - {survey.upper()} - LR (balanced class weight) f1 score ", fontsize=16)
-ax.set_ylabel('')
-ax.tick_params(axis="y", labelsize=16)
-
-sns.despine(left=True, bottom=True)
-plt.tight_layout()
-
-figpath = os.path.join(lrfolder, filename+'.png')
-plt.savefig(figpath, dpi=300)
 
 if show:
     plt.show()
