@@ -23,6 +23,21 @@ def load_ide_embeddings(folder):
     return ide_sources, ide_targets
 
 
+def load_experiment_data(folder):
+
+    X = np.load(os.path.join(folder, "graph.npz"))['X']
+    targets_pids = np.load(
+        os.path.join(folder, "targets_pids.npy"),
+        allow_pickle=True)
+    sources_pids = np.load(
+        os.path.join(folder, "sources_pids.npy"),
+        allow_pickle=True)
+    sources_map_pids = np.load(
+        os.path.join(folder, "sources_map_pids.npy"),
+        allow_pickle=True)
+
+    return X, targets_pids, sources_pids, sources_map_pids
+
 def save_ide_embeddings(sources_embeddings, targets_embeddings, folder):
 
     sources_embeddings.to_csv(

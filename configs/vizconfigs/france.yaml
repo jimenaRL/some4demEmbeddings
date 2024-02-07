@@ -1,4 +1,6 @@
 attitudinal:
+  ches2023:
+    -
   gps2019:
     -
   ches2019:
@@ -342,3 +344,4 @@ palette:
   PS: tab:pink
   RN: magenta
   UDI: cyan
+  PRG: bisque

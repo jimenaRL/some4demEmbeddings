@@ -1,20 +1,21 @@
 #!/bin/bash
 
 declare -a Countries=(
-    belgium
+    # belgium
     france
-    germany
-    italy
-    netherlands
-    poland
-    romania
-    slovenia
-    spain
+    # germany
+    # italy
+    # netherlands
+    # poland
+    # romania
+    # slovenia
+    # spain
 )
 
 declare -a Surveys=(
-    ches2019
-    gps2019
+    # ches2019
+    # gps2019
+    ches2023
 )
 
 output=exports/byCountry
@@ -43,26 +44,25 @@ for country in ${Countries[@]}; do
         #     --country=$country \
         #     --survey=$survey \
         #     --vizconfig=$vizconfig \
-        #     --output=$output \
+        #     --output=$output  \
         #     --show
 
-        # # ATTITUDINAL EMBEDDINGS CREATION
+        # ATTITUDINAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
         # ATTITUDINAL EMBEDDINGS VISUALIZATION
-        # python python/some4demexp/visualizations/create_att_viz.py \
-        #     --config=$config \
-        #     --country=$country \
-        #     --survey=$survey \
-        #     --vizconfig=$vizconfig \
-        #     --output=$output \
-        #     --show
+        python python/some4demexp/visualizations/create_att_viz.py \
+            --config=$config \
+            --country=$country \
+            --survey=$survey \
+            --vizconfig=$vizconfig \
+            --output=$output \
+            --show
 
         # # ANALYSIS
         # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --survey=$survey --output=$output
 
         # VALIDATION
-        # python python/some4demexp/validation/labels_proportions.py --config=$config --country=$country --survey=$survey --output=$output  # --show
         # python python/some4demexp/validation/logistic_regression.py \
         #     --config=$config --country=$country --survey=$survey --output=$output --plot # --show
 
@@ -73,4 +73,3 @@ for country in ${Countries[@]}; do
     # python exports_deliverableD21.py --config=$config --country=$country --output=$output
 
 done
-

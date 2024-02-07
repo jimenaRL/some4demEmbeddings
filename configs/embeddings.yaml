@@ -25,6 +25,18 @@ attitudinal_dimensions:
     - sociallifestyle
     - people_vs_elite
     - corrupt_salience
+  ches2023:
+    - lrecon
+    - refugees
+    - EU_Russia
+    - eu_position
+    - galtan
+    - UA_EU
+    - energy_costs
+    - weapons
+    - supportUA
+    - antielite_salience
+    - Kremlin_ties
 ideological_model:
   check_input: true
   engine: auto
