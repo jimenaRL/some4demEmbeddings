@@ -50,6 +50,12 @@ COUNTRIES = [
 def get_count(sqlite, query, country):
     return SQLITE.retrieve(query.format(country))[0][0]
 
+def get_discarded_count(sqlite, query, keyTrue, country):
+    return SQLITE.retrieve(query.format(country, keyTrue))[0][0]
+
+def get_annotation_count(sqlite, query, keyTrue, keyFalse, country):
+    return SQLITE.retrieve(query.format(country, keyTrue, keyFalse))[0][0]
+
 
 qMpGraph = """
     SELECT COUNT(DISTINCT(mp_pseudo_id))
@@ -105,6 +111,21 @@ qUsersLlmLabels = """
     FROM user_llm_labels_{}
     """
 
+qAnnotNbTrue = """
+    SELECT COUNT(*)
+    FROM user_llm_labels_{}
+    WHERE C_{}='1'
+    AND C_{}!='1'
+    """
+
+
+qAnnotNbDiscarded = """
+    SELECT COUNT(*)
+    FROM user_llm_labels_{}
+    WHERE C_{} NOT IN ('0', '1')
+    """
+
+
 nb_mps_lut = []
 nb_mps_graph = []
 nb_mps_annotation = []
@@ -118,6 +139,16 @@ nb_users_metadata = []
 nb_users_enriched_metadata = []
 nb_users_keywords_labels = []
 nb_users_llm_labels = []
+
+llm_labels_left = []
+llm_labels_right = []
+llm_labels_populist = []
+llm_labels_elite = []
+
+llm_labels_discarded_left = []
+llm_labels_discarded_right = []
+llm_labels_discarded_populist = []
+llm_labels_discarded_elite = []
 
 for country in COUNTRIES:
 
@@ -142,6 +173,18 @@ for country in COUNTRIES:
     nb_users_keywords_labels.append(get_count(SQLITE, qUsersKeywordsLabels, country))
     nb_users_llm_labels.append(get_count(SQLITE, qUsersLlmLabels, country))
 
+    llm_labels_left.append(get_annotation_count(SQLITE, qAnnotNbTrue, 'left', 'right', country))
+    llm_labels_right.append(get_annotation_count(SQLITE, qAnnotNbTrue, 'right', 'left', country))
+    llm_labels_populist.append(get_annotation_count(SQLITE, qAnnotNbTrue, 'populist', 'elite', country))
+    llm_labels_elite.append(get_annotation_count(SQLITE, qAnnotNbTrue, 'elite', 'populist' ,country))
+
+
+    llm_labels_discarded_left.append(get_discarded_count(SQLITE, qAnnotNbDiscarded, 'left', country))
+    llm_labels_discarded_right.append(get_discarded_count(SQLITE, qAnnotNbDiscarded, 'right', country))
+    llm_labels_discarded_populist.append(get_discarded_count(SQLITE, qAnnotNbDiscarded, 'populist', country))
+    llm_labels_discarded_elite.append(get_discarded_count(SQLITE, qAnnotNbDiscarded, 'elite' ,country))
+
+
 data = [
     nb_mps_graph,
     nb_mps_lut,
@@ -153,7 +196,15 @@ data = [
     nb_users_metadata,
     nb_users_enriched_metadata,
     nb_users_keywords_labels,
-    nb_users_llm_labels
+    nb_users_llm_labels,
+    llm_labels_left,
+    llm_labels_right,
+    llm_labels_populist,
+    llm_labels_elite,
+    llm_labels_discarded_left,
+    llm_labels_discarded_right,
+    llm_labels_discarded_populist,
+    llm_labels_discarded_elite,
 ]
 
 index = [
@@ -168,7 +219,17 @@ index = [
     '# users enriched metadata',
     '# users keywords labels',
     '# users llm labels',
+    '# sources llm left',
+    '# sources llm right',
+    '# sources llm populist',
+    '# sources llm elite',
+    '# sources llm discarded left',
+    '# sources llm discarded right',
+    '# sources llm discarded populist',
+    '# sources llm discarded elite',
 ]
+
+import pdb; pdb.set_trace()  # breakpoint 05197dec //
 
 df = pd.DataFrame(data=data, index=index, columns=COUNTRIES).T
 
@@ -191,7 +252,36 @@ print(df[[
 ]])
 
 
+print(df[[
+    '# sources llm left',
+    '# sources llm right',
+    '# sources llm populist',
+    '# sources llm elite',
+]])
+
+print(" & ".join(df['# sources llm left'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm right'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm populist'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm elite'].astype(str).values.tolist()))
+
+print(df[[
+    '# sources llm discarded left',
+    '# sources llm discarded right',
+    '# sources llm discarded populist',
+    '# sources llm discarded elite',
+]])
+
+print(" & ".join(df['# sources llm discarded left'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm discarded right'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm discarded populist'].astype(str).values.tolist()))
+print(" & ".join(df['# sources llm discarded elite'].astype(str).values.tolist()))
+
+
+
 df_preprocessing = df.copy()
+
+exit()
+
 
 # 2. POST FILTERING (csv)
 

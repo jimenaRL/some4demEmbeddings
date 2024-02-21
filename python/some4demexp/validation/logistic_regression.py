@@ -146,8 +146,8 @@ for strategy, lrdata in tqdm(
         continue
 
     data = {
-        1: strategy_data[strategy].query(f"{egroups[1]}=='1'"),
-        2: strategy_data[strategy].query(f"{egroups[2]}=='1'")
+        1: strategy_data[strategy].query(f"{egroups[1]}=='1' & {egroups[2]}!='1'"),
+        2: strategy_data[strategy].query(f"{egroups[2]}=='1' & {egroups[1]}!='1'")
     }
 
     if len(data[1]) == 0:
