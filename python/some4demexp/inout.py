@@ -22,6 +22,31 @@ def load_ide_embeddings(folder):
 
     return ide_sources, ide_targets
 
+def save_experiment_data(
+    X, targets_pids, sources_pids, sources_map_pids, folder):
+
+    # graph
+    np.savez(os.path.join(folder, "graph.npz"), X=X)
+    # targets
+    np.save(
+        os.path.join(folder, "targets_pids.npy"),
+        targets_pids,
+        allow_pickle=True)
+    pd.DataFrame(data=targets_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "targets_pids.csv"), index=False)
+    # sources
+    np.save(
+        os.path.join(folder, "sources_pids.npy"),
+        sources_pids,
+        allow_pickle=True)
+    pd.DataFrame(data=sources_pids,columns=['entity']) \
+        .to_csv(os.path.join(folder, "sources_pids.csv"), index=False)
+    # sources map pids
+    np.save(
+        os.path.join(folder, "sources_map_pids.npy"),
+        sources_map_pids,
+        allow_pickle=True)
+    print(f"Social graph, pseudo ids and counts saved at {folder}.")
 
 def load_experiment_data(folder):
 
