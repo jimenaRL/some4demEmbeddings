@@ -229,8 +229,6 @@ index = [
     '# sources llm discarded elite',
 ]
 
-import pdb; pdb.set_trace()  # breakpoint 05197dec //
-
 df = pd.DataFrame(data=data, index=index, columns=COUNTRIES).T
 
 print(df[[
