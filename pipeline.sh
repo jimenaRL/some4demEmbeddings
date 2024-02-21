@@ -2,7 +2,7 @@
 
 declare -a Countries=(
     # belgium
-    france
+    # france
     # germany
     # italy
     # netherlands
@@ -15,7 +15,7 @@ declare -a Countries=(
 declare -a Surveys=(
     # ches2019
     # gps2019
-    ches2023
+    # ches2023
 )
 
 output=exports/byCountry
@@ -29,16 +29,16 @@ for country in ${Countries[@]}; do
     vizconfig="configs/vizconfigs/${country}.yaml"
 
     # PREPROCESSING
-    # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
+    python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
 
     for survey in ${Surveys[@]}; do
 
         echo ">>>>>>>>>>>>> ${survey}"
 
-        # # IDELOGICAL EMBEDDINGS CREATION
+        # # # IDELOGICAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_ide_emb.py --config=$config --country=$country --survey=$survey --output=$output
 
-        # # IDELOGICAL EMBEDDINGS VISUALIZATION
+        # # # IDELOGICAL EMBEDDINGS VISUALIZATION
         # python python/some4demexp/visualizations/create_ide_viz.py \
         #     --config=$config \
         #     --country=$country \
@@ -50,19 +50,21 @@ for country in ${Countries[@]}; do
         # ATTITUDINAL EMBEDDINGS CREATION
         # python python/some4demexp/embeddings/create_att_emb.py --config=$config  --country=$country --survey=$survey --output=$output
 
-        # ATTITUDINAL EMBEDDINGS VISUALIZATION
-        python python/some4demexp/visualizations/create_att_viz.py \
-            --config=$config \
-            --country=$country \
-            --survey=$survey \
-            --vizconfig=$vizconfig \
-            --output=$output \
-            --show
+        # # ATTITUDINAL EMBEDDINGS VISUALIZATION
+        # python python/some4demexp/visualizations/create_att_viz.py \
+        #     --config=$config \
+        #     --country=$country \
+        #     --survey=$survey \
+        #     --vizconfig=$vizconfig \
+        #     --output=$output \
+        #     --show
 
         # # ANALYSIS
         # python python/some4demexp/validation/correlation_matrices.py --config=$config --country=$country --survey=$survey --output=$output
 
         # VALIDATION
+        # python python/some4demexp/validation/labels_proportions.py \
+        #     --config=$config --country=$country --survey=$survey --output=$output --show
         # python python/some4demexp/validation/logistic_regression.py \
         #     --config=$config --country=$country --survey=$survey --output=$output --plot # --show
 
