@@ -85,6 +85,7 @@ if t0 > t1:
 
 parties_available_survey = set(parties_coord_att[SURVEYCOL].unique())
 parties_mps = set(ide_mps_in_parties_with_valid_mapping[SURVEYCOL].unique())
+
 if len(parties_available_survey) < len(parties_mps):
     m = f"There are less effetively available parties in survey {survey}: "
     m += f"{parties_available_survey} that parties present in mps affilations "

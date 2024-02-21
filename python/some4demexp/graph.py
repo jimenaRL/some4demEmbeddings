@@ -62,6 +62,9 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     print(mssg)
 
     # remove targets (columns) with no source associated
+    idx_invalid_i = np.argwhere((np.abs(ntwrk_csr).sum(axis=0) == 0).tolist()[0])[:, 0]
+    invalid_rows_id = rows_id[idx_invalid_i]
+
     idx_valid_i = np.argwhere((np.abs(ntwrk_csr).sum(axis=0) != 0).tolist()[0])[:, 0]
 
     ia = ntwrk_csr.shape[1]
@@ -71,7 +74,7 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
     mssg = f"Drop {ia - ib} targets with no sources associated "
-    mssg += f"({100*(ia - ib)/ia:.2f}%), keeped {ib}."
+    mssg += f"({100*(ia - ib)/ia:.2f}%), keeped {ib}:\n{invalid_rows_id}"
 
     # checking if final network is bipartite:
     nb_shared = len(np.intersect1d(rows_id, columns_id))

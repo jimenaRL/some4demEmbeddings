@@ -16,7 +16,8 @@ from some4demexp.distributions import distributions
 
 from some4demexp.conf import \
     CHES2019DEFAULTATTVIZ, \
-    GPS2019DEFAULTATTVIZ
+    GPS2019DEFAULTATTVIZ, \
+    CHES2023DEFAULTATTVIZ
 
 # parse arguments and set paths
 ap = ArgumentParser()
@@ -100,14 +101,21 @@ for dimpair in combinations(ATTDIMS, 2):
         # 'lrgen_vs_antielite_salience',
         # 'V4_Scale_vs_V6_Scale',
         # FOR MIRO VIZ
+        # ches2019
         'lrgen_vs_antielite_salience',
         'lrgen_vs_lrecon',
         'galtan_vs_environment',
         'eu_position_vs_immigrate_policy',
+        # gps2019
         'V6_Scale_vs_v14',
         'V4_Scale_vs_V6_Scale',
         'v12_vs_v13',
         'v10_vs_v20',
+        # ches2023
+        'lrecon_vs_antielite_salience',
+        'lrecon_vs_energy_costs',
+        'galtan_vs_supportUA',
+        'eu_position_vs_refugees',
     ]:
         continue
 

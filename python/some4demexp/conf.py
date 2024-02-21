@@ -1,5 +1,12 @@
 VIZMAXDROP = 1
 
+CHES2023DEFAULTATTVIZ = {
+  'cbar_rect': [0.15, 0.6, 0.02, 0.3],
+  'legend_loc': 'lower center',
+  'limits': [-2, 12],
+  'nudges': []
+}
+
 CHES2019DEFAULTATTVIZ = {
   'cbar_rect': [0.15, 0.6, 0.02, 0.3],
   'legend_loc': 'lower center',
@@ -15,6 +22,18 @@ GPS2019DEFAULTATTVIZ = {
 }
 
 ATTDICT = {
+    'ches2023': {
+        'antielite_salience': 'Anti-elite salience',
+        'energy_costs': 'energy_costs',
+        'eu_position': 'EU',
+        'EU_Russia': 'EU_Russia',
+        'galtan': 'GAL – TAN',
+        'lrecon': 'Left – Right (economic)',
+        'supportUA': 'supportUA',
+        'UA_EU': 'UA_EU',
+        'weapons': 'weapons',
+
+    },
     'ches2019': {
         'eu_position': 'EU',
         'eu_position_sd': 'EU (std)',
