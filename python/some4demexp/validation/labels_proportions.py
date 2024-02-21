@@ -18,7 +18,6 @@ from some4demexp.inout import \
     load_ide_embeddings, \
     set_output_folder_att, \
     load_att_embeddings, \
-    load_issues, \
     get_ide_ndims
 
 from some4demexp.conf import \
