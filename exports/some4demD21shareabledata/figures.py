@@ -1,10 +1,6 @@
 """
-2. Para cada país generar la imagen bonita 2D con las dos dimensiones latentes left_right y antielite con densidad en azul, MPs +, partidos (centroide) o.
 ** Para las figuras 2D, delete users with duplicate coordinates ?
-3. Nomenclatura para los ejes de las imágenes 2D:
-    3a. dimensiones ideológicas: ‘First latent dimension $\delta_1$’ y ‘Second latent dimension $\delta_2$’
-    3b. dimensiones CHES: ‘Left – Right’ and ‘Anti-elite rhetoric’
-    3c. Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
+** Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
 4. Calcular una tabla de países versus labels 9 x 4 para mostrar la cantidad de labels: (index y columns) exportado a csv y latex
 4. Calcular los F1 (con std para N=100 subsampling minoritario) 2 x 9, exportado a csv y latex
 5. Para cada país y para left_right y antielite, calcular una figura de regresión logística (18 figuras):
@@ -74,7 +70,7 @@ COUNTRIES = [
 
 
 IDEFIG = False
-ATTFIG = False
+ATTFIG = False  
 
 SHOW = False
 
@@ -167,8 +163,8 @@ for country in COUNTRIES:
                 fontsize=9)
             texts.append(text)
 
-        xl = fr'1st latent dimension $\delta_1$'
-        yl = fr'2nd latent dimension $\delta_2$'
+        xl = fr'First latent dimension $\delta_1$'
+        yl = fr'‘Second latent dimension $\delta_2$'
         ax.set_xlabel(xl, fontsize=FONTSIZE)
         ax.set_ylabel(yl, fontsize=FONTSIZE)
 
