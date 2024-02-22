@@ -1,18 +1,21 @@
 """
-** Para las figuras 2D, delete users with duplicate coordinates ?
-** Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
-4. Calcular una tabla de países versus labels 9 x 4 para mostrar la cantidad de labels: (index y columns) exportado a csv y latex
-4. Calcular los F1 (con std para N=100 subsampling minoritario) 2 x 9, exportado a csv y latex
-5. Para cada país y para left_right y antielite, calcular una figura de regresión logística (18 figuras):
-    5a. la regresión logística es con los parámetros promedio
-    5b. los KDE son sobre la totalidad de las muestras labelled
+TO DO :
+    - Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
+    - Calcular una tabla de países versus labels 9 x 4 para mostrar la cantidad de labels: (index y columns) exportado a csv y latex
 """
 
 import os
 import yaml
 import pandas as pd
-import seaborn as sns
 
+import numpy as np
+from scipy.special import expit
+from sklearn.linear_model import LogisticRegression
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.pipeline import make_pipeline
+from sklearn.model_selection import cross_validate
+
+import seaborn as sns
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -68,13 +71,19 @@ COUNTRIES = [
     'spain',
 ]
 
+SEED = 187
+NBSPLITS = 10
 
-IDEFIG = False
-ATTFIG = False  
+IDEFIG = True
+ATTFIG = True
+LOGREG = True
 
 SHOW = False
 
-for country in COUNTRIES:
+validation_results = np.empty(shape=(2, len(COUNTRIES))).astype(str)
+labelling_stats = np.empty(shape=(4, len(COUNTRIES)))
+
+for c, country in enumerate(COUNTRIES):
 
     print(f"----- {country} -----")
 
@@ -84,8 +93,8 @@ for country in COUNTRIES:
 
     palette = vizparams['palette']
 
-    sources_coord = pd.read_csv(f"{country}_users.csv")
-    targets_coord = pd.read_csv(f"{country}_mps.csv")
+    sources = pd.read_csv(f"{country}_users.csv")
+    targets = pd.read_csv(f"{country}_mps.csv")
 
      # I. Ideological embeddings visualizations
     if IDEFIG:
@@ -96,8 +105,8 @@ for country in COUNTRIES:
         legend_loc = vizparams['ideological']['legend_loc']
 
         plot_df = pd.concat([
-            sources_coord[['delta_1', 'delta_2']],
-            targets_coord[['delta_1', 'delta_2']]
+            sources[['delta_1', 'delta_2']],
+            targets[['delta_1', 'delta_2']]
             ]) \
             .reset_index() \
             .drop(columns="index") \
@@ -121,7 +130,7 @@ for country in COUNTRIES:
         texts = []
         for party in palette:
 
-            sample = targets_coord[targets_coord.party == party]
+            sample = targets[targets.party == party]
             sample = sample[['delta_1', 'delta_2', 'party']] \
                 .rename(columns={'delta_1': 'x', 'delta_2': 'y'})
 
@@ -196,8 +205,8 @@ for country in COUNTRIES:
         legend_loc = attparams['legend_loc']
 
         plot_df = pd.concat([
-            sources_coord[['left_right', 'antielite']],
-            targets_coord[['left_right', 'antielite']]
+            sources[['left_right', 'antielite']],
+            targets[['left_right', 'antielite']]
             ]) \
             .reset_index() \
             .drop(columns="index") \
@@ -239,7 +248,7 @@ for country in COUNTRIES:
         for party in palette:
 
             # plot colored by parties target embeddings
-            mps_coord_att = targets_coord[targets_coord['party'] == party] \
+            mps_coord_att = targets[targets['party'] == party] \
                 .rename(columns={'left_right': 'x', 'antielite': 'y'})
 
             ax.scatter(
@@ -303,5 +312,154 @@ for country in COUNTRIES:
         if SHOW:
             plt.show()
 
+    # III. Validations
+    if LOGREG:
 
+        VALIDATIONS = [
+            ('right', 'left', 'left_right', 'Left – Right'),
+            ('populist', 'elite', 'antielite', 'Anti-elite rhetoric'),
+        ]
 
+        for v, (label1, label2, attdim, dimname) in enumerate(VALIDATIONS):
+
+            attdim1 = sources \
+                .query(f"labeled_{label1}==1 & labeled_{label2}!=1") \
+                .loc[:, attdim]
+
+            attdim2 = sources \
+                .query(f"labeled_{label2}==1 & labeled_{label1}!=1") \
+                .loc[:, attdim]
+
+            l1 = len(attdim1)
+            l2 = len(attdim2)
+
+            labelling_stats[2*v+0, c] = l1
+            labelling_stats[2*v+1, c] = l2
+
+            X = np.hstack([
+                attdim1.values,
+                attdim2.values
+                ]).reshape(-1, 1)
+
+            y = np.hstack([np.zeros_like(attdim1), np.ones_like(attdim2)]).ravel()
+
+            # egalize samples
+            model = make_pipeline(
+                RandomUnderSampler(random_state=SEED),
+                LogisticRegression(penalty='l2', C=1e5, class_weight='balanced')
+            )
+
+            if not len(X) > NBSPLITS:
+                NBSPLITS = min(l1, l2)
+                print(
+                    f"""Classes size ({l1} and {l2}) are too small,
+                    changing number of folds to {NBSPLITS}.""")
+
+            cv_results = cross_validate(
+                model, X, y, cv=NBSPLITS, scoring=('precision', 'recall', 'f1'),
+                return_train_score=True, return_estimator=True, n_jobs=-1)
+
+            clf_models = [pipe[-1] for pipe in cv_results['estimator']]
+            clf_intercept = np.mean([clf.intercept_ for clf in clf_models])
+            clf_coef = np.mean([clf.coef_ for clf in clf_models])
+
+            precision = cv_results['train_precision'].mean()
+            recall = cv_results['train_recall'].mean()
+            f1 = cv_results['train_f1'].mean()
+            f1_sdt = cv_results['train_precision'].std()
+
+            validation_results[v, c] = f"{f1:.2f} ± {f1_sdt:.2f}"
+
+            Xplot = np.sort(X.flatten())
+            f = expit(Xplot * clf_coef + clf_intercept).ravel()
+
+            if clf_intercept < 0:
+                above_threshold = f > 0.5
+            else:
+                above_threshold = f < 0.5
+
+            X_threshold = Xplot[above_threshold][0]
+
+            custom_legend=[
+                #densities
+                Line2D([0], [0], color='white', lw=1, alpha=1, label='Users:'),
+                Line2D([0], [0], color='blue', marker='o', mew=0, lw=0, alpha=0.5,
+                    label=f'Labeled {label1} ({l1})'),
+                Line2D([0], [0], color='red', marker='o', mew=0, lw=0, alpha=0.5,
+                    label=f'Labeled {label2} ({l2})'),
+                #densities
+                Line2D([0], [0], color='white', lw=1, alpha=1, label='\nDensities:'),
+                Line2D([0], [0], color='blue', alpha=1, label=f'Labeled {label1}'),
+                Line2D([0], [0], color='red', alpha=1, label=f'Labeled {label2}\n'),
+                Line2D([0], [0], color='white', lw=1, alpha=1, label='\nLogistic Reg.:'),
+                Line2D([0], [0], color='k',  alpha=1, label='Model'),
+                Line2D([0], [0], color='k',  linestyle=':', alpha=1,
+                    label='Classification'),
+                Line2D([0], [0], color='white', lw=1, alpha=1, label='cuttof'),
+            ]
+
+            fig = plt.figure(figsize=(5,  3.3))
+            ax = fig.add_subplot(1,  1,  1)
+
+            sns.kdeplot(data=attdim1.to_frame(), x=attdim, color='blue', ax=ax, common_norm=False)
+            ax.plot(X[y==0], np.zeros(X[y==0].size), 'o', color='blue', alpha=0.02, ms=5, mew=1)
+
+            sns.kdeplot(data=attdim2.to_frame(), x=attdim, color='red', ax=ax, common_norm=False)
+            ax.plot(X[y==1], np.ones(X[y==1].size),  'o', color='red',  alpha=0.02, ms=5, mew=1)
+
+            # logistic
+            ax.plot(Xplot, f, color='k')
+            ax.axvline(X_threshold, linestyle=':', color='k')
+            ax.axhline(0.5, linestyle=':', color='k')
+            ax.text(-2.3, 0.42, r'$0.5$', color='gray', fontsize=10)
+            ax.text(X_threshold+0.25, -0.18, r'$%.2f$' % (X_threshold), color='gray', fontsize=10)
+
+            # positives & negatives
+            ax.text(X_threshold+0.2, 1.1, 'True pos.', color='r', fontsize=9)
+            ax.text(X_threshold-3.15, 1.1, 'False neg.', color='r', fontsize=9)
+            ax.text(X_threshold+0.2, -0.1, 'False pos.', color='b', fontsize=9)
+            ax.text(X_threshold-3.05, -0.1, 'True neg.', color='b', fontsize=9)
+
+            # axis
+            ax.set_xlim((-2.5, 15))
+            ax.set_ylim((-0.2, 1.2))
+            ax.set_xlabel(f"$\delta_{{{dimname}}}$", fontsize=13)
+            ax.set_ylabel('')
+            ax.legend(handles=custom_legend, loc='center left', fontsize=8.7, bbox_to_anchor=(1, 0.5))
+            ax.set_xticks([0, 2.5, 5, 7.5, 10])
+            ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+            title = f
+            fig.suptitle(
+                t=f'{country.capitalize()}: precision=%.3f,  recall=%.3f,  F1=%.3f ' % (precision, recall, f1),
+                x=0.5,
+                y=0.94
+            )
+            plt.tight_layout()
+
+            path = f'{country}_{attdim}_validation_f1.pdf'
+            plt.savefig(path, dpi=300)
+            print(f"Figure saved at {path}.")
+            if SHOW:
+                plt.show()
+
+if LOGREG:
+
+    validation_results = pd.DataFrame(
+        data=validation_results,
+        columns=COUNTRIES,
+        index=['Left – Right', 'Anti-elite rhetoric'],
+        dtype=str)
+    validation_results.to_csv('validation_results.csv')
+    with open("validation_results.tex", "w") as tf:
+        tf.write(validation_results.to_latex())
+    print(f"Validation results:\n{validation_results}")
+
+    labelling_stats = pd.DataFrame(
+        data=labelling_stats,
+        columns=COUNTRIES,
+        index=['left', 'right', 'populist', 'elite'],
+        dtype=int)
+    labelling_stats.to_csv('labelling_stats.csv')
+    with open("labelling_stats.tex", "w") as tf:
+        tf.write(labelling_stats.to_latex())
+    print(f"Labelling statistics:\n{labelling_stats}")
