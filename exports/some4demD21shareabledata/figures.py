@@ -1,7 +1,6 @@
 """
 TO DO :
     - Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
-    - Calcular una tabla de países versus labels 9 x 4 para mostrar la cantidad de labels: (index y columns) exportado a csv y latex
 """
 
 import os
@@ -72,16 +71,25 @@ COUNTRIES = [
 ]
 
 SEED = 187
-NBSPLITS = 10
+NBSPLITS = 100
 
 IDEFIG = True
-ATTFIG = True
-LOGREG = True
+ATTFIG = False
+LOGREG = False
 
+STATS = False
 SHOW = False
 
 validation_results = np.empty(shape=(2, len(COUNTRIES))).astype(str)
-labelling_stats = np.empty(shape=(4, len(COUNTRIES)))
+
+
+nb_mps_accounts = []
+nb_selected_accounts = []
+
+llm_labels_left = []
+llm_labels_right = []
+llm_labels_populist = []
+llm_labels_elite = []
 
 for c, country in enumerate(COUNTRIES):
 
@@ -96,7 +104,19 @@ for c, country in enumerate(COUNTRIES):
     sources = pd.read_csv(f"{country}_users.csv")
     targets = pd.read_csv(f"{country}_mps.csv")
 
-     # I. Ideological embeddings visualizations
+    nb_mps_accounts.append(len(targets))
+    nb_selected_accounts.append(len(sources))
+
+    llm_labels_left.append(
+        len(sources.query("labeled_left==1 & labeled_right!=1")))
+    llm_labels_right.append(
+        len(sources.query("labeled_right==1 & labeled_left!=1")))
+    llm_labels_populist.append(
+        len(sources.query("labeled_populist==1 & labeled_elite!=1")))
+    llm_labels_elite.append(
+        len(sources.query("labeled_elite==1 & labeled_populist!=1")))
+
+    # I. Ideological embeddings visualizations
     if IDEFIG:
 
         nudges = vizparams['ideological']['nudges']
@@ -173,7 +193,7 @@ for c, country in enumerate(COUNTRIES):
             texts.append(text)
 
         xl = fr'First latent dimension $\delta_1$'
-        yl = fr'‘Second latent dimension $\delta_2$'
+        yl = fr'Second latent dimension $\delta_2$'
         ax.set_xlabel(xl, fontsize=FONTSIZE)
         ax.set_ylabel(yl, fontsize=FONTSIZE)
 
@@ -333,9 +353,6 @@ for c, country in enumerate(COUNTRIES):
             l1 = len(attdim1)
             l2 = len(attdim2)
 
-            labelling_stats[2*v+0, c] = l1
-            labelling_stats[2*v+1, c] = l2
-
             X = np.hstack([
                 attdim1.values,
                 attdim2.values
@@ -423,7 +440,7 @@ for c, country in enumerate(COUNTRIES):
             # axis
             ax.set_xlim((-2.5, 15))
             ax.set_ylim((-0.2, 1.2))
-            ax.set_xlabel(f"$\delta_{{{dimname}}}$", fontsize=13)
+            ax.set_xlabel(dimname, fontsize=13)
             ax.set_ylabel('')
             ax.legend(handles=custom_legend, loc='center left', fontsize=8.7, bbox_to_anchor=(1, 0.5))
             ax.set_xticks([0, 2.5, 5, 7.5, 10])
@@ -442,6 +459,56 @@ for c, country in enumerate(COUNTRIES):
             if SHOW:
                 plt.show()
 
+
+
+
+# STATS
+
+if STATS:
+    accounts_stats = [
+        nb_mps_accounts,
+        nb_selected_accounts,
+    ]
+    index = [
+        '# mps accounts',
+        '# users selected accounts',
+    ]
+    accounts_stats = pd.DataFrame(
+        data=accounts_stats,
+        index=index,
+        columns=COUNTRIES)
+    print(f"Accounts statistics:\n{accounts_stats}")
+    path = 'accounts_stats.csv'
+    accounts_stats.to_csv(path)
+    print(f"Labelling stats saved at {path}.")
+    with open("accounts_stats.tex", "w") as tf:
+        tf.write(accounts_stats.to_latex())
+
+    labelling_stats = [
+        llm_labels_left,
+        llm_labels_right,
+        llm_labels_populist,
+        llm_labels_elite,
+    ]
+    index = [
+        '# labeled left',
+        '# labeled right',
+        '# labeled populist',
+        '# labeled elite',
+    ]
+    labelling_stats = pd.DataFrame(
+        data=labelling_stats,
+        index=index,
+        columns=COUNTRIES)
+    print(f"Labelling statistics:\n{labelling_stats}")
+    path = 'labelling_stats.csv'
+    labelling_stats.to_csv(path)
+    print(f"Labelling stats saved at {path}.")
+    with open("labelling_stats.tex", "w") as tf:
+        tf.write(labelling_stats.to_latex())
+
+
+
 if LOGREG:
 
     validation_results = pd.DataFrame(
@@ -449,17 +516,10 @@ if LOGREG:
         columns=COUNTRIES,
         index=['Left – Right', 'Anti-elite rhetoric'],
         dtype=str)
-    validation_results.to_csv('validation_results.csv')
+    path = 'validation_results.csv'
+    validation_results.to_csv(path)
+    print(f"Validations results saved at {path}.")
     with open("validation_results.tex", "w") as tf:
         tf.write(validation_results.to_latex())
     print(f"Validation results:\n{validation_results}")
 
-    labelling_stats = pd.DataFrame(
-        data=labelling_stats,
-        columns=COUNTRIES,
-        index=['left', 'right', 'populist', 'elite'],
-        dtype=int)
-    labelling_stats.to_csv('labelling_stats.csv')
-    with open("labelling_stats.tex", "w") as tf:
-        tf.write(labelling_stats.to_latex())
-    print(f"Labelling statistics:\n{labelling_stats}")

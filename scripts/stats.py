@@ -54,7 +54,8 @@ def get_discarded_count(sqlite, query, keyTrue, country):
     return SQLITE.retrieve(query.format(country, keyTrue))[0][0]
 
 def get_annotation_count(sqlite, query, keyTrue, keyFalse, country):
-    return SQLITE.retrieve(query.format(country, keyTrue, keyFalse))[0][0]
+    query = query.format(country, keyTrue, keyFalse)
+    return SQLITE.retrieve(query)[0][0]
 
 
 qMpGraph = """
@@ -231,6 +232,22 @@ index = [
 
 df = pd.DataFrame(data=data, index=index, columns=COUNTRIES).T
 
+
+print(df[[
+    '# sources llm left',
+    '# sources llm right',
+    '# sources llm populist',
+    '# sources llm elite',
+]].T)
+
+print(df[[
+    '# sources llm left',
+    '# sources llm right',
+    '# sources llm populist',
+    '# sources llm elite',
+]].to_latex())
+
+
 print(df[[
     '# mps graph',
     '# mps lut',
@@ -250,17 +267,6 @@ print(df[[
 ]])
 
 
-print(df[[
-    '# sources llm left',
-    '# sources llm right',
-    '# sources llm populist',
-    '# sources llm elite',
-]])
-
-print(" & ".join(df['# sources llm left'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm right'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm populist'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm elite'].astype(str).values.tolist()))
 
 print(df[[
     '# sources llm discarded left',
@@ -269,17 +275,34 @@ print(df[[
     '# sources llm discarded elite',
 ]])
 
-print(" & ".join(df['# sources llm discarded left'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm discarded right'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm discarded populist'].astype(str).values.tolist()))
-print(" & ".join(df['# sources llm discarded elite'].astype(str).values.tolist()))
 
 
 
+perc_discarded_left = 100 * df[['# sources llm discarded left']].T.values.flatten() / df[['# users llm labels']].T.values.flatten()
+perc_discarded_right = 100 * df[['# sources llm discarded right']].T.values.flatten() / df[['# users llm labels']].T.values.flatten()
+perc_discarded_populist = 100 * df[['# sources llm discarded populist']].T.values.flatten() / df[['# users llm labels']].T.values.flatten()
+perc_discarded_elite = 100 * df[['# sources llm discarded elite']].T.values.flatten() / df[['# users llm labels']].T.values.flatten()
+
+
+dfperc = pd.DataFrame(
+    data=[
+        100 * df[['# sources llm discarded right']].T.values.flatten() / df[['# users llm labels']].T.values.flatten(),
+        100 * df[['# sources llm discarded left']].T.values.flatten() / df[['# users llm labels']].T.values.flatten(),
+        100 * df[['# sources llm discarded populist']].T.values.flatten() / df[['# users llm labels']].T.values.flatten(),
+        100 * df[['# sources llm discarded elite']].T.values.flatten() / df[['# users llm labels']].T.values.flatten(),
+
+    ],
+    index=[
+        "% not labelled left",
+        "% labelled right",
+        "% labelled populist",
+        "% labelled elite",
+        ],
+    columns=COUNTRIES)
+
+print(dfperc)
+# print(dfperc.to_latex())
 df_preprocessing = df.copy()
-
-exit()
-
 
 # 2. POST FILTERING (csv)
 
