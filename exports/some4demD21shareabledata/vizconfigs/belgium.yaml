@@ -50,7 +50,7 @@ attitudinal:
 ideological:
   cbar_rect:
   - 0.15
-  - 0.35
+  - 0.42
   - 0.03
   - 0.45
   legend_loc: upper right
@@ -72,7 +72,7 @@ ideological:
     - 0.2
     - -0.3
     MR:
-    - -0.75
+    - -0.65
     - 0.15
     PS:
     - 0.3
@@ -82,15 +82,15 @@ ideological:
     - -0.4
     SP.A:
     - -0.8
-    - -0.4
+    - -0.2
     VB:
     - 0.2
     - 0
     'Open Vld':
-    - -1.6
+    - -1.2
     - 0.25
     N-VA:
-    - 0.15
+    - 0.25
     - 0.05
 palette:
   'CD&V': blue

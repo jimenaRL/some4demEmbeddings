@@ -34,8 +34,8 @@ attitudinal:
         - -0.1
 ideological:
   cbar_rect:
-  - 0.775
-  - 0.55
+  - 0.73
+  - 0.525
   - 0.05
   - 0.35
   legend_loc: lower right
@@ -51,13 +51,13 @@ ideological:
     - -0.2
     - -0.45
     CDU:
-    - -0.9
-    - 0
+    - -0.8
+    - -0.2
     CSU:
-    - -0.6
-    - 0
+    - -0.8
+    - 0.1
     FDP:
-    - 0.3
+    - 0.4
     - 0
     GRÜNE:
     - 0.4

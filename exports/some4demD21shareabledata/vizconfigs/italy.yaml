@@ -52,11 +52,11 @@ attitudinal:
           - 0
 ideological:
   cbar_rect:
-    - 0.15
+    - 0.75
     - 0.35
     - 0.03
-    - 0.45
-  legend_loc: upper right
+    - 0.52
+  legend_loc: lower right
   limits:
     x:
       - -2.5
@@ -67,16 +67,16 @@ ideological:
   nudges:
     FI:
       - 0
-      - -0.8
+      - -1
     FdI:
       - -0.2
-      - 0.3
+      - 0.4
     LN:
       - 0
       - 0.3
     M5S:
-      - 0.35
-      - 0
+      - 0.4
+      - -0.2
     PD:
       - 0.2
       - 0.3
@@ -85,22 +85,22 @@ ideological:
       - 0.3
     LSP:
       - 0
-      - 0
+      - -1
     PD-IDP:
-      - 0
+      - -1.8
       - 0
     Misto/AVS:
-      - 0
-      - 0
+      - -1.4
+      - 0.4
     A-IV:
       - 0
-      - 0
+      - -0.8
     AVS:
       - 0
-      - 0
+      - 0.4
     Per le Autonomie:
       - 0
-      - 0
+      - 0.8
 palette:
   FI: cornflowerblue
   FdI: navy

@@ -41,7 +41,7 @@ attitudinal:
 ideological:
   cbar_rect:
     - 0.175
-    - 0.45
+    - 0.425
     - 0.03
     - 0.45
   legend_loc: upper right
@@ -72,8 +72,8 @@ ideological:
       - -0.2
       - -0.4
     SDS:
-      - -0.5
-      - -0.2
+      - 0.2
+      - 0.2
     SMC:
       - 0.2
       - -0.25
