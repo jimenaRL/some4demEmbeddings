@@ -12,16 +12,16 @@ attitudinal:
       - 12
       nudges:
         PNL:
-        - 0.2
+        - 0.6
         - -0.2
         UDMR:
-        - 0
+        - 0.6
         - 0.2
         PSD:
-        - 0.2
+        - -1.8
         - 0.2
         USR:
-        - 0.2
+        - 0.8
         - 0
 ideological:
   cbar_rect:

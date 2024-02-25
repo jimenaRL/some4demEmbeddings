@@ -6,50 +6,50 @@ attitudinal:
       - 0.6
       - 0.02
       - 0.3
-      legend_loc: lower center
+      legend_loc: lower left
       limits:
       - -2
       - 12
       nudges:
         '50+':
-        - 0
-        - 0
+        - 0.6
+        - -0.2
         CDA:
         - 0
-        - 0
+        - -0.8
         CU:
-        - 0
+        - -1.2
         - 0
         D66:
         - 0
-        - 0
+        - 0.8
         DENK:
-        - 0
-        - 0
+        - 0.6
+        - 0.2
         FVD:
         - 0
-        - 0
+        - -0.8
         GL:
-        - 0
-        - 0
+        - -0.6
+        - 0.6
         PVV:
-        - 0
+        - -1.6
         - 0
         PvdD:
-        - 0
+        - -1.6
         - 0
         PvdA:
         - 0
-        - 0
+        - 0.6
         SGP:
-        - 0
-        - 0
+        - 0.6
+        - -0.2
         SP:
-        - 0
-        - 0
+        - -1
+        - 0.2
         VVD:
         - 0
-        - 0
+        - 0.8
 ideological:
   cbar_rect:
   - 0.15

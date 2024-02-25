@@ -13,31 +13,31 @@ attitudinal:
       nudges:
         Konfederacja:
         - 0
-        - 0
+        - -0.8
         'K’15':
-        - 0
+        - 0.8
         - 0
         Razem:
         - 0
-        - 0
+        - 0.6
         '.N':
-        - 0
-        - 0
+        - 0.4
+        - 0.4
         PO:
-        - 0
+        - 0.6
         - 0
         PSL:
-        - 0
+        - 0.6
         - 0
         PiS:
-        - 0
+        - -1.4
         - 0
         SLD:
         - 0
-        - 0
+        - -0.8
         Wiosna:
-        - 0
-        - 0
+        - 0.4
+        - 0.4
 ideological:
   cbar_rect:
   - 0.175

@@ -6,32 +6,32 @@ attitudinal:
       - 0.6
       - 0.02
       - 0.3
-      legend_loc: lower center
+      legend_loc: lower right
       limits:
       - -2
       - 12
       nudges:
         AfD:
         - -0.2
-        - -0.45
+        - -0.8
         CDU:
-        - -0.9
-        - 0
+        - 0.6
+        - 0.6
         CSU:
-        - -0.6
-        - 0
+        - 1.2
+        - -0.8
         FDP:
-        - 0.3
-        - 0
+        - -1.6
+        - -0.6
         GRÜNE:
-        - 0.4
-        - -0.1
+        - -2
+        - 0.2
         LINKE:
-        - 0.3
-        - -0.1
-        SPD:
         - 0.5
-        - -0.1
+        - 0.4
+        SPD:
+        - -1.5
+        - -0.4
 ideological:
   cbar_rect:
   - 0.73
