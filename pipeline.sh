@@ -29,7 +29,7 @@ for country in ${Countries[@]}; do
     vizconfig="configs/vizconfigs/${country}.yaml"
 
     # PREPROCESSING
-    python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
+    # python python/some4demexp/embeddings/preprocess_data.py --config=$config --country=$country --output=$output
 
     for survey in ${Surveys[@]}; do
 
@@ -66,12 +66,14 @@ for country in ${Countries[@]}; do
         # python python/some4demexp/validation/labels_proportions.py \
         #     --config=$config --country=$country --survey=$survey --output=$output --show
         # python python/some4demexp/validation/logistic_regression.py \
-        #     --config=$config --country=$country --survey=$survey --output=$output --plot # --show
+        #     --config=$config --country=$country --survey=$survey --output=$output --plot  --show
 
     done
 
     # EXPORTS
     # python python/some4demexp/exports.py --config=$config --country=$country --output=$output
     # python exports_deliverableD21.py --config=$config --country=$country --output=$output
+
+    # python exports/some4demD21shareabledata/figures.py --config=$config --output=$output
 
 done

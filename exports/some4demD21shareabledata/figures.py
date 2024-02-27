@@ -1,8 +1,3 @@
-"""
-TO DO :
-    - Hay que correr las cajitas de los nombres de los partidos para que sean visibles las posiciones de los partidos.
-"""
-
 import os
 import yaml
 import pandas as pd
@@ -59,21 +54,21 @@ legend_followers = Line2D(
 CUSTOMLEGEND = [legend_mps, legend_parties, legend_followers]
 
 COUNTRIES = [
-    'belgium',
-    'france',
-    'germany',
-    'italy',
-    'netherlands',
-    'poland',
-    'romania',
-    'slovenia',
-    'spain',
+    # 'belgium',
+    # 'france',
+    # 'germany',
+    # 'italy',
+    # 'netherlands',
+    # 'poland',
+    # 'romania',
+    # 'slovenia',
+    # 'spain',
 ]
 
 SEED = 187
 NBSPLITS = 100
 
-IDEFIG = True
+IDEFIG = False
 ATTFIG = False
 LOGREG = False
 
