@@ -66,7 +66,7 @@ mps_parties = SQLITE.getMpParties(['MMS', survey], dropna=False)
 mps_with_mapping = mps_parties[~mps_parties[SURVEYCOL].isna()]
 mps_without_mapping = mps_parties[mps_parties[SURVEYCOL].isna()]
 mssg = f"Found {len(mps_with_mapping)} "
-mssg += f"associated to parties with mapping in {survey}."
+mssg += f"associated to parties mps with mapping in {survey}."
 print(mssg)
 
 t0 = len(ide_mps)
