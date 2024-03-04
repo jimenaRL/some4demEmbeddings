@@ -73,6 +73,7 @@ keywords_labels = SQLITE.getKeywordsLabels(entity='user')
 
 llm_labels = SQLITE.getLLMLabels('user')
 
+
 # (3) merge attitudinal embeddings, enrichements and keywords annotations
 export = export.merge(
     enrichments,
@@ -100,6 +101,7 @@ lo = len(export)
 print(f"Found {lo} users with attitudinal embeddings and llm labels")
 
 
+exit()
 # (4) Add twitter ids and handlers
 sources_twitter_ids = SQLITE.getTwitterIds(
     entity="follower", pseudo_ids=export.pseudo_id.tolist())
@@ -135,9 +137,9 @@ labels = [
     l[2:] for l in list(set(SQLITE.TABLES['llm_labels']['columns']) - {key})]
 
 def get_data(label):
-    ta = f'user_llm_labels_{country}'
-    tb = f'user_llm_{label}_labels_{country}'
-    tc = f'user_enriched_metadata_{country}'
+    ta = f'user_llm_labels'
+    tb = f'user_llm_{label}_labels'
+    tc = f'user_enriched_metadata'
 
     cola = f'C_{label}'
     colb = f'llm_answer_{label}'
