@@ -31,15 +31,15 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
 COUNTRIES = [
-    'belgium',
-    'france',
-    'germany',
-    'italy',
-    'netherlands',
-    'poland',
-    'romania',
+    # 'belgium',
+    # 'france',
+    # 'germany',
+    # 'italy',
+    # 'netherlands',
+    # 'poland',
+    # 'romania',
     'slovenia',
-    'spain',
+    # 'spain',
 ]
 
 RENAME = {

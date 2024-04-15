@@ -32,15 +32,15 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
 
 
 COUNTRIES = [
-    'belgium',
+    # 'belgium',
     'france',
-    'germany',
-    'italy',
-    'netherlands',
-    'poland',
-    'romania',
+    # 'germany',
+    # 'italy',
+    # 'netherlands',
+    # 'poland',
+    # 'romania',
     'slovenia',
-    'spain',
+    # 'spain',
 ]
 
 
@@ -240,12 +240,12 @@ print(df[[
     '# sources llm elite',
 ]].T)
 
-print(df[[
-    '# sources llm left',
-    '# sources llm right',
-    '# sources llm populist',
-    '# sources llm elite',
-]].to_latex())
+# print(df[[
+#     '# sources llm left',
+#     '# sources llm right',
+#     '# sources llm populist',
+#     '# sources llm elite',
+# ]].to_latex())
 
 
 print(df[[
@@ -303,6 +303,8 @@ dfperc = pd.DataFrame(
 print(dfperc)
 # print(dfperc.to_latex())
 df_preprocessing = df.copy()
+
+
 
 # 2. POST FILTERING (csv)
 

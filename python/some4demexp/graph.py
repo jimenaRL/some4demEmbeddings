@@ -36,6 +36,10 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     mssg += f"with outdegree less than {min_outdegree}, keeped {j1}."
     print(mssg)
 
+    mssg0 = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} sources "
+    mssg0 += f"to {len(rows_id)} targets."
+    print(mssg0)
+
     # remove and keep repeated sources (rows)
     old_ntwrk = copy.deepcopy(ntwrk_csr)
     old_columns_id = copy.deepcopy(columns_id)
@@ -49,12 +53,14 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     assert np.abs(values - ntwrk_csr).sum() == 0
     assert np.abs(old_ntwrk - ntwrk_csr[inverse]).sum() == 0
 
+
     # TO DO; DOCUMENT !!!!!!!
     # quitte hard to explain but must be done
     # check np.unique doc at
     # https://numpy.org/doc/stable/reference/generated/numpy.unique.html
     # ['original_columns_id', 'idx_inv']
     mapp = np.array([old_columns_id, old_columns_id[unique_idx_j][inverse]]).T
+
 
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
     mssg = f"Drop {ja - jb} of {ja} repeated sources "
@@ -85,11 +91,13 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     mssg1 = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} unique sources "
     mssg1 += f"to {len(rows_id)} unique targets."
 
-    if sparce:
-        return ntwrk_csr, rows_id, columns_id, original_columns_ids, unique_inverse_ids
 
     print(mssg)
     print(mssg1)
+
+
+    if sparce:
+        return ntwrk_csr, rows_id, columns_id, mapp
 
     return ntwrk_csr.toarray(), rows_id, columns_id, mapp
 
