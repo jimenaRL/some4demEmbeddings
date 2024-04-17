@@ -1,30 +1,76 @@
 attitudinal_dimensions:
   gps2019:
-    - V4_Scale
-    - V6_Scale
-    - V8_Scale
-    - v9
-    - v10
-    - v12
-    - v13
-    - v14
-    - v18
-    - v19
-    - v20
-    - v21
+    - 'V1'
+    - 'V2'
+    - 'V3'
+    - 'V4_Scale'
+    - 'V5'
+    - 'V6_Scale'
+    - 'V7'
+    - 'V8_Scale'
+    - 'V9'
+    - 'V10'
+    - 'V11'
+    - 'V12'
+    - 'V13'
+    - 'V14'
+    - 'V15'
+    - 'V16'
+    - 'V17'
+    - 'V18'
+    - 'V19'
+    - 'V20'
+    - 'V21'
   ches2019:
-    - lrgen
-    - lrecon
-    - eu_position
-    - antielite_salience
-    - immigrate_policy
-    - galtan
-    - environment
-    - enviro_salience
-    - nationalism
-    - sociallifestyle
-    - people_vs_elite
-    - corrupt_salience
+    - 'eu_position'
+    - 'eu_position_sd'
+    - 'eu_salience'
+    - 'eu_dissent'
+    - 'eu_blur'
+    - 'eu_cohesion'
+    - 'eu_foreign'
+    - 'eu_intmark'
+    - 'eu_budgets'
+    - 'eu_asylum'
+    - 'lrgen'
+    - 'lrecon'
+    - 'lrecon_sd'
+    - 'lrecon_salience'
+    - 'lrecon_dissent'
+    - 'lrecon_blur'
+    - 'galtan'
+    - 'galtan_sd'
+    - 'galtan_salience'
+    - 'galtan_dissent'
+    - 'galtan_blur'
+    - 'immigrate_policy'
+    - 'immigrate_salience'
+    - 'immigrate_dissent'
+    - 'multiculturalism'
+    - 'multicult_salience'
+    - 'multicult_dissent'
+    - 'redistribution'
+    - 'redist_salience'
+    - 'environment'
+    - 'enviro_salience'
+    - 'spendvtax'
+    - 'deregulation'
+    - 'econ_interven'
+    - 'civlib_laworder'
+    - 'sociallifestyle'
+    - 'religious_principles'
+    - 'ethnic_minorities'
+    - 'nationalism'
+    - 'urban_rural'
+    - 'protectionism'
+    - 'regions'
+    - 'russian_interference'
+    - 'anti_islam_rhetoric'
+    - 'people_vs_elite'
+    - 'antielite_salience'
+    - 'corrupt_salience'
+    - 'members_vs_leadership'
+
   ches2023:
     - lrecon
     - refugees
@@ -37,20 +83,9 @@ attitudinal_dimensions:
     - supportUA
     - antielite_salience
     - Kremlin_ties
-ideological_model:
-  check_input: true
-  engine: auto
-  force_bipartite: true
-  force_full_rank: false
-  in_degree_threshold: 3
-  out_degree_threshold: null
-  random_state: null
-  standardize_mean: true
-  standardize_std: false
+params_db: /home/jimena/work/dev/some4demDB/EPO2023Collection.yml
+export_folder: 'wip'
 sources_min_followers: 25
 sources_min_outdegree: 3
-params_db: /home/jimena/work/dev/some4demDB/config.yml
-sqlite_db: '/home/jimena/work/data/some4dem/dbs/{country}.db'
-export_folder: '/home/jimena/work/dev/some4demEmbeddings/exports/deliverableD21'
 validation:
   seed: 666

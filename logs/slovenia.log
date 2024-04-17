@@ -1,0 +1,20 @@
+2024-04-16 15:38:05,140 [INFO] SLOVENIA SQLITE: found 253584 links in preprocessedmp<>follower graph 
+2024-04-16 15:38:05,141 [INFO] SLOVENIA Building adjency matrix... 
+2024-04-16 15:38:05,637 [INFO] SLOVENIA Drop 0 of 29456 sources (0.00%) with outdegree less than 3, keeped 29456.
+2024-04-16 15:38:05,637 [INFO] SLOVENIA Found 253584 links, from 29456 sources to 84 targets.
+2024-04-16 15:38:05,803 [INFO] SLOVENIA Drop 10207 of 29456 repeated sources (34.65%), keeped 19249.
+2024-04-16 15:38:05,822 [INFO] SLOVENIA Drop 0 targets with no sources associated (0.00%), keeped 84:
+[]
+2024-04-16 15:38:05,822 [INFO] SLOVENIA Found 212600 links, from 19249 unique sources to 84 unique targets.
+2024-04-16 15:38:05,870 [INFO] SLOVENIA Social graph, pseudo ids and counts saved at wip/slovenia/min_followers_25_min_outdegree_3.
+2024-04-16 15:38:05,914 [DEBUG] SLOVENIA matplotlib data path: /home/jimena/.pyenv/versions/3.9.16/envs/some4demEmbeddings/lib/python3.9/site-packages/matplotlib/mpl-data
+2024-04-16 15:38:05,917 [DEBUG] SLOVENIA CONFIGDIR=/home/jimena/.config/matplotlib
+2024-04-16 15:38:05,918 [DEBUG] SLOVENIA interactive is False
+2024-04-16 15:38:05,919 [DEBUG] SLOVENIA platform is linux
+2024-04-16 15:38:05,952 [DEBUG] SLOVENIA CACHEDIR=/home/jimena/.cache/matplotlib
+2024-04-16 15:38:05,953 [DEBUG] SLOVENIA Using fontManager instance from /home/jimena/.cache/matplotlib/fontlist-v330.json
+2024-04-16 15:38:06,820 [INFO] SLOVENIA Ideological embeddings (84 targets and 29456 sources) saved at folder wip/slovenia/min_followers_25_min_outdegree_3/ideN_8.
+2024-04-16 15:38:06,836 [INFO] SLOVENIA Ideological embeddings loaded from folder wip/slovenia/min_followers_25_min_outdegree_3/ideN_8.
+2024-04-16 15:38:06,872 [INFO] SLOVENIA Found 75 associated to parties mps with mapping in gps2019.
+2024-04-16 15:38:06,873 [INFO] SLOVENIA Dropped 9 mps out of 84 in ideological embedding with no party in mapping, left 75.
+2024-04-16 15:38:07,404 [INFO] SLOVENIA Attitudinal embeddings (84 targets and 29456 sources) saved at folder wip/slovenia/min_followers_25_min_outdegree_3/ideN_8/gps2019.

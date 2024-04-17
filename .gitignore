@@ -3,6 +3,7 @@ __pycache__
 *.npy
 *.npz
 *.tar
+*logs
 exports/*
 .python-version
 .ipynb_checkpoints/*
