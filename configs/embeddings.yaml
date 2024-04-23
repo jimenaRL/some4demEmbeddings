@@ -50,7 +50,7 @@ ideological_model:
 sources_min_followers: 25
 sources_min_outdegree: 3
 params_db: /home/jimena/work/dev/some4demDB/config.yml
-sqlite_db: '/home/jimena/work/data/some4dem/dbs/{country}.db'
-export_folder: '/home/jimena/work/dev/some4demEmbeddings/exports/deliverableD21'
+sqlite_db: '/home/jimena/work/data/some4dem/some4demD21shareabledata/dbs/versions/some4demD21shareabledata/{country}.db'
+export_folder: 'export17avril'
 validation:
   seed: 666
