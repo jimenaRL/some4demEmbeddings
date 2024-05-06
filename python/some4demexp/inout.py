@@ -120,7 +120,7 @@ def set_output_folder(params, country, output, logger):
 
 
 def set_output_folder_emb(
-        params, country, survey, n_latent_dimensions, output, logger):
+        params, country, n_latent_dimensions, output, logger):
     output_folder_emb = os.path.join(
         set_output_folder(params, country, output, logger),
         f"ideN_{n_latent_dimensions}")
@@ -132,7 +132,7 @@ def set_output_folder_att(
     params, survey, country, n_latent_dimensions, output, logger):
     output_folder_att = os.path.join(
         set_output_folder_emb(
-            params, country, survey, n_latent_dimensions, output, logger),
+            params, country, n_latent_dimensions, output, logger),
             survey)
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att

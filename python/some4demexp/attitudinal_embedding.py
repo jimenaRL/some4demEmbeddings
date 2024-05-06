@@ -78,11 +78,8 @@ def create_attitudinal_embedding(
     estimated_parties_coord_ide = estimated_parties_coord_ide.sort_values(by=SURVEYCOL)
     parties_coord_att = parties_coord_att.sort_values(by=SURVEYCOL)
 
-    # assert (len(estimated_parties_coord_ide[SURVEYCOL].values) == len(parties_coord_att[SURVEYCOL].values))
-    # assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
-
-
-    import pdb; pdb.set_trace()  # breakpoint eb02a2d1 //
+    assert (len(estimated_parties_coord_ide[SURVEYCOL].values) == len(parties_coord_att[SURVEYCOL].values))
+    assert (estimated_parties_coord_ide[SURVEYCOL].values != parties_coord_att[SURVEYCOL].values).sum() == 0
 
     X = estimated_parties_coord_ide.drop(columns=[SURVEYCOL]).values
     Y = parties_coord_att.drop(columns=[SURVEYCOL, 'MMS_party_acronym']).values

@@ -16,12 +16,12 @@ from some4demexp.inout import \
 ap = ArgumentParser()
 ap.add_argument('--config', type=str, required=True)
 ap.add_argument('--country', type=str, required=True)
-ap.add_argument('--survey', type=str, required=True)
-ap.add_argument('--output', type=str, required=False, default='-1')
+ap.add_argument('--surveys', type=str, required=True)
+ap.add_argument('--output', type=str, required=True)
 args = ap.parse_args()
 config = args.config
 output = args.output
-survey = args.survey
+surveys = args.surveys.split(',')
 country = args.country
 
 # 0. Get things setted
@@ -50,40 +50,43 @@ SQLITE = SQLite(
 NB_MIN_FOLLOWERS = params['sources_min_followers']
 MIN_OUTDEGREE = params['sources_min_outdegree']
 
-PARTIESMAPPING = SQLITE.getPartiesMapping([survey])
-ideN = get_ide_ndims(PARTIESMAPPING, survey)
+
+# get ideological embedding space dimension
+ideN = max([
+    get_ide_ndims(SQLITE.getPartiesMapping([survey]), survey)
+    for survey in surveys])
 folder = set_output_folder(
     params, country, output, logger)
 emb_folder = set_output_folder_emb(
-    params, country, survey, ideN, output, logger)
-att_folder = set_output_folder_att(
-    params, survey, country, ideN, output, logger)
-
+    params, country, ideN, output, logger)
 
 # # 1. Create ideological embedding
-# create_ideological_embedding(
-#     SQLITE,
-#     NB_MIN_FOLLOWERS,
-#     MIN_OUTDEGREE,
-#     ideN,
-#     folder,
-#     emb_folder,
-#     logger)
-
-
-# 2. Create create_attitudinal embedding
-
-ATTDIMS = params['attitudinal_dimensions'][survey]
-
-create_attitudinal_embedding(
+create_ideological_embedding(
     SQLITE,
     NB_MIN_FOLLOWERS,
     MIN_OUTDEGREE,
-    ATTDIMS,
     ideN,
-    survey,
     folder,
     emb_folder,
-    att_folder,
     logger)
+
+# 2. Create create_attitudinal embedding
+
+for survey in surveys:
+
+    ATTDIMS = params['attitudinal_dimensions'][survey]
+    att_folder = set_output_folder_att(
+        params, survey, country, ideN, output, logger)
+
+    create_attitudinal_embedding(
+        SQLITE,
+        NB_MIN_FOLLOWERS,
+        MIN_OUTDEGREE,
+        ATTDIMS,
+        ideN,
+        survey,
+        folder,
+        emb_folder,
+        att_folder,
+        logger)
 

@@ -84,6 +84,6 @@ def create_ideological_embedding(
 
     assert sources_embeddings.duplicated().sum() == 0
 
-    # Save sources/targets coordinates in ideological space and add pseudo ids
+    # Save sources/targets coordinates in ideological space and add pseudo ids    
     save_ide_embeddings(sources_embeddings, targets_embeddings, emb_folder, logger)
 
