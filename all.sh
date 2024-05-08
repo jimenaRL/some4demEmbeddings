@@ -7,7 +7,6 @@ sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp canada
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp chile
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp colombia
-sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp croatia
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019 tmp cyprus
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp czechia
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp denmark
@@ -19,7 +18,6 @@ sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp greece
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp hungary
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp iceland
-sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp india
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp ireland
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp israel
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp italy

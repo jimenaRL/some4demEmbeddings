@@ -6,6 +6,7 @@ __pycache__
 *.tar
 *logs
 exports/*
+environments/*
 .python-version
 .ipynb_checkpoints/*
 *.ipynb
