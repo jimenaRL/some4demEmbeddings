@@ -43,7 +43,6 @@ sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp sweden
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp switzerland
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml ches2019,gps2019,ches2023 tmp uk
-sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp ukraine
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp uruguay
 sbatch slurm_create_embeddings.sh configs/embeddings.yaml gps2019 tmp venezuela
 
