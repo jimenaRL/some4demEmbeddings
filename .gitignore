@@ -4,6 +4,7 @@ __pycache__
 *.npy
 *.npz
 *.tar
+*tmp
 *logs
 exports/*
 environments/*
