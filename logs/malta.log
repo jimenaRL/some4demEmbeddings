@@ -1,19 +1,30 @@
-2024-04-16 15:38:51,573 [INFO] MALTA SQLITE: found 135017 links in preprocessedmp<>follower graph 
-2024-04-16 15:38:51,573 [INFO] MALTA Building adjency matrix... 
-2024-04-16 15:38:51,844 [INFO] MALTA Drop 0 of 15545 sources (0.00%) with outdegree less than 3, keeped 15545.
-2024-04-16 15:38:51,844 [INFO] MALTA Found 135017 links, from 15545 sources to 57 targets.
-2024-04-16 15:38:51,907 [INFO] MALTA Drop 3849 of 15545 repeated sources (24.76%), keeped 11696.
-2024-04-16 15:38:51,916 [INFO] MALTA Drop 0 targets with no sources associated (0.00%), keeped 57:
+2024-05-07 00:49:39,361 [INFO] MALTA YAML config saved at tmp/malta/min_followers_25_min_outdegree_3.
+2024-05-07 00:49:39,476 [INFO] MALTA SQLITE: found 135017 links in preprocessedmp<>follower graph 
+2024-05-07 00:49:39,476 [INFO] MALTA Building adjency matrix... 
+2024-05-07 00:49:39,789 [INFO] MALTA Drop 0 of 15545 sources (0.00%) with outdegree less than 3, keeped 15545.
+2024-05-07 00:49:39,789 [INFO] MALTA Found 135017 links, from 15545 sources to 57 targets.
+2024-05-07 00:49:39,870 [INFO] MALTA Drop 3849 of 15545 repeated sources (24.76%), keeped 11696.
+2024-05-07 00:49:39,882 [INFO] MALTA Drop 0 targets with no sources associated (0.00%), keeped 57:
 []
-2024-04-16 15:38:51,916 [INFO] MALTA Found 118515 links, from 11696 unique sources to 57 unique targets.
-2024-04-16 15:38:51,942 [INFO] MALTA Social graph, pseudo ids and counts saved at wip/malta/min_followers_25_min_outdegree_3.
-2024-04-16 15:38:51,976 [DEBUG] MALTA matplotlib data path: /home/jimena/.pyenv/versions/3.9.16/envs/some4demEmbeddings/lib/python3.9/site-packages/matplotlib/mpl-data
-2024-04-16 15:38:51,979 [DEBUG] MALTA CONFIGDIR=/home/jimena/.config/matplotlib
-2024-04-16 15:38:51,980 [DEBUG] MALTA interactive is False
-2024-04-16 15:38:51,980 [DEBUG] MALTA platform is linux
-2024-04-16 15:38:52,013 [DEBUG] MALTA CACHEDIR=/home/jimena/.cache/matplotlib
-2024-04-16 15:38:52,014 [DEBUG] MALTA Using fontManager instance from /home/jimena/.cache/matplotlib/fontlist-v330.json
-2024-04-16 15:38:52,310 [INFO] MALTA Ideological embeddings (57 targets and 15545 sources) saved at folder wip/malta/min_followers_25_min_outdegree_3/ideN_1.
-2024-04-16 15:38:52,346 [INFO] MALTA Ideological embeddings loaded from folder wip/malta/min_followers_25_min_outdegree_3/ideN_1.
-2024-04-16 15:38:52,359 [INFO] MALTA Found 57 associated to parties mps with mapping in gps2019.
-2024-04-16 15:38:52,361 [INFO] MALTA There are less effetively available parties in survey gps2019: set() that parties present in mps affilations {'PL', 'FN'}. Dropping {'PL', 'FN'}.
+2024-05-07 00:49:39,882 [INFO] MALTA Found 118515 links, from 11696 unique sources to 57 unique targets.
+2024-05-07 00:49:39,906 [INFO] MALTA Social graph, pseudo ids and counts saved at tmp/malta/min_followers_25_min_outdegree_3.
+2024-05-07 00:49:39,943 [DEBUG] MALTA matplotlib data path: /home/jimena/.pyenv/versions/3.10.12/envs/some4dem/lib/python3.10/site-packages/matplotlib/mpl-data
+2024-05-07 00:49:39,946 [DEBUG] MALTA CONFIGDIR=/home/jimena/.config/matplotlib
+2024-05-07 00:49:39,947 [DEBUG] MALTA interactive is False
+2024-05-07 00:49:39,947 [DEBUG] MALTA platform is linux
+2024-05-07 00:49:39,986 [DEBUG] MALTA CACHEDIR=/home/jimena/.cache/matplotlib
+2024-05-07 00:49:39,989 [DEBUG] MALTA Using fontManager instance from /home/jimena/.cache/matplotlib/fontlist-v330.json
+2024-05-07 00:49:40,313 [INFO] MALTA Ideological embeddings (57 targets and 15545 sources) saved at folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1.
+2024-05-07 00:49:40,330 [INFO] MALTA Ideological embeddings loaded from folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1.
+2024-05-07 00:49:40,338 [INFO] MALTA Found 57 associated to parties mps with mapping in ches2019.
+2024-05-07 00:49:40,949 [INFO] MALTA Attitudinal embeddings (57 targets and 15545 sources) saved at folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1/ches2019.
+2024-05-07 00:49:40,953 [INFO] MALTA 
+                HOT FIX : drop rows with blanck spaces values.
+                This happens for some dimensions in GPS2019
+                
+2024-05-07 00:49:40,957 [INFO] MALTA Ideological embeddings loaded from folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1.
+2024-05-07 00:49:40,965 [INFO] MALTA Found 57 associated to parties mps with mapping in gps2019.
+2024-05-07 00:49:41,240 [INFO] MALTA Attitudinal embeddings (57 targets and 15545 sources) saved at folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1/gps2019.
+2024-05-07 00:49:41,245 [INFO] MALTA Ideological embeddings loaded from folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1.
+2024-05-07 00:49:41,252 [INFO] MALTA Found 57 associated to parties mps with mapping in ches2023.
+2024-05-07 00:49:41,390 [INFO] MALTA Attitudinal embeddings (57 targets and 15545 sources) saved at folder tmp/malta/min_followers_25_min_outdegree_3/ideN_1/ches2023.
