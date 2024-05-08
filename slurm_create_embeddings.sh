@@ -17,8 +17,8 @@
 #SBATCH --gres=gpu:v100:1
 
 COUNTRY="$4"
-SURVEYS="$3"
-OUTPUT="$2"
+SURVEYS="$2"
+OUTPUT="$3"
 CONFIG="$1"
 
 cd /sps/humanum/user/jroyolet/dev/some4demEmbeddings
