@@ -8,7 +8,7 @@
 #SBATCH --partition=gpu               # Choix de partition
 
 #SBATCH --ntasks=1                    # Exécuter une seule tâche
-#SBATCH --mem=32G                    # Mémoire en MB par défaut
+#SBATCH --mem=512G                    # Mémoire en MB par défaut
 #SBATCH --time=6-023:00             # Déli max
 
 #SBATCH --mail-user=jimena.royoletelier@sciencespo.fr  # Où envoyer l'e-mail
