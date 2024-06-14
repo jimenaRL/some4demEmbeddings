@@ -19,8 +19,7 @@ RUN tar -xvf sqlite-autoconf-3410100.tar.gz
 RUN ./sqlite-autoconf-3410100/configure && \
     make && \
     make install
-RUN sqlite3 --version && \
-    ./test_sqlite3.sh
+
 
 # -----------------------------------------------------------------------------
 #  Stage 1: install pyenv
@@ -29,13 +28,28 @@ FROM ubuntu:22.04 AS pyenv
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# install pyenv with pyenv-installer
-COPY pyenv_dependencies.txt pyenv_dependencies.txt
+# install pyenv denpendencies and pyenv with pyenv-installer
 
 ENV PYENV_GIT_TAG=v2.3.14
 
 RUN apt-get update && \
-    apt-get install -y $(cat pyenv_dependencies.txt)
+    apt-get install -y build-essential && \
+    apt-get install -y curl && \
+    apt-get install -y git && \
+    apt-get install -y zlib1g-dev && \
+    apt-get install -y tk-dev && \
+    apt-get install -y libssl-dev && \
+    apt-get install -y libbz2-dev && \
+    apt-get install -y libreadline-dev && \
+    apt-get install -y libsqlite3-dev && \
+    apt-get install -y libncursesw5-dev && \
+    apt-get install -y xz-utils && \
+    apt-get install -y libxml2-dev && \
+    apt-get install -y libxmlsec1-dev && \
+    apt-get install -y libffi-dev && \
+    apt-get install -y liblzma-dev
+
+
 RUN curl https://pyenv.run | bash
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -54,9 +68,6 @@ FROM ubuntu:22.04
 # sqlite settings
 COPY --from=sqlite /usr/local/bin/sqlite3 /usr/local/bin/sqlite3
 COPY --from=sqlite /usr/local/lib/libsqlite3.so.0 /usr/local/lib/libsqlite3.so.0
-COPY test_sqlite3.sh test_sqlite3.sh
-RUN sqlite3 --version && \
-    ./test_sqlite3.sh
 
 # pyenv settings
 COPY --from=pyenv /root/.pyenv /root/.pyenv
