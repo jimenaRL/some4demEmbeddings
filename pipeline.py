@@ -42,7 +42,7 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
     params_db = yaml.load(fh, Loader=yaml.SafeLoader)
 
 SQLITE = SQLite(
-    db_path=params_db['sqlite'].format(country=country),
+    db_path=params['sqlite'].format(country=country),
     tables=params_db['output']['tables'],
     pp_params=params_db['preprocess'],
     logger=logger,

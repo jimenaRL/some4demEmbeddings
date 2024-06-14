@@ -12,3 +12,5 @@ environments/*
 .ipynb_checkpoints/*
 *.ipynb
 logs/*
+anonymizedDBs/*
+wip/*
