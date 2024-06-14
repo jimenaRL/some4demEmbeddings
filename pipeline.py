@@ -44,6 +44,7 @@ with open(params['params_db'], "r", encoding='utf-8') as fh:
 SQLITE = SQLite(
     db_path=params_db['sqlite'].format(country=country),
     tables=params_db['output']['tables'],
+    pp_params=params_db['preprocess'],
     logger=logger,
     country=country)
 
