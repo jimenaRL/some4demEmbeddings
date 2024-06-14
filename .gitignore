@@ -11,4 +11,4 @@ environments/*
 .python-version
 .ipynb_checkpoints/*
 *.ipynb
-populations/*
+logs/*
