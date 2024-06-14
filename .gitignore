@@ -7,3 +7,4 @@ exports/*
 .python-version
 .ipynb_checkpoints/*
 *.ipynb
+logs/*
