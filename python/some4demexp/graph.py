@@ -6,12 +6,12 @@ import pandas as pd
 from scipy.sparse import csr_matrix
 
 
-def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
+def graphToAdjencyMatrix(graph, min_outdegree, logger, sparce=False):
     """
     # Format data from sqlite graph res and build (sparse) matrix
     """
 
-    print(f"Building adjency matrix... ")
+    logger.info(f"Building adjency matrix... ")
 
     sources = [link[1] for link in graph]
     targets = [link[0] for link in graph]
@@ -34,16 +34,17 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
     mssg = f"Drop {j0 - j1} of {j0} sources ({100*(j0 - j1)/j0:.2f}%) "
     mssg += f"with outdegree less than {min_outdegree}, keeped {j1}."
-    print(mssg)
+    logger.info(mssg)
 
     mssg0 = f"Found {ntwrk_csr.nnz} links, from {len(columns_id)} sources "
     mssg0 += f"to {len(rows_id)} targets."
-    print(mssg0)
+    logger.info(mssg0)
 
     # remove and keep repeated sources (rows)
     old_ntwrk = copy.deepcopy(ntwrk_csr)
     old_columns_id = copy.deepcopy(columns_id)
-    values, unique_idx_j, inverse = np.unique(ntwrk_csr.toarray(), axis=0, return_index=True, return_inverse=True)
+    values, unique_idx_j, inverse = np.unique(
+        ntwrk_csr.toarray(), axis=0, return_index=True, return_inverse=True)
 
     ja = ntwrk_csr.shape[0]
     ntwrk_csr = ntwrk_csr[unique_idx_j, :]
@@ -65,7 +66,7 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     assert ntwrk_csr.shape == (len(columns_id), len(rows_id))
     mssg = f"Drop {ja - jb} of {ja} repeated sources "
     mssg += f"({100*(ja - jb)/ja:.2f}%), keeped {jb}."
-    print(mssg)
+    logger.info(mssg)
 
     # remove targets (columns) with no source associated
     idx_invalid_i = np.argwhere((np.abs(ntwrk_csr).sum(axis=0) == 0).tolist()[0])[:, 0]
@@ -92,9 +93,8 @@ def graphToAdjencyMatrix(graph, min_outdegree, sparce=False):
     mssg1 += f"to {len(rows_id)} unique targets."
 
 
-    print(mssg)
-    print(mssg1)
-
+    logger.info(mssg)
+    logger.info(mssg1)
 
     if sparce:
         return ntwrk_csr, rows_id, columns_id, mapp

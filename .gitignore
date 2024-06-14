@@ -1,9 +1,13 @@
+logs/*
 __pycache__
 *.png
 *.npy
 *.npz
 *.tar
+*tmp
+*logs
 exports/*
+environments/*
 .python-version
 .ipynb_checkpoints/*
 *.ipynb

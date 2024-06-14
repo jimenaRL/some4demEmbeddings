@@ -13,9 +13,9 @@ def get_ide_ndims(parties_mapping, survey):
     m += f"for survey {survey}."
     return n_latent_dimensions
 
-def load_ide_embeddings(folder):
+def load_ide_embeddings(folder, logger):
 
-    print(f"Ideological embeddings loaded from folder {folder}.")
+    logger.info(f"Ideological embeddings loaded from folder {folder}.")
 
     ide_sources = pd.read_csv(os.path.join(folder, 'ide_sources.csv'))
     ide_targets = pd.read_csv(os.path.join(folder, 'ide_targets.csv'))
@@ -23,7 +23,7 @@ def load_ide_embeddings(folder):
     return ide_sources, ide_targets
 
 def save_experiment_data(
-    X, targets_pids, sources_pids, sources_map_pids, folder):
+    X, targets_pids, sources_pids, sources_map_pids, folder, logger):
 
     # graph
     np.savez(os.path.join(folder, "graph.npz"), X=X)
@@ -46,7 +46,7 @@ def save_experiment_data(
         os.path.join(folder, "sources_map_pids.npy"),
         sources_map_pids,
         allow_pickle=True)
-    print(f"Social graph, pseudo ids and counts saved at {folder}.")
+    logger.info(f"Social graph, pseudo ids and counts saved at {folder}.")
 
 def load_experiment_data(folder):
 
@@ -63,7 +63,7 @@ def load_experiment_data(folder):
 
     return X, targets_pids, sources_pids, sources_map_pids
 
-def save_ide_embeddings(sources_embeddings, targets_embeddings, folder):
+def save_ide_embeddings(sources_embeddings, targets_embeddings, folder, logger):
 
     sources_embeddings.to_csv(
             os.path.join(folder, 'ide_sources.csv'),
@@ -75,10 +75,10 @@ def save_ide_embeddings(sources_embeddings, targets_embeddings, folder):
 
     mssg = f"Ideological embeddings ({len(targets_embeddings)} targets and "
     mssg += f"{len(sources_embeddings)} sources) saved at folder {folder}."
-    print(mssg)
+    logger.info(mssg)
 
 
-def save_att_embeddings(att_source, att_targets, folder):
+def save_att_embeddings(att_source, att_targets, folder, logger):
 
     att_source.to_csv(
         os.path.join(folder, 'att_sources.csv'), index=False)
@@ -87,12 +87,12 @@ def save_att_embeddings(att_source, att_targets, folder):
 
     mssg = f"Attitudinal embeddings ({len(att_targets)} targets and "
     mssg += f"{len(att_source)} sources) saved at folder {folder}."
-    print(mssg)
+    logger.info(mssg)
 
 
 def load_att_embeddings(folder):
 
-    print(f"Attitudinal embeddings load from folder {folder}.")
+    logger.info(f"Attitudinal embeddings load from folder {folder}.")
 
     att_source = pd.read_csv(os.path.join(folder, 'att_sources.csv'))
     att_targets = pd.read_csv(os.path.join(folder, 'att_targets.csv'))
@@ -100,7 +100,7 @@ def load_att_embeddings(folder):
     return att_source, att_targets
 
 
-def set_output_folder(params, country, output):
+def set_output_folder(params, country, output, logger):
 
     emb_folder = f"min_followers_{params['sources_min_followers']}"
     emb_folder += f"_min_outdegree_{params['sources_min_outdegree']}"
@@ -114,24 +114,26 @@ def set_output_folder(params, country, output):
     if not os.path.exists(config_file):
         with open(config_file, 'w') as file:
             yaml.dump(params, file)
-        print(f"YAML config saved at {output_folder}.")
+        logger.info(f"YAML config saved at {output_folder}.")
 
     return output_folder
 
 
-def set_output_folder_emb(params, country, survey, n_latent_dimensions, output):
+def set_output_folder_emb(
+        params, country, n_latent_dimensions, output, logger):
     output_folder_emb = os.path.join(
-        set_output_folder(params, country, output),
+        set_output_folder(params, country, output, logger),
         f"ideN_{n_latent_dimensions}")
     os.makedirs(output_folder_emb, exist_ok=True)
     return output_folder_emb
 
 
-def set_output_folder_att(params, survey, country, n_latent_dimensions, output):
+def set_output_folder_att(
+    params, survey, country, n_latent_dimensions, output, logger):
     output_folder_att = os.path.join(
-        set_output_folder_emb(params, country, survey, n_latent_dimensions, output),
-        f"attM_{len(params['attitudinal_dimensions'][survey])}",
-        '_vs_'.join(params["attitudinal_dimensions"][survey]))
+        set_output_folder_emb(
+            params, country, n_latent_dimensions, output, logger),
+            survey)
     os.makedirs(output_folder_att, exist_ok=True)
     return output_folder_att
 
